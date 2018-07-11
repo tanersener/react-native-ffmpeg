@@ -1,0 +1,27 @@
+
+{
+  "name": "react-native-ffmpeg",
+  "version": "0.0.1",
+  "description": "FFmpeg for React Native",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "react-native",
+    "ffmpeg"
+  ],
+  "author": "Taner Sener",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tanersener/react-native-ffmpeg/issues"
+  },
+  "homepage": "https://github.com/tanersener/react-native-ffmpeg#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tanersener/react-native-ffmpeg.git"
+  },
+  "peerDependencies": {
+    "react-native": "^0.41.2"
+  }
+}
