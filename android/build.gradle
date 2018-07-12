@@ -1,35 +1,45 @@
 
 buildscript {
     repositories {
+        google()
         jcenter()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.3.1'
+        classpath 'com.android.tools.build:gradle:3.1.3'
     }
 }
 
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.1"
+    compileSdkVersion 27
 
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 22
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
+        project.archivesBaseName = "react-native-ffmpeg"
     }
     lintOptions {
         abortOnError false
     }
 }
 
+ext {
+    mobileFFmpegVersion = '2.0'
+    reactNativeVersion = '0.20.1'
+}
+
 repositories {
+    maven { url "$rootDir/node_modules/react-native/android" }
     mavenCentral()
+    jcenter()
+    google()
 }
 
 dependencies {
-    compile 'com.facebook.react:react-native:+'
+    implementation 'com.arthenica:mobile-ffmpeg-https:' + mobileFFmpegVersion
+    implementation 'com.facebook.react:react-native:' + reactNativeVersion
 }
