@@ -1,16 +1,15 @@
+apply plugin: 'com.android.library'
 
 buildscript {
     repositories {
-        google()
         jcenter()
+        google()
     }
 
     dependencies {
         classpath 'com.android.tools.build:gradle:3.1.3'
     }
 }
-
-apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 27
@@ -29,7 +28,6 @@ android {
 
 ext {
     mobileFFmpegVersion = '2.0'
-    reactNativeVersion = '0.20.1'
 }
 
 repositories {
@@ -41,5 +39,5 @@ repositories {
 
 dependencies {
     implementation 'com.arthenica:mobile-ffmpeg-https:' + mobileFFmpegVersion
-    implementation 'com.facebook.react:react-native:' + reactNativeVersion
+    implementation 'com.facebook.react:react-native:+'
 }

@@ -21,6 +21,6 @@
     "url": "git+https://github.com/tanersener/react-native-ffmpeg.git"
   },
   "peerDependencies": {
-    "react-native": "0.56"
+    "react-native": "^0.56.0"
   }
 }

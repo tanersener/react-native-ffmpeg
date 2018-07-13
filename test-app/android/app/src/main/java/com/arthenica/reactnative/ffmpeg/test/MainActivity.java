@@ -1,4 +1,4 @@
-/*!
+/*
  * MIT License
  *
  * Copyright (c) 2018 Taner Sener
@@ -22,37 +22,19 @@
  * SOFTWARE.
  */
 
-import { DeviceEventEmitter, NativeModules } from 'react-native';
+package com.arthenica.reactnative.ffmpeg.test;
 
-const eventLog = "reactNativeFFmpegLogCallback";
+import com.facebook.react.ReactActivity;
 
-class ReactNativeFFmpeg {
+public class MainActivity extends ReactActivity {
 
-    constructor() {
-        DeviceEventEmitter.addListener(eventLog, event => {
-            console.log(event.log);
-        });
-    }
-    getFFmpegVersion() {
-        return NativeModules.ReactNativeFFmpegModule.getFFmpegVersion();
-    }
-
-    execute(parameters) {
-        return NativeModules.ReactNativeFFmpegModule.execute(parameters);
-    }
-
-    getPlatform() {
-        return NativeModules.ReactNativeFFmpegModule.getPlatform();
-    }
-
-    enableLogEvents() {
-        NativeModules.ReactNativeFFmpegModule.enableLogEvents();
-    }
-
-    disableLogEvents() {
-        NativeModules.ReactNativeFFmpegModule.disableLogEvents();
+    /**
+     * Returns the name of the main component registered from JavaScript.
+     * This is used to schedule rendering of the component.
+     */
+    @Override
+    protected String getMainComponentName() {
+        return "ReactNativeFFmpegTest";
     }
 
 }
-
-export const reactNativeFFmpeg = new ReactNativeFFmpeg();
