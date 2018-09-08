@@ -1,4 +1,4 @@
-/*!
+/*
  * MIT License
  *
  * Copyright (c) 2018 Taner Sener
@@ -22,23 +22,11 @@
  * SOFTWARE.
  */
 
-import { NativeModules } from 'react-native';
+#import <Foundation/Foundation.h>
+#import <mobileffmpeg/MobileFFmpegConfig.h>
+#import <React/RCTBridgeModule.h>
 
-const { ReactNativeFFmpegModule } = NativeModules;
+@interface RNFFmpegModule : NSObject <RCTBridgeModule,LogDelegate,StatisticsDelegate>
 
-export class ReactNativeFFmpeg {
-
-    static getFFmpegVersion() {
-        return ReactNativeFFmpegModule.getFFmpegVersion();
-    }
-
-    static execute(commandArguments) {
-        return ReactNativeFFmpegModule.execute.apply(this, commandArguments);
-    }
-
-    static getPlatform() {
-        return ReactNativeFFmpegModule.getPlatform();
-    }
-
-}
-
+@end
+  

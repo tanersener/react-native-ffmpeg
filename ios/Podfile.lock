@@ -1,16 +1,16 @@
 PODS:
-  - mobile-ffmpeg-https (2.0)
+  - mobile-ffmpeg-https (2.1.1)
 
 DEPENDENCIES:
-  - mobile-ffmpeg-https (~> 2.0)
+  - mobile-ffmpeg-https (~> 2.1.1)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - mobile-ffmpeg-https
 
 SPEC CHECKSUMS:
-  mobile-ffmpeg-https: f6e41423895c94b716c4b6b46a0abbdcaf9566f4
+  mobile-ffmpeg-https: 7d7c1fea8950cca139f6bb3b6c012084d5e6bacd
 
-PODFILE CHECKSUM: 8e76f2820946cd74fe494c9630630a08874d85ad
+PODFILE CHECKSUM: 30b81fb98da2656ed79ba220b4a4eca4189fc948
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.6.0.beta.1

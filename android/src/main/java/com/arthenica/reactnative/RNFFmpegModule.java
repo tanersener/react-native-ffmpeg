@@ -24,6 +24,7 @@
 
 package com.arthenica.reactnative;
 
+import android.system.ErrnoException;
 import android.util.Log;
 
 import com.arthenica.mobileffmpeg.AbiDetect;
@@ -40,6 +41,8 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableMapKeySetIterator;
 import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
@@ -47,9 +50,14 @@ import com.facebook.react.modules.core.DeviceEventManagerModule;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RNFFmpegModule extends ReactContextBaseJavaModule {
+
+    public static final String LIBRARY_NAME = "react-native-ffmpeg";
+    public static final String PLATFORM_NAME = "android";
 
     public static final String KEY_VERSION = "version";
     public static final String KEY_RC = "rc";
@@ -83,6 +91,12 @@ public class RNFFmpegModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
+    public void getPlatform(final Promise promise) {
+        final String abi = AbiDetect.getAbi();
+        promise.resolve(toStringMap(KEY_PLATFORM, PLATFORM_NAME + "-" + abi));
+    }
+
+    @ReactMethod
     public void getFFmpegVersion(final Promise promise) {
         final String version = FFmpeg.getFFmpegVersion();
         promise.resolve(toStringMap(KEY_VERSION, version));
@@ -103,20 +117,49 @@ public class RNFFmpegModule extends ReactContextBaseJavaModule {
 
         final String[] argumentsArray = arguments.toArray(new String[arguments.size()]);
 
-        Log.d("react-native-ffmpeg", String.format("Calling execute with arguments %s", Arrays.toString(argumentsArray)));
+        Log.d(LIBRARY_NAME, String.format("Running FFmpeg with arguments: %s", Arrays.toString(argumentsArray)));
 
         int rc = FFmpeg.execute(argumentsArray);
-        if (rc == 0) {
-            promise.resolve(toIntMap(KEY_RC, rc));
-        } else {
-            promise.reject(String.valueOf(rc), "Execute failed");
-        }
+
+        Log.d(LIBRARY_NAME, String.format("FFmpeg exited with rc: %d", rc));
+
+        promise.resolve(toIntMap(KEY_RC, rc));
     }
 
     @ReactMethod
-    public void getPlatform(final Promise promise) {
-        final String platform = AbiDetect.getAbi();
-        promise.resolve(toStringMap(KEY_PLATFORM, platform));
+    public void cancel() {
+        FFmpeg.cancel();
+    }
+
+    @ReactMethod
+    public void enableRedirection() {
+        Config.enableRedirection();
+    }
+
+    @ReactMethod
+    public void disableRedirection() {
+        Config.disableRedirection();
+    }
+
+    @ReactMethod
+    public void getLogLevel(final Promise promise) {
+        final Level level = Config.getLogLevel();
+        promise.resolve(toIntMap(KEY_LOG_LEVEL, levelToInt(level)));
+    }
+
+    @ReactMethod
+    public void setLogLevel(final ReadableArray readableArray) {
+        int logLevelInt = Level.AV_LOG_TRACE.getValue();
+
+        for (int i = 0; i < readableArray.size(); i++) {
+            final ReadableType type = readableArray.getType(i);
+
+            if (type == ReadableType.Number) {
+                logLevelInt = readableArray.getInt(i);
+            }
+        }
+
+        Config.setLogLevel(Level.from(logLevelInt));
     }
 
     @ReactMethod
@@ -151,40 +194,116 @@ public class RNFFmpegModule extends ReactContextBaseJavaModule {
         Config.enableStatisticsCallback(null);
     }
 
+    @ReactMethod
+    public void getLastReceivedStatistics(final Promise promise) {
+        WritableMap map = toMap(Config.getLastReceivedStatistics());
+        promise.resolve(map);
+    }
+
+    @ReactMethod
+    public void resetStatistics() {
+        Config.resetStatistics();
+    }
+
+    @ReactMethod
+    public void setFontconfigConfigurationPath(final ReadableArray readableArray) {
+        String path = null;
+
+        for (int i = 0; i < readableArray.size(); i++) {
+            final ReadableType type = readableArray.getType(i);
+
+            if (type == ReadableType.String) {
+                path = readableArray.getString(i);
+            }
+        }
+
+        try {
+            Config.setFontconfigConfigurationPath(path);
+        } catch (final ErrnoException e) {
+            Log.w(LIBRARY_NAME, String.format("Setting fontconfig configuration path failed for %s", path), e);
+        }
+    }
+
+    @ReactMethod
+    public void setFontDirectory(final ReadableArray readableArray) {
+        String path = null;
+        Map<String, String> map = null;
+
+        for (int i = 0; i < readableArray.size(); i++) {
+            final ReadableType type = readableArray.getType(i);
+
+            if (type == ReadableType.String) {
+                path = readableArray.getString(i);
+            } else if (type == ReadableType.Map) {
+                map = toMap(readableArray.getMap(i));
+            }
+        }
+
+        Config.setFontDirectory(reactContext, path, map);
+    }
+
     protected void emitLogMessage(final LogMessage logMessage) {
         final DeviceEventManagerModule.RCTDeviceEventEmitter jsModule = reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class);
         final WritableMap logMap = Arguments.createMap();
+        logMap.putInt(KEY_LOG_LEVEL, levelToInt(logMessage.getLevel()));
         logMap.putString(KEY_LOG_TEXT, logMessage.getText());
-        logMap.putInt(KEY_LOG_LEVEL, (logMessage.getLevel() == null) ? Level.AV_LOG_TRACE.getValue() : logMessage.getLevel().getValue());
         jsModule.emit(EVENT_LOG, logMap);
     }
 
     protected void emitStatistics(final Statistics statistics) {
         final DeviceEventManagerModule.RCTDeviceEventEmitter jsModule = reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class);
-        final WritableMap statisticsMap = Arguments.createMap();
-
-        statisticsMap.putInt(KEY_STAT_TIME, statistics.getTime());
-        statisticsMap.putInt(KEY_STAT_SIZE, (statistics.getSize() < Integer.MAX_VALUE) ? (int) statistics.getSize() : (int) (statistics.getSize() % Integer.MAX_VALUE));
-        statisticsMap.putDouble(KEY_STAT_BITRATE, statistics.getBitrate());
-        statisticsMap.putDouble(KEY_STAT_SPEED, statistics.getSpeed());
-
-        statisticsMap.putInt(KEY_STAT_VIDEO_FRAME_NUMBER, statistics.getVideoFrameNumber());
-        statisticsMap.putDouble(KEY_STAT_VIDEO_QUALITY, statistics.getVideoQuality());
-        statisticsMap.putDouble(KEY_STAT_VIDEO_FPS, statistics.getVideoFps());
-
-        jsModule.emit(EVENT_STAT, statisticsMap);
+        jsModule.emit(EVENT_STAT, toMap(statistics));
     }
 
-    protected static WritableMap toStringMap(final String key, final String value) {
+    public static int levelToInt(final Level level) {
+        return (level == null) ? Level.AV_LOG_TRACE.getValue() : level.getValue();
+    }
+
+    public static WritableMap toStringMap(final String key, final String value) {
         final WritableMap map = new WritableNativeMap();
         map.putString(key, value);
         return map;
     }
 
-    protected static WritableMap toIntMap(final String key, final int value) {
+    public static WritableMap toIntMap(final String key, final int value) {
         final WritableMap map = new WritableNativeMap();
         map.putInt(key, value);
         return map;
+    }
+
+    public static Map<String, String> toMap(final ReadableMap readableMap) {
+        final Map<String, String> map = new HashMap<>();
+
+        final ReadableMapKeySetIterator iterator = readableMap.keySetIterator();
+        while (iterator.hasNextKey()) {
+            final String key = iterator.nextKey();
+            final ReadableType type = readableMap.getType(key);
+
+            switch (type) {
+                case String:
+                    map.put(key, readableMap.getString(key));
+                    break;
+            }
+        }
+
+        return map;
+    }
+
+    public static WritableMap toMap(final Statistics statistics) {
+        final WritableMap statisticsMap = Arguments.createMap();
+
+        if (statistics != null) {
+            statisticsMap.putInt(KEY_STAT_TIME, statistics.getTime());
+            statisticsMap.putInt(KEY_STAT_SIZE, (statistics.getSize() < Integer.MAX_VALUE) ? (int) statistics.getSize() : (int) (statistics.getSize() % Integer.MAX_VALUE));
+            statisticsMap.putDouble(KEY_STAT_BITRATE, statistics.getBitrate());
+            statisticsMap.putDouble(KEY_STAT_SPEED, statistics.getSpeed());
+
+            statisticsMap.putInt(KEY_STAT_VIDEO_FRAME_NUMBER, statistics.getVideoFrameNumber());
+            statisticsMap.putDouble(KEY_STAT_VIDEO_QUALITY, statistics.getVideoQuality());
+            statisticsMap.putDouble(KEY_STAT_VIDEO_FPS, statistics.getVideoFps());
+        }
+
+        return statisticsMap;
     }
 
 }

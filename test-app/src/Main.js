@@ -1,31 +1,9 @@
-/*!
- * MIT License
- *
- * Copyright (c) 2018 Taner Sener
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
-
 import React from 'react';
 import { Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { createBottomTabNavigator } from 'react-navigation';
-import { reactNativeFFmpeg } from 'react-native-ffmpeg';
+import RNFFmpeg from 'react-native-ffmpeg';
+
+import RNFS from 'react-native-fs';
 
 class CommandScreen extends React.Component {
     constructor(props) {
@@ -36,7 +14,39 @@ class CommandScreen extends React.Component {
             output: ''
         };
 
-        reactNativeFFmpeg.enableLogEvents();
+//        console.log('MOdule is ' + RNFFmpegModule);
+//        RNFFmpegModule.enableLogEvents();
+//        RNFFmpegModule.enableStatisticsEvents();
+//        RNFFmpegModule.enableRedirection();
+
+
+        RNFFmpeg.getPlatform().then((result) => {
+            console.log('Version is ', result);
+        });
+
+        RNFS.readDir(RNFS.DocumentDirectoryPath) // On Android, use "RNFS.DocumentDirectoryPath" (MainBundlePath is not defined)
+            .then((result) => {
+                console.log('GOT RESULT', result);
+
+                // stat the first file
+                return Promise.all([RNFS.stat(result[0].path), result[0].path]);
+            })
+            .then((statResult) => {
+                if (statResult[0].isFile()) {
+                    // if we have a file, read it
+                    return RNFS.readFile(statResult[1], 'utf8');
+                }
+
+                return 'no file';
+            })
+            .then((contents) => {
+                // log the file contents
+                console.log(contents);
+            })
+            .catch((err) => {
+                console.log(err.message, err.code);
+            });
+
     }
 
     render() {
@@ -181,7 +191,7 @@ const TabNavigator = createBottomTabNavigator(
     }
 );
 
-export default class App extends React.Component {
+export default class Main extends React.Component {
     render() {
         return <TabNavigator/>;
     }
