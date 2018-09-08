@@ -24,11 +24,16 @@
 
 package com.arthenica.reactnative;
 
-import android.arch.core.util.Function;
 import android.util.Log;
 
 import com.arthenica.mobileffmpeg.AbiDetect;
+import com.arthenica.mobileffmpeg.Config;
 import com.arthenica.mobileffmpeg.FFmpeg;
+import com.arthenica.mobileffmpeg.Level;
+import com.arthenica.mobileffmpeg.LogCallback;
+import com.arthenica.mobileffmpeg.LogMessage;
+import com.arthenica.mobileffmpeg.Statistics;
+import com.arthenica.mobileffmpeg.StatisticsCallback;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -44,19 +49,29 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ReactNativeFFmpegModule extends ReactContextBaseJavaModule {
+public class RNFFmpegModule extends ReactContextBaseJavaModule {
 
     public static final String KEY_VERSION = "version";
-
     public static final String KEY_RC = "rc";
-
     public static final String KEY_PLATFORM = "platform";
 
-    public static final String EVENT_LOG = "reactNativeFFmpegLogCallback";
+    public static final String KEY_LOG_TEXT = "log";
+    public static final String KEY_LOG_LEVEL = "level";
+
+    public static final String KEY_STAT_TIME = "time";
+    public static final String KEY_STAT_SIZE = "size";
+    public static final String KEY_STAT_BITRATE = "bitrate";
+    public static final String KEY_STAT_SPEED = "speed";
+    public static final String KEY_STAT_VIDEO_FRAME_NUMBER = "videoFrameNumber";
+    public static final String KEY_STAT_VIDEO_QUALITY = "videoQuality";
+    public static final String KEY_STAT_VIDEO_FPS = "videoFps";
+
+    public static final String EVENT_LOG = "RNFFmpegLogCallback";
+    public static final String EVENT_STAT = "RNFFmpegStatisticsCallback";
 
     private final ReactApplicationContext reactContext;
 
-    public ReactNativeFFmpegModule(final ReactApplicationContext reactContext) {
+    public RNFFmpegModule(final ReactApplicationContext reactContext) {
         super(reactContext);
 
         this.reactContext = reactContext;
@@ -64,7 +79,7 @@ public class ReactNativeFFmpegModule extends ReactContextBaseJavaModule {
 
     @Override
     public String getName() {
-        return "ReactNativeFFmpegModule";
+        return "RNFFmpegModule";
     }
 
     @ReactMethod
@@ -75,8 +90,9 @@ public class ReactNativeFFmpegModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void execute(final ReadableArray readableArray, final Promise promise) {
-        final List<String> arguments = new ArrayList<>();
 
+        // PREPARING ARGUMENTS
+        final List<String> arguments = new ArrayList<>();
         for (int i = 0; i < readableArray.size(); i++) {
             final ReadableType type = readableArray.getType(i);
 
@@ -87,7 +103,7 @@ public class ReactNativeFFmpegModule extends ReactContextBaseJavaModule {
 
         final String[] argumentsArray = arguments.toArray(new String[arguments.size()]);
 
-        Log.d("react-native-ffmpeg", "Execute called with arguments " + Arrays.toString(argumentsArray));
+        Log.d("react-native-ffmpeg", String.format("Calling execute with arguments %s", Arrays.toString(argumentsArray)));
 
         int rc = FFmpeg.execute(argumentsArray);
         if (rc == 0) {
@@ -105,35 +121,58 @@ public class ReactNativeFFmpegModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void enableLogEvents() {
-        com.arthenica.mobileffmpeg.Log.enableCallbackFunction(new Function<byte[], Void>() {
+        Config.enableLogCallback(new LogCallback() {
 
             @Override
-            public Void apply(byte[] input) {
-                emitLogMessage(new String(input));
-                return null;
+            public void apply(final LogMessage logMessage) {
+                emitLogMessage(logMessage);
             }
         });
     }
 
     @ReactMethod
     public void disableLogEvents() {
-        com.arthenica.mobileffmpeg.Log.enableCallbackFunction(null);
+        Config.enableLogCallback(null);
     }
 
-    /**
-     * This method is available only in Android.
-     */
     @ReactMethod
-    public void shutdown() {
-        //@TODO decide what to do with this
-        FFmpeg.shutdown();
+    public void enableStatisticsEvents() {
+        Config.enableStatisticsCallback(new StatisticsCallback() {
+
+            @Override
+            public void apply(final Statistics statistics) {
+                emitStatistics(statistics);
+            }
+        });
     }
 
-    protected void emitLogMessage(final String logMessage) {
+    @ReactMethod
+    public void disableStatisticsEvents() {
+        Config.enableStatisticsCallback(null);
+    }
+
+    protected void emitLogMessage(final LogMessage logMessage) {
         final DeviceEventManagerModule.RCTDeviceEventEmitter jsModule = reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class);
         final WritableMap logMap = Arguments.createMap();
-        logMap.putString("log", logMessage);
+        logMap.putString(KEY_LOG_TEXT, logMessage.getText());
+        logMap.putInt(KEY_LOG_LEVEL, (logMessage.getLevel() == null) ? Level.AV_LOG_TRACE.getValue() : logMessage.getLevel().getValue());
         jsModule.emit(EVENT_LOG, logMap);
+    }
+
+    protected void emitStatistics(final Statistics statistics) {
+        final DeviceEventManagerModule.RCTDeviceEventEmitter jsModule = reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class);
+        final WritableMap statisticsMap = Arguments.createMap();
+
+        statisticsMap.putInt(KEY_STAT_TIME, statistics.getTime());
+        statisticsMap.putInt(KEY_STAT_SIZE, (statistics.getSize() < Integer.MAX_VALUE) ? (int) statistics.getSize() : (int) (statistics.getSize() % Integer.MAX_VALUE));
+        statisticsMap.putDouble(KEY_STAT_BITRATE, statistics.getBitrate());
+        statisticsMap.putDouble(KEY_STAT_SPEED, statistics.getSpeed());
+
+        statisticsMap.putInt(KEY_STAT_VIDEO_FRAME_NUMBER, statistics.getVideoFrameNumber());
+        statisticsMap.putDouble(KEY_STAT_VIDEO_QUALITY, statistics.getVideoQuality());
+        statisticsMap.putDouble(KEY_STAT_VIDEO_FPS, statistics.getVideoFps());
+
+        jsModule.emit(EVENT_STAT, statisticsMap);
     }
 
     protected static WritableMap toStringMap(final String key, final String value) {

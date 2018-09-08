@@ -33,11 +33,11 @@ import com.facebook.react.uimanager.ViewManager;
 import java.util.Collections;
 import java.util.List;
 
-public class ReactNativeFFmpegPackage implements ReactPackage {
+public class RNFFmpegPackage implements ReactPackage {
 
     @Override
     public List<NativeModule> createNativeModules(final ReactApplicationContext reactContext) {
-        return Collections.<NativeModule>singletonList(new ReactNativeFFmpegModule(reactContext));
+        return Collections.<NativeModule>singletonList(new RNFFmpegModule(reactContext));
     }
 
     /**

@@ -27,7 +27,7 @@ android {
 }
 
 ext {
-    mobileFFmpegVersion = '2.0'
+    mobileFFmpegVersion = '2.1'
 }
 
 repositories {
