@@ -1,9 +1,33 @@
 import React from 'react';
-import { Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { createBottomTabNavigator } from 'react-navigation';
-import RNFFmpeg from 'react-native-ffmpeg';
+import { RNFFmpeg } from 'react-native-ffmpeg';
 
-import RNFS from 'react-native-fs';
+// import RNFS from 'react-native-fs';
+/*
+RNFS.readDir(RNFS.DocumentDirectoryPath) // On Android, use "RNFS.DocumentDirectoryPath" (MainBundlePath is not defined)
+    .then((result) => {
+        console.log('GOT RESULT', result);
+
+        // stat the first file
+        return Promise.all([RNFS.stat(result[0].path), result[0].path]);
+    })
+    .then((statResult) => {
+        if (statResult[0].isFile()) {
+            // if we have a file, read it
+            return RNFS.readFile(statResult[1], 'utf8');
+        }
+
+        return 'no file';
+    })
+    .then((contents) => {
+        // log the file contents
+        console.log(contents);
+    })
+    .catch((err) => {
+        console.log(err.message, err.code);
+    });
+*/
 
 class CommandScreen extends React.Component {
     constructor(props) {
@@ -11,42 +35,10 @@ class CommandScreen extends React.Component {
 
         this.state = {
             command: '',
-            output: ''
+            commandOutput: ''
         };
 
-//        console.log('MOdule is ' + RNFFmpegModule);
-//        RNFFmpegModule.enableLogEvents();
-//        RNFFmpegModule.enableStatisticsEvents();
-//        RNFFmpegModule.enableRedirection();
-
-
-        RNFFmpeg.getPlatform().then((result) => {
-            console.log('Version is ', result);
-        });
-
-        RNFS.readDir(RNFS.DocumentDirectoryPath) // On Android, use "RNFS.DocumentDirectoryPath" (MainBundlePath is not defined)
-            .then((result) => {
-                console.log('GOT RESULT', result);
-
-                // stat the first file
-                return Promise.all([RNFS.stat(result[0].path), result[0].path]);
-            })
-            .then((statResult) => {
-                if (statResult[0].isFile()) {
-                    // if we have a file, read it
-                    return RNFS.readFile(statResult[1], 'utf8');
-                }
-
-                return 'no file';
-            })
-            .then((contents) => {
-                // log the file contents
-                console.log(contents);
-            })
-            .catch((err) => {
-                console.log(err.message, err.code);
-            });
-
+        RNFFmpeg.enableLogCallback(this.logCallback);
     }
 
     render() {
@@ -76,73 +68,81 @@ class CommandScreen extends React.Component {
                         <Text style={commandScreenStyles.buttonTextStyle}>RUN</Text>
                     </TouchableOpacity>
                 </View>
-                <View style={commandScreenStyles.logTextViewStyle}>
-                    <TextInput
-                        style={commandScreenStyles.logTextInputStyle}
-                        autoCapitalize='none'
-                        autoCorrect={false}
-                        dataDetectorTypes='none'
-                        underlineColorAndroid="transparent"
-                        multiline={true}
-                        editable={false}
-                        onChangeText={(output) => this.setState({output})}
-                        value={this.state.output}
-                    />
+                <View style={commandScreenStyles.commandOutputViewStyle}>
+                    <ScrollView style={commandScreenStyles.commandOutputScrollViewStyle}>
+                        <Text>{this.state.commandOutput}</Text>
+                    </ScrollView>
                 </View>
             </View>
         );
-    }
+    };
+
+    logCallback = (logData) => {
+        this.setState({commandOutput: this.state.commandOutput + logData.log});
+    };
 
     run = () => {
+
+        // CLEAR COMMAND OUTPUT FIRST
+        this.setState({commandOutput:''});
+
+        console.log("Testing COMMAND.");
+
+        console.log("FFmpeg process started with arguments");
+        console.log(this.state.command);
+
         if ((this.state.command !== undefined) && (this.state.command.length > 0)) {
-            reactNativeFFmpeg.execute(this.state.command.split(' '))
+            RNFFmpeg.execute(this.state.command)
                 .then(() => {
-                    this.setState({output: 'Process exited with rc 0.'});
+                    console.log("FFmpeg process exited with rc 0");
                 })
                 .catch(rc => {
-                    this.setState({output: 'Process exited with rc ' + rc + "."});
+                    console.log("FFmpeg process exited with rc " + result);
                 });
         }
     };
 
 }
 
-class SlideshowScreen extends React.Component {
+class VideoScreen extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            playDisabled: true
+            videoCodec: 'mpeg4'
         };
     }
 
     render() {
         return (
-            <View style={slideshowScreenStyles.screenStyle}>
-                <View style={slideshowScreenStyles.headerViewStyle}>
+            <View style={videoScreenStyles.screenStyle}>
+                <View style={videoScreenStyles.headerViewStyle}>
                     <Text
-                        style={slideshowScreenStyles.headerTextStyle}>
+                        style={videoScreenStyles.headerTextStyle}>
                         ReactNativeFFmpegTest
                     </Text>
                 </View>
-                <View style={slideshowScreenStyles.createViewStyle}>
-                    <TouchableOpacity
-                        style={slideshowScreenStyles.createButtonStyle}
-                        onPress={this.createSlideshow}>
-                        <Text style={slideshowScreenStyles.buttonTextStyle}>CREATE</Text>
-                    </TouchableOpacity>
-                </View>
-                <View style={slideshowScreenStyles.playViewStyle}>
-                    <TouchableOpacity
-                        style={slideshowScreenStyles.playButtonStyle}
-                        disabled={this.state.playDisabled}
-                        onPress={this.playSlideshow}>
-                        <Text style={slideshowScreenStyles.buttonTextStyle}>PLAY</Text>
-                    </TouchableOpacity>
-                </View>
-                <View style={slideshowScreenStyles.logTextViewStyle}>
+                <View style={videoScreenStyles.videoCodecTextViewStyle}>
                     <TextInput
-                        style={slideshowScreenStyles.logTextInputStyle}
+                        style={videoScreenStyles.videoCodecTextInputStyle}
+                        autoCapitalize='none'
+                        autoCorrect={false}
+                        placeholder="video codec"
+                        underlineColorAndroid="transparent"
+                        onChangeText={(videoCodec) => this.setState({videoCodec})}
+                        value={this.state.videoCodec}
+                    />
+                </View>
+                <View style={videoScreenStyles.createViewStyle}>
+                    <TouchableOpacity
+                        style={videoScreenStyles.createButtonStyle}
+                        onPress={this.createVideo}>
+                        <Text style={videoScreenStyles.buttonTextStyle}>CREATE</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={videoScreenStyles.logTextViewStyle}>
+                    <TextInput
+                        style={videoScreenStyles.logTextInputStyle}
                         autoCapitalize='none'
                         autoCorrect={false}
                         dataDetectorTypes='none'
@@ -155,17 +155,17 @@ class SlideshowScreen extends React.Component {
         );
     }
 
-    createSlideshow = () => {
-        reactNativeFFmpeg.execute(this.state.command.split(' '))
+    createVideo = () => {
+        RNFFmpeg.execute(this.state.command)
             .then(() => {
-                this.setState({output: 'Process exited with rc 0.'});
+                // this.setState({output: 'Process exited with rc 0.'});
             })
             .catch(rc => {
-                this.setState({output: 'Process exited with rc ' + rc + "."});
+                // this.setState({output: 'Process exited with rc ' + rc + "."});
             });
     };
 
-    playSlideshow = () => {
+    playVideo = () => {
     };
 
 }
@@ -173,7 +173,7 @@ class SlideshowScreen extends React.Component {
 const TabNavigator = createBottomTabNavigator(
     {
         COMMAND: CommandScreen,
-        SLIDESHOW: SlideshowScreen,
+        VIDEO: VideoScreen,
     },
     {
         tabBarOptions: {
@@ -196,71 +196,6 @@ export default class Main extends React.Component {
         return <TabNavigator/>;
     }
 }
-
-const slideshowScreenStyles = StyleSheet.create({
-    screenStyle: {
-        flex: 1,
-        justifyContent: 'flex-start',
-        alignItems: 'stretch',
-        marginTop: Platform.select({ios: 20, android: 0})
-    },
-    headerViewStyle: {
-        paddingTop: 16,
-        paddingBottom: 10,
-        backgroundColor: '#F46842'
-    },
-    headerTextStyle: {
-        alignSelf: "center",
-        height: 32,
-        fontSize: 18,
-        fontWeight: 'bold',
-        color: '#fff',
-        borderColor: 'lightgray',
-        borderRadius: 5,
-        borderWidth: 0
-    },
-    createViewStyle: {
-        paddingTop: 40,
-        alignSelf: "center",
-        paddingBottom: 20
-    },
-    createButtonStyle: {
-        justifyContent: 'center',
-        width: 100,
-        height: 38,
-        backgroundColor: '#E3E3E3',
-        borderRadius: 5
-    },
-    playViewStyle: {
-        paddingTop: 20,
-        alignSelf: "center",
-        paddingBottom: 20
-    },
-    playButtonStyle: {
-        justifyContent: 'center',
-        width: 100,
-        height: 38,
-        backgroundColor: '#E3E3E3',
-        borderRadius: 5
-    },
-    buttonTextStyle: {
-        textAlign: "center",
-        fontSize: 14
-    },
-    logTextViewStyle: {
-        padding: 20
-    },
-    logTextInputStyle: {
-        backgroundColor: '#E3E3E3',
-        textAlignVertical: 'top',
-        color: 'black',
-        borderColor: 'lightgray',
-        borderRadius: 5,
-        borderWidth: 1,
-        height: 200,
-        maxHeight: 200
-    }
-});
 
 const commandScreenStyles = StyleSheet.create({
     screenStyle: {
@@ -293,7 +228,7 @@ const commandScreenStyles = StyleSheet.create({
     commandTextInputStyle: {
         height: 36,
         fontSize: 12,
-        borderColor: 'lightgray',
+        borderColor: '#3498db',
         borderRadius: 5,
         borderWidth: 1
     },
@@ -305,7 +240,72 @@ const commandScreenStyles = StyleSheet.create({
         justifyContent: 'center',
         width: 100,
         height: 38,
-        backgroundColor: '#E3E3E3',
+        backgroundColor: '#2ecc71',
+        borderRadius: 5
+    },
+    buttonTextStyle: {
+        textAlign: "center",
+        fontSize: 14
+    },
+    commandOutputViewStyle: {
+        padding: 20
+    },
+    commandOutputScrollViewStyle: {
+        padding: 4,
+        backgroundColor: '#f1c40f',
+        borderColor: '#f39c12',
+        borderRadius: 5,
+        borderWidth: 1,
+        height: 200,
+        maxHeight: 200
+    }
+});
+
+const videoScreenStyles = StyleSheet.create({
+    screenStyle: {
+        flex: 1,
+        justifyContent: 'flex-start',
+        alignItems: 'stretch',
+        marginTop: Platform.select({ios: 20, android: 0})
+    },
+    headerViewStyle: {
+        paddingTop: 16,
+        paddingBottom: 10,
+        backgroundColor: '#F46842'
+    },
+    headerTextStyle: {
+        alignSelf: "center",
+        height: 32,
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#fff',
+        borderColor: 'lightgray',
+        borderRadius: 5,
+        borderWidth: 0
+    },
+    videoCodecTextViewStyle: {
+        paddingTop: 40,
+        paddingBottom: 40,
+        width: 100,
+        alignSelf: "center"
+    },
+    videoCodecTextInputStyle: {
+        height: 36,
+        fontSize: 12,
+        borderColor: '#3498db',
+        borderRadius: 5,
+        borderWidth: 1,
+        textAlign: 'center'
+    },
+    createViewStyle: {
+        alignSelf: "center",
+        paddingBottom: 20
+    },
+    createButtonStyle: {
+        justifyContent: 'center',
+        width: 100,
+        height: 38,
+        backgroundColor: '#2ecc71',
         borderRadius: 5
     },
     buttonTextStyle: {
@@ -316,10 +316,10 @@ const commandScreenStyles = StyleSheet.create({
         padding: 20
     },
     logTextInputStyle: {
-        backgroundColor: '#E3E3E3',
+        backgroundColor: '#ecf0f1',
         textAlignVertical: 'top',
         color: 'black',
-        borderColor: 'lightgray',
+        borderColor: '#bdc3c7',
         borderRadius: 5,
         borderWidth: 1,
         height: 200,

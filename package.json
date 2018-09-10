@@ -6,12 +6,17 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "author": {
+    "name": "Taner Sener",
+    "email": "tanersener@gmail.com"
+  },
+  "license": "MIT",
   "keywords": [
     "react-native",
-    "ffmpeg"
+    "ffmpeg",
+    "android",
+    "ios"
   ],
-  "author": "Taner Sener",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/tanersener/react-native-ffmpeg/issues"
   },

@@ -103,9 +103,9 @@ public class RNFFmpegModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void execute(final ReadableArray readableArray, final Promise promise) {
+    public void execute(final String arguments, final Promise promise) {
 
-        // PREPARING ARGUMENTS
+        /* PREPARING ARGUMENTS
         final List<String> arguments = new ArrayList<>();
         for (int i = 0; i < readableArray.size(); i++) {
             final ReadableType type = readableArray.getType(i);
@@ -116,10 +116,10 @@ public class RNFFmpegModule extends ReactContextBaseJavaModule {
         }
 
         final String[] argumentsArray = arguments.toArray(new String[arguments.size()]);
+*/
+        Log.d(LIBRARY_NAME, String.format("Running FFmpeg with arguments: %s", arguments));
 
-        Log.d(LIBRARY_NAME, String.format("Running FFmpeg with arguments: %s", Arrays.toString(argumentsArray)));
-
-        int rc = FFmpeg.execute(argumentsArray);
+        int rc = FFmpeg.execute(arguments);
 
         Log.d(LIBRARY_NAME, String.format("FFmpeg exited with rc: %d", rc));
 
