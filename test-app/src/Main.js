@@ -70,7 +70,7 @@ class CommandScreen extends React.Component {
                 </View>
                 <View style={commandScreenStyles.commandOutputViewStyle}>
                     <ScrollView style={commandScreenStyles.commandOutputScrollViewStyle}>
-                        <Text>{this.state.commandOutput}</Text>
+                        <Text style={commandScreenStyles.commandOutputTextStyle}>{this.state.commandOutput}</Text>
                     </ScrollView>
                 </View>
             </View>
@@ -97,7 +97,7 @@ class CommandScreen extends React.Component {
                     console.log("FFmpeg process exited with rc 0");
                 })
                 .catch(rc => {
-                    console.log("FFmpeg process exited with rc " + result);
+                    console.log("FFmpeg process exited with rc " + rc);
                 });
         }
     };
@@ -245,7 +245,9 @@ const commandScreenStyles = StyleSheet.create({
     },
     buttonTextStyle: {
         textAlign: "center",
-        fontSize: 14
+        fontSize: 14,
+        fontWeight: 'bold',
+        color: '#fff'
     },
     commandOutputViewStyle: {
         padding: 20
@@ -258,6 +260,9 @@ const commandScreenStyles = StyleSheet.create({
         borderWidth: 1,
         height: 200,
         maxHeight: 200
+    },
+    commandOutputTextStyle: {
+        color: 'black'
     }
 });
 
@@ -310,7 +315,9 @@ const videoScreenStyles = StyleSheet.create({
     },
     buttonTextStyle: {
         textAlign: "center",
-        fontSize: 14
+        fontSize: 14,
+        fontWeight: 'bold',
+        color: '#fff'
     },
     logTextViewStyle: {
         padding: 20
