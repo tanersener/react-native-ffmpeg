@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1159687BAE880597AE501E4A /* Pods_ReactNativeFFmpeg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F39A2B7C20DEAEBE62242562 /* Pods_ReactNativeFFmpeg.framework */; };
-		B3E7B58A1CC2AC0600A0062D /* RNFFmpeg.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E7B5891CC2AC0600A0062D /* RNFFmpeg.m */; };
+		2DD407CEC5C0CCE9D71EE528 /* Pods_ReactNativeFFmpeg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8ED9B32C13C411B726C1A631 /* Pods_ReactNativeFFmpeg.framework */; };
+		341AD1E821487113000196E4 /* RNFFmpegModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 341AD1E721487113000196E4 /* RNFFmpegModule.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -147,12 +147,12 @@
 
 /* Begin PBXFileReference section */
 		134814201AA4EA6300B7C361 /* libReactNativeFFmpeg.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libReactNativeFFmpeg.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		341AD1D721487113000196E4 /* RNFFmpegModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNFFmpegModule.h; sourceTree = "<group>"; };
+		341AD1E721487113000196E4 /* RNFFmpegModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNFFmpegModule.m; sourceTree = "<group>"; };
 		34F10F5920F7D1A300212DA0 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
+		8ED9B32C13C411B726C1A631 /* Pods_ReactNativeFFmpeg.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ReactNativeFFmpeg.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		94C77B42A011F41CA48FA560 /* Pods-ReactNativeFFmpeg.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactNativeFFmpeg.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ReactNativeFFmpeg/Pods-ReactNativeFFmpeg.debug.xcconfig"; sourceTree = "<group>"; };
-		B3E7B5881CC2AC0600A0062D /* RNFFmpeg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNFFmpeg.h; sourceTree = "<group>"; };
-		B3E7B5891CC2AC0600A0062D /* RNFFmpeg.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNFFmpeg.m; sourceTree = "<group>"; };
 		E8D9D45C608E96DDBAD00FFF /* Pods-ReactNativeFFmpeg.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactNativeFFmpeg.release.xcconfig"; path = "Pods/Target Support Files/Pods-ReactNativeFFmpeg/Pods-ReactNativeFFmpeg.release.xcconfig"; sourceTree = "<group>"; };
-		F39A2B7C20DEAEBE62242562 /* Pods_ReactNativeFFmpeg.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ReactNativeFFmpeg.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,7 +160,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1159687BAE880597AE501E4A /* Pods_ReactNativeFFmpeg.framework in Frameworks */,
+				2DD407CEC5C0CCE9D71EE528 /* Pods_ReactNativeFFmpeg.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -210,9 +210,9 @@
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
+				341AD1D721487113000196E4 /* RNFFmpegModule.h */,
+				341AD1E721487113000196E4 /* RNFFmpegModule.m */,
 				34F10F5920F7D1A300212DA0 /* React.xcodeproj */,
-				B3E7B5881CC2AC0600A0062D /* RNFFmpeg.h */,
-				B3E7B5891CC2AC0600A0062D /* RNFFmpeg.m */,
 				134814211AA4EA7D00B7C361 /* Products */,
 				12A30D81C66D7D5B7E81A190 /* Pods */,
 				D4C6EDE691F8EF780793A37A /* Frameworks */,
@@ -222,7 +222,7 @@
 		D4C6EDE691F8EF780793A37A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				F39A2B7C20DEAEBE62242562 /* Pods_ReactNativeFFmpeg.framework */,
+				8ED9B32C13C411B726C1A631 /* Pods_ReactNativeFFmpeg.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -427,7 +427,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B3E7B58A1CC2AC0600A0062D /* RNFFmpeg.m in Sources */,
+				341AD1E821487113000196E4 /* RNFFmpegModule.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

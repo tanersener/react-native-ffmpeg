@@ -1,4 +1,4 @@
-platform :ios, '8.0'
+platform :ios
 
 use_frameworks!
 

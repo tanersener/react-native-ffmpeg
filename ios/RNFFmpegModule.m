@@ -52,29 +52,37 @@ static NSString *const EVENT_LOG = @"RNFFmpegLogCallback";
 static NSString *const EVENT_STAT = @"RNFFmpegStatisticsCallback";
 
 @implementation RNFFmpegModule
-@synthesize bridge = _bridge;
 
-RCT_EXPORT_MODULE();
+RCT_EXPORT_MODULE(RNFFmpegModule);
+
+- (NSArray<NSString*> *)supportedEvents {
+    NSMutableArray *array = [NSMutableArray array];
+
+    [array addObject:EVENT_LOG];
+    [array addObject:EVENT_STAT];
+
+    return array;
+}
 
 RCT_EXPORT_METHOD(getPlatform:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     NSString *architecture = [ArchDetect getArch];
-    resolve([self toStringDictionary(KEY_PLATFORM, [NSString stringWithFormat:@"%@-%@", PLATFORM_NAME, architecture])]);
+    resolve([RNFFmpegModule toStringDictionary:KEY_PLATFORM :[NSString stringWithFormat:@"%@-%@", PLATFORM_NAME, architecture]]);
 }
 
 RCT_EXPORT_METHOD(getFFmpegVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     NSString *ffmpegVersion = [MobileFFmpeg getFFmpegVersion];
-    resolve([self toStringDictionary(KEY_VERSION, ffmpegVersion)]);
+    resolve([RNFFmpegModule toStringDictionary:KEY_VERSION :ffmpegVersion]);
 }
 
 RCT_EXPORT_METHOD(execute:(NSString*)arguments resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
-    RCTLogInfo(@"Running FFmpeg with arguments: %s\n", command);
+    RCTLogInfo(@"Running FFmpeg with arguments: %@\n", arguments);
 
     dispatch_async(dispatch_get_main_queue(), ^{
         int rc = [MobileFFmpeg execute:arguments];
 
         RCTLogInfo(@"FFmpeg exited with rc: %d\n", rc);
 
-        resolve([self toIntDictionary(KEY_RC, [NSNumber numberWithInt:rc])]);
+        resolve([RNFFmpegModule toIntDictionary:KEY_RC :[NSNumber numberWithInt:rc]]);
     });
 }
 
@@ -92,7 +100,7 @@ RCT_EXPORT_METHOD(disableRedirection) {
 
 RCT_EXPORT_METHOD(getLogLevel:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     int logLevel = [MobileFFmpegConfig getLogLevel];
-    resolve([self toIntDictionary(KEY_LOG_LEVEL, [NSNumber numberWithInt:logLevel])]);
+    resolve([RNFFmpegModule toIntDictionary:KEY_LOG_LEVEL :[NSNumber numberWithInt:logLevel]]);
 }
 
 RCT_EXPORT_METHOD(setLogLevel:(int)logLevel) {
@@ -116,8 +124,8 @@ RCT_EXPORT_METHOD(disableStatisticsEvents) {
 }
 
 RCT_EXPORT_METHOD(getLastReceivedStatistics:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
-    (Statistics*) statistics = [MobileFFmpegConfig getLastReceivedStatistics];
-    resolve([self toIntDictionary(KEY_LOG_LEVEL, [NSNumber numberWithInt:logLevel])]);
+    Statistics *statistics = [MobileFFmpegConfig getLastReceivedStatistics];
+    resolve([RNFFmpegModule toStatisticsDictionary:statistics]);
 }
 
 RCT_EXPORT_METHOD(resetStatistics) {
@@ -125,21 +133,23 @@ RCT_EXPORT_METHOD(resetStatistics) {
 }
 
 RCT_EXPORT_METHOD(setFontconfigConfigurationPath:(NSString*)path) {
-    [MobileFFmpegConfig setFontDirectory:path];
+    [MobileFFmpegConfig setFontconfigConfigurationPath:path];
 }
 
 RCT_EXPORT_METHOD(setFontDirectory:(NSString*)fontDirectoryPath) {
-    [MobileFFmpegConfig setFontDirectory:fontDirectoryPath];
+    [MobileFFmpegConfig setFontDirectory:fontDirectoryPath with:nil];
 }
 
 - (void)logCallback: (int)level :(NSString*)message {
     dispatch_async(dispatch_get_main_queue(), ^{
+        NSMutableArray *array = [NSMutableArray array];
+        
         NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
-
         dictionary[KEY_LOG_LEVEL] = [NSNumber numberWithInt:level];
         dictionary[KEY_LOG_TEXT] = message;
+        [array addObject:dictionary];
 
-        [self emitLogMessage: dictionary];
+        [self emitLogMessage: array];
     });
 }
 
@@ -148,8 +158,16 @@ RCT_EXPORT_METHOD(setFontDirectory:(NSString*)fontDirectoryPath) {
         [self emitStatistics: statistics];
     });
 }
+- (void) emitLogMessage:(NSArray*)logMessage{
+    [self sendEventWithName:EVENT_LOG body:logMessage];
+}
 
-- (NSArray *) toStringDictionary:(NSString*)key :(NSString*)value {
+- (void) emitStatistics:(Statistics*)statistics{
+    NSArray *array = [RNFFmpegModule toStatisticsDictionary:statistics];
+    [self sendEventWithName:EVENT_STAT body:array];
+}
+
++ (NSArray *) toStringDictionary:(NSString*)key :(NSString*)value {
     NSMutableArray *array = [NSMutableArray array];
     
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
@@ -159,7 +177,7 @@ RCT_EXPORT_METHOD(setFontDirectory:(NSString*)fontDirectoryPath) {
     return array;
 }
 
-- (NSArray *) toIntDictionary:(NSString*)key :(NSNumber*)value {
++ (NSArray *) toIntDictionary:(NSString*)key :(NSNumber*)value {
     NSMutableArray *array = [NSMutableArray array];
     
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
@@ -169,15 +187,15 @@ RCT_EXPORT_METHOD(setFontDirectory:(NSString*)fontDirectoryPath) {
     return array;
 }
 
-- (NSArray *) toStatisticsDictionary:(Statistics*)statistics {
++ (NSArray *) toStatisticsDictionary:(Statistics*)statistics {
     NSMutableArray *array = [NSMutableArray array];
     
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
-
+    
     if (statistics != nil) {
         dictionary[KEY_STAT_TIME] = [NSNumber numberWithInt: [statistics getTime]];
         dictionary[KEY_STAT_SIZE] = [NSNumber numberWithLong: [statistics getSize]];
-
+        
         dictionary[KEY_STAT_BITRATE] = [NSNumber numberWithDouble: [statistics getBitrate]];
         dictionary[KEY_STAT_SPEED] = [NSNumber numberWithDouble: [statistics getSpeed]];
         
@@ -189,15 +207,6 @@ RCT_EXPORT_METHOD(setFontDirectory:(NSString*)fontDirectoryPath) {
     [array addObject:dictionary];
     
     return array;
-}
-
-- (void) emitLogMessage:(NSDictionary*)logMessage{
-    [self.bridge.eventDispatcher sendAppEventWithName:EVENT_LOG body:logMessage];
-}
-
-- (void) emitStatistics:(Statistics*)statistics{
-    (NSDictionary*)dictionary = [self toStatistics:statistics]
-    [self.bridge.eventDispatcher sendAppEventWithName:EVENT_STAT body:dictionary];
 }
 
 @end
