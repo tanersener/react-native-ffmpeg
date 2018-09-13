@@ -21,6 +21,9 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
+		34EEF7A2214A85B7008F3121 /* colosseum.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 34EEF79F214A85B6008F3121 /* colosseum.jpg */; };
+		34EEF7A3214A85B7008F3121 /* pyramid.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 34EEF7A0214A85B6008F3121 /* pyramid.jpg */; };
+		34EEF7A4214A85B7008F3121 /* tajmahal.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 34EEF7A1214A85B6008F3121 /* tajmahal.jpg */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
 		ADEB0B6342EDCEFEE829D644 /* libPods-ReactNativeFFmpegTest.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3286F3B55C4901B999B3F457 /* libPods-ReactNativeFFmpegTest.a */; };
@@ -307,6 +310,9 @@
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		3286F3B55C4901B999B3F457 /* libPods-ReactNativeFFmpegTest.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ReactNativeFFmpegTest.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		34EEF79F214A85B6008F3121 /* colosseum.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = colosseum.jpg; sourceTree = "<group>"; };
+		34EEF7A0214A85B6008F3121 /* pyramid.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = pyramid.jpg; sourceTree = "<group>"; };
+		34EEF7A1214A85B6008F3121 /* tajmahal.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = tajmahal.jpg; sourceTree = "<group>"; };
 		3DC8F2CF5966F3CFB7F57878 /* Pods-ReactNativeFFmpegTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactNativeFFmpegTest.release.xcconfig"; path = "Target Support Files/Pods-ReactNativeFFmpegTest/Pods-ReactNativeFFmpegTest.release.xcconfig"; sourceTree = "<group>"; };
 		47D4DE4E51412223D33A35BF /* Pods-ReactNativeFFmpegTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReactNativeFFmpegTest.debug.xcconfig"; path = "Target Support Files/Pods-ReactNativeFFmpegTest/Pods-ReactNativeFFmpegTest.debug.xcconfig"; sourceTree = "<group>"; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
@@ -447,6 +453,16 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		34EEF79E214A85B6008F3121 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				34EEF79F214A85B6008F3121 /* colosseum.jpg */,
+				34EEF7A0214A85B6008F3121 /* pyramid.jpg */,
+				34EEF7A1214A85B6008F3121 /* tajmahal.jpg */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		5E91572E1DD0AC6500FF2AA8 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -496,6 +512,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				34EEF79E214A85B6008F3121 /* Resources */,
 				13B07FAE1A68108700A75B9A /* ReactNativeFFmpegTest */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
@@ -900,8 +917,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				34EEF7A3214A85B7008F3121 /* pyramid.jpg in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
+				34EEF7A2214A85B7008F3121 /* colosseum.jpg in Resources */,
+				34EEF7A4214A85B7008F3121 /* tajmahal.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

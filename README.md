@@ -1,5 +1,17 @@
-
 # react-native-ffmpeg
+
+FFmpeg for React Native
+
+<img src="https://github.com/tanersener/react-native-ffmpeg/blob/master/docs/assets/react-native-ffmpeg-logo-v1.jpeg" width="240">
+
+### 1. Features
+- Based on [MobileFFmpeg](https://github.com/tanersener/mobile-ffmpeg)
+- Supports both Android and IOS
+- Provides eight different packages
+
+| min | min-gpl | https | https-gpl | audio | video | full | full-gpl |
+| :----: | :----: | :----: | :----: | :----: | :----: | :----: | :----: |
+|  -  |  vid.stab <br/> x264 <br/> x265 <br/> xvidcore  |  gnutls  |  gnutls <br/> vid.stab <br/> x264 <br/> x265 <br/> xvidcore  |  chromaprint <br/> lame <br/> libilbc <br/> libvorbis <br/> opencore-amr <br/> opus <br/> shine <br/> soxr <br/> speex <br/> wavpack  |  fontconfig <br/> freetype <br/> fribidi <br/> kvazaar <br/> libaom <br/> libass <br/> libiconv <br/> libtheora <br/> libvpx <br/> snappy  |  chromaprint <br/> fontconfig <br/> freetype <br/> fribidi <br/> gmp <br/> gnutls <br/> kvazaar <br/> lame <br/> libaom <br/> libass <br/> libiconv <br/> libilbc <br/> libtheora <br/> libvorbis <br/> libvpx <br/> libwebp <br/> libxml2 <br/> opencore-amr <br/> opus <br/> shine <br/> snappy <br/> soxr <br/> speex <br/> wavpack  |  chromaprint <br/> fontconfig <br/> freetype <br/> fribidi <br/> gmp <br/> gnutls <br/> kvazaar <br/> lame <br/> libaom <br/> libass <br/> libiconv <br/> libilbc <br/> libtheora <br/> libvorbis <br/> libvpx <br/> libwebp <br/> libxml2 <br/> opencore-amr <br/> opus <br/> shine <br/> snappy <br/> soxr <br/> speex <br/> vid.stab <br/> wavpack <br/> x264 <br/> x265 <br/> xvidcore  |
 
 ## Getting started
 

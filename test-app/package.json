@@ -9,6 +9,7 @@
     "react": "16.4.1",
     "react-native": "^0.56",
     "react-native-ffmpeg": "file:..",
+    "react-native-fs": "^2.11.15",
     "react-navigation": "^2.6.2"
   }
 }

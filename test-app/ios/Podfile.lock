@@ -7,6 +7,8 @@ PODS:
     - glog
   - glog (0.3.4)
   - mobile-ffmpeg-min (2.1.1)
+  - React (0.56.1):
+    - React/Core (= 0.56.1)
   - react-native-ffmpeg-min (0.0.1):
     - mobile-ffmpeg-min
   - React/Core (0.56.1):
@@ -46,6 +48,8 @@ PODS:
     - React/Core
     - React/fishhook
     - React/RCTBlob
+  - RNFS (2.11.15):
+    - React
   - yoga (0.56.1.React)
 
 DEPENDENCIES:
@@ -64,6 +68,7 @@ DEPENDENCIES:
   - React/RCTNetwork (from `../node_modules/react-native`)
   - React/RCTText (from `../node_modules/react-native`)
   - React/RCTWebSocket (from `../node_modules/react-native`)
+  - RNFS (from `../node_modules/react-native-fs`)
   - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -82,19 +87,22 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native"
   react-native-ffmpeg-min:
     :podspec: "../node_modules/react-native-ffmpeg/ios/react-native-ffmpeg-min.podspec"
+  RNFS:
+    :path: "../node_modules/react-native-fs"
   yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
-  DoubleConversion: a6ec5115d02a687c3a7350d6462b8c3e744bfa41
-  Folly: fa458a15230e6bee654f3e2b25f6be60f0b61bf3
-  glog: cffdcd539a4fed795bdf0146afde6dd4a981576c
+  DoubleConversion: a9706f16e388b53ff12cca34473428ee29746a26
+  Folly: c89ac2d5c6ab169cd7397ef27485c44f35f742c7
+  glog: b3b0330915eccea41c5cc9731a77cf564a9be5ea
   mobile-ffmpeg-min: 75051455a3799575ed077d80ec05e9b42026e58a
   React: 1fe0eb13d90b625d94c3b117c274dcfd2e760e11
-  react-native-ffmpeg-min: 23436d6571b4e393393aff00291c00d1f47a4668
+  react-native-ffmpeg-min: 73fb9a15b52cdd4f69398c552fdd6633c563d01c
+  RNFS: bbb1a64eb245763daf34aea86f97c97c4e85f74c
   yoga: b1ce48b6cf950b98deae82838f5173ea7cf89e85
 
-PODFILE CHECKSUM: dc150d1ed299e42da1fb48cd99ba8ff1578b0713
+PODFILE CHECKSUM: 78928a66ce528c104801547587dc9c1920641cbd
 
 COCOAPODS: 1.6.0.beta.1

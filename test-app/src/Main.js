@@ -2,32 +2,14 @@ import React from 'react';
 import { Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { createBottomTabNavigator } from 'react-navigation';
 import { RNFFmpeg } from 'react-native-ffmpeg';
+import RNFS from 'react-native-fs';
+import { VideoUtil } from './VideoUtil';
 
-// import RNFS from 'react-native-fs';
-/*
-RNFS.readDir(RNFS.DocumentDirectoryPath) // On Android, use "RNFS.DocumentDirectoryPath" (MainBundlePath is not defined)
-    .then((result) => {
-        console.log('GOT RESULT', result);
-
-        // stat the first file
-        return Promise.all([RNFS.stat(result[0].path), result[0].path]);
-    })
-    .then((statResult) => {
-        if (statResult[0].isFile()) {
-            // if we have a file, read it
-            return RNFS.readFile(statResult[1], 'utf8');
-        }
-
-        return 'no file';
-    })
-    .then((contents) => {
-        // log the file contents
-        console.log(contents);
-    })
-    .catch((err) => {
-        console.log(err.message, err.code);
+async function execute(command) {
+    await RNFFmpeg.execute(command).then(data => {
+        console.log("FFmpeg process exited with rc " + data.rc);
     });
-*/
+}
 
 class CommandScreen extends React.Component {
     constructor(props) {
@@ -37,8 +19,6 @@ class CommandScreen extends React.Component {
             command: '',
             commandOutput: ''
         };
-
-        RNFFmpeg.enableLogCallback(this.logCallback);
     }
 
     render() {
@@ -83,6 +63,8 @@ class CommandScreen extends React.Component {
 
     run = () => {
 
+        RNFFmpeg.enableLogCallback(this.logCallback);
+
         // CLEAR COMMAND OUTPUT FIRST
         this.setState({commandOutput:''});
 
@@ -92,10 +74,7 @@ class CommandScreen extends React.Component {
         console.log(this.state.command);
 
         if ((this.state.command !== undefined) && (this.state.command.length > 0)) {
-            RNFFmpeg.execute(this.state.command)
-                .then(data => {
-                    console.log("FFmpeg process exited with rc " + data.rc);
-                });
+            execute(this.state.command);
         }
     };
 
@@ -106,7 +85,8 @@ class VideoScreen extends React.Component {
         super(props);
 
         this.state = {
-            videoCodec: 'mpeg4'
+            videoCodec: 'mpeg4',
+            encodeOutput: ''
         };
     }
 
@@ -137,32 +117,59 @@ class VideoScreen extends React.Component {
                         <Text style={videoScreenStyles.buttonTextStyle}>CREATE</Text>
                     </TouchableOpacity>
                 </View>
-                <View style={videoScreenStyles.logTextViewStyle}>
-                    <TextInput
-                        style={videoScreenStyles.logTextInputStyle}
-                        autoCapitalize='none'
-                        autoCorrect={false}
-                        dataDetectorTypes='none'
-                        underlineColorAndroid="transparent"
-                        multiline={true}
-                        editable={false}
-                    />
+                <View style={commandScreenStyles.commandOutputViewStyle}>
+                    <ScrollView style={commandScreenStyles.commandOutputScrollViewStyle}>
+                        <Text style={commandScreenStyles.commandOutputTextStyle}>{this.state.encodeOutput}</Text>
+                    </ScrollView>
                 </View>
             </View>
         );
     }
 
-    createVideo = () => {
-        RNFFmpeg.execute(this.state.command)
-            .then(() => {
-                // this.setState({output: 'Process exited with rc 0.'});
-            })
-            .catch(rc => {
-                // this.setState({output: 'Process exited with rc ' + rc + "."});
-            });
+    logCallback = (logData) => {
+        this.setState({encodeOutput: this.state.encodeOutput + logData.log});
     };
 
-    playVideo = () => {
+    statisticsCallback = (statisticsData) => {
+        console.log('Statistics; frame: ' + statisticsData.videoFrameNumber.toFixed(1) + ', fps: ' + statisticsData.videoFps.toFixed(1) + ', quality: ' + statisticsData.videoQuality.toFixed(1) +
+        ', size: ' + statisticsData.size + ', time: ' + statisticsData.time);
+    };
+
+    createVideo = () => {
+        RNFFmpeg.enableLogCallback(this.logCallback);
+        RNFFmpeg.enableStatisticsCallback(this.statisticsCallback);
+
+        console.log("Testing VIDEO.");
+
+        VideoUtil.resourcePath('colosseum.jpg').then((image1) => {
+            console.log('Saved resource colosseum.jpg to ' + image1);
+
+            VideoUtil.resourcePath('pyramid.jpg').then((image2) => {
+                console.log('Saved resource pyramid.jpg to ' + image2);
+
+                VideoUtil.resourcePath('tajmahal.jpg').then((image3) => {
+                    console.log('Saved resource tajmahal.jpg to ' + image3);
+
+                    var videoPath = RNFS.CachesDirectoryPath + '/video.mp4';
+
+                    console.log("FFmpeg process started with arguments");
+                    let command = VideoUtil.generateEncodeVideoScript(image1, image2, image3, videoPath, this.state.videoCodec, '');
+                    console.log(command);
+
+                    execute(command);
+
+                }).catch((err) => {
+                    console.log('Failed to save resource: tajmahal.jpg');
+                    console.log(err.message, err.code);
+                });
+            }).catch((err) => {
+                console.log('Failed to save resource: pyramid.jpg');
+                console.log(err.message, err.code);
+            });
+        }).catch((err) => {
+            console.log('Failed to save resource: colosseum.jpg');
+            console.log(err.message, err.code);
+        });
     };
 
 }
@@ -315,18 +322,5 @@ const videoScreenStyles = StyleSheet.create({
         fontSize: 14,
         fontWeight: 'bold',
         color: '#fff'
-    },
-    logTextViewStyle: {
-        padding: 20
-    },
-    logTextInputStyle: {
-        backgroundColor: '#ecf0f1',
-        textAlignVertical: 'top',
-        color: 'black',
-        borderColor: '#bdc3c7',
-        borderRadius: 5,
-        borderWidth: 1,
-        height: 200,
-        maxHeight: 200
     }
 });

@@ -5,6 +5,8 @@ platform :ios, '9.0'
 target "ReactNativeFFmpegTest" do
 
   pod 'react-native-ffmpeg-min', :podspec => '../node_modules/react-native-ffmpeg/ios/react-native-ffmpeg-min.podspec'
+
+  pod 'RNFS', :path => '../node_modules/react-native-fs'
   
   pod 'React', :path => '../node_modules/react-native', :subspecs => [
     'Core',

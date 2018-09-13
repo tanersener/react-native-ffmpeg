@@ -73,7 +73,7 @@ class ReactNativeFFmpeg {
             }
         });
         reactNativeFFmpegModuleEvents.addListener(statisticsLog, statistics => {
-            if (this.logCallback !== undefined) {
+            if (this.statisticsCallback !== undefined) {
                 this.statisticsCallback(statistics);
             }
         });
