@@ -92,7 +92,7 @@ SPEC CHECKSUMS:
   glog: cffdcd539a4fed795bdf0146afde6dd4a981576c
   mobile-ffmpeg-min: 75051455a3799575ed077d80ec05e9b42026e58a
   React: 1fe0eb13d90b625d94c3b117c274dcfd2e760e11
-  react-native-ffmpeg-min: 25c1408c73db31e4ef069dc566252f3e0f83250f
+  react-native-ffmpeg-min: 23436d6571b4e393393aff00291c00d1f47a4668
   yoga: b1ce48b6cf950b98deae82838f5173ea7cf89e85
 
 PODFILE CHECKSUM: dc150d1ed299e42da1fb48cd99ba8ff1578b0713

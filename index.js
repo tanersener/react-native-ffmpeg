@@ -1,4 +1,4 @@
-import { DeviceEventEmitter, NativeModules } from 'react-native';
+import { NativeEventEmitter, NativeModules } from 'react-native';
 
 const { RNFFmpegModule } = NativeModules;
 
@@ -64,14 +64,15 @@ export const LogLevel = {
 class ReactNativeFFmpeg {
 
     constructor() {
-        DeviceEventEmitter.addListener(eventLog, event => {
+        const reactNativeFFmpegModuleEvents = new NativeEventEmitter(RNFFmpegModule);
+        reactNativeFFmpegModuleEvents.addListener(eventLog, event => {
             if (this.logCallback === undefined) {
                 console.log(event.log);
             } else {
                 this.logCallback(event);
             }
         });
-        DeviceEventEmitter.addListener(statisticsLog, statistics => {
+        reactNativeFFmpegModuleEvents.addListener(statisticsLog, statistics => {
             if (this.logCallback !== undefined) {
                 this.statisticsCallback(statistics);
             }

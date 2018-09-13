@@ -142,14 +142,11 @@ RCT_EXPORT_METHOD(setFontDirectory:(NSString*)fontDirectoryPath) {
 
 - (void)logCallback: (int)level :(NSString*)message {
     dispatch_async(dispatch_get_main_queue(), ^{
-        NSMutableArray *array = [NSMutableArray array];
-        
         NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
         dictionary[KEY_LOG_LEVEL] = [NSNumber numberWithInt:level];
         dictionary[KEY_LOG_TEXT] = message;
-        [array addObject:dictionary];
 
-        [self emitLogMessage: array];
+        [self emitLogMessage: dictionary];
     });
 }
 
@@ -158,38 +155,31 @@ RCT_EXPORT_METHOD(setFontDirectory:(NSString*)fontDirectoryPath) {
         [self emitStatistics: statistics];
     });
 }
-- (void) emitLogMessage:(NSArray*)logMessage{
+
+- (void) emitLogMessage:(NSDictionary*)logMessage{
     [self sendEventWithName:EVENT_LOG body:logMessage];
 }
 
 - (void) emitStatistics:(Statistics*)statistics{
-    NSArray *array = [RNFFmpegModule toStatisticsDictionary:statistics];
-    [self sendEventWithName:EVENT_STAT body:array];
+    NSDictionary *dictionary = [RNFFmpegModule toStatisticsDictionary:statistics];
+    [self sendEventWithName:EVENT_STAT body:dictionary];
 }
 
-+ (NSArray *) toStringDictionary:(NSString*)key :(NSString*)value {
-    NSMutableArray *array = [NSMutableArray array];
-    
++ (NSDictionary *) toStringDictionary:(NSString*)key :(NSString*)value {
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     dictionary[key] = value;
-    [array addObject:dictionary];
-    
-    return array;
+
+    return dictionary;
 }
 
-+ (NSArray *) toIntDictionary:(NSString*)key :(NSNumber*)value {
-    NSMutableArray *array = [NSMutableArray array];
-    
++ (NSDictionary *) toIntDictionary:(NSString*)key :(NSNumber*)value {
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     dictionary[key] = value;
-    [array addObject:dictionary];
-    
-    return array;
+
+    return dictionary;
 }
 
-+ (NSArray *) toStatisticsDictionary:(Statistics*)statistics {
-    NSMutableArray *array = [NSMutableArray array];
-    
++ (NSDictionary *) toStatisticsDictionary:(Statistics*)statistics {
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     
     if (statistics != nil) {
@@ -203,10 +193,8 @@ RCT_EXPORT_METHOD(setFontDirectory:(NSString*)fontDirectoryPath) {
         dictionary[KEY_STAT_VIDEO_QUALITY] = [NSNumber numberWithFloat: [statistics getVideoQuality]];
         dictionary[KEY_STAT_VIDEO_FPS] = [NSNumber numberWithFloat: [statistics getVideoFps]];
     }
-    
-    [array addObject:dictionary];
-    
-    return array;
+
+    return dictionary;
 }
 
 @end

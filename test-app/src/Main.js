@@ -93,11 +93,8 @@ class CommandScreen extends React.Component {
 
         if ((this.state.command !== undefined) && (this.state.command.length > 0)) {
             RNFFmpeg.execute(this.state.command)
-                .then(() => {
-                    console.log("FFmpeg process exited with rc 0");
-                })
-                .catch(rc => {
-                    console.log("FFmpeg process exited with rc " + rc);
+                .then(data => {
+                    console.log("FFmpeg process exited with rc " + data.rc);
                 });
         }
     };

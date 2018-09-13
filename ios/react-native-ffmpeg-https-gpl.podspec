@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
     s.requires_arc      = true
     s.ios.deployment_target = '8.0'
 
-    s.source            = { :http => 'https://www.dropbox.com/s/9jiszzz8fstemoq/Archive.zip' }
+    s.source            = { :http => 'https://www.dropbox.com/s/atj0nh1jwkz9ssj/Archive.zip' }
     s.source_files      = 'RNFFmpegModule.m',
                           'RNFFmpegModule.h'
 
