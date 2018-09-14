@@ -10,7 +10,7 @@
     "name": "Taner Sener",
     "email": "tanersener@gmail.com"
   },
-  "license": "MIT",
+  "license": "LGPL-3.0",
   "keywords": [
     "react-native",
     "ffmpeg",
