@@ -2,7 +2,7 @@
 
 FFmpeg for React Native
 
-<img src="https://github.com/tanersener/react-native-ffmpeg/blob/master/docs/assets/react-native-ffmpeg-logo-v1.jpeg" width="280">
+<img src="https://github.com/tanersener/react-native-ffmpeg/blob/master/docs/assets/react-native-ffmpeg-logo-v2.png" width="280">
 
 ### 1. Features
 - Based on MobileFFmpeg
