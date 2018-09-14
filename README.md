@@ -1,57 +1,76 @@
-# react-native-ffmpeg
+# React Native FFmpeg
 
 FFmpeg for React Native
 
-<img src="https://github.com/tanersener/react-native-ffmpeg/blob/master/docs/assets/react-native-ffmpeg-logo-v1.jpeg" width="240">
+<img src="https://github.com/tanersener/react-native-ffmpeg/blob/master/docs/assets/react-native-ffmpeg-logo-v1.jpeg" width="280">
 
 ### 1. Features
-- Based on [MobileFFmpeg](https://github.com/tanersener/mobile-ffmpeg)
+- Based on MobileFFmpeg
 - Supports both Android and IOS
-- Provides eight different packages
 
-| min | min-gpl | https | https-gpl | audio | video | full | full-gpl |
-| :----: | :----: | :----: | :----: | :----: | :----: | :----: | :----: |
-|  -  |  vid.stab <br/> x264 <br/> x265 <br/> xvidcore  |  gnutls  |  gnutls <br/> vid.stab <br/> x264 <br/> x265 <br/> xvidcore  |  chromaprint <br/> lame <br/> libilbc <br/> libvorbis <br/> opencore-amr <br/> opus <br/> shine <br/> soxr <br/> speex <br/> wavpack  |  fontconfig <br/> freetype <br/> fribidi <br/> kvazaar <br/> libaom <br/> libass <br/> libiconv <br/> libtheora <br/> libvpx <br/> snappy  |  chromaprint <br/> fontconfig <br/> freetype <br/> fribidi <br/> gmp <br/> gnutls <br/> kvazaar <br/> lame <br/> libaom <br/> libass <br/> libiconv <br/> libilbc <br/> libtheora <br/> libvorbis <br/> libvpx <br/> libwebp <br/> libxml2 <br/> opencore-amr <br/> opus <br/> shine <br/> snappy <br/> soxr <br/> speex <br/> wavpack  |  chromaprint <br/> fontconfig <br/> freetype <br/> fribidi <br/> gmp <br/> gnutls <br/> kvazaar <br/> lame <br/> libaom <br/> libass <br/> libiconv <br/> libilbc <br/> libtheora <br/> libvorbis <br/> libvpx <br/> libwebp <br/> libxml2 <br/> opencore-amr <br/> opus <br/> shine <br/> snappy <br/> soxr <br/> speex <br/> vid.stab <br/> wavpack <br/> x264 <br/> x265 <br/> xvidcore  |
-
-## Getting started
+### 2. Installation
 
 `$ npm install react-native-ffmpeg --save`
 
-### Mostly automatic installation
+#### 2.1 iOS
+
+Add react-native-ffmpeg pod to your `Podfile`
+`pod 'react-native-ffmpeg', :podspec => '../node_modules/react-native-ffmpeg/ios/react-native-ffmpeg.podspec'`
+
+#### 2.2 Android
 
 `$ react-native link react-native-ffmpeg`
 
-### Manual installation
+### 3. Using
 
+1. Create and execute commands.
+    ```
+    import { RNFFmpeg } from 'react-native-ffmpeg';
+    
+    RNFFmpeg.execute('-i file1.mp4 -c:v mpeg4 file2.mp4').then(data => {
+        console.log("FFmpeg process exited with rc " + data.rc);
+    });
+    ```
 
-#### iOS
+2. Stop an ongoing operation.
+    ```
+    RNFFmpeg.cancel();
+    ```
 
-1. In XCode, in the project navigator, right click `Libraries` ➜ `Add Files to [your project's name]`
-2. Go to `node_modules` ➜ `react-native-ffmpeg` and add `ReactNativeFfmpeg.xcodeproj`
-3. In XCode, in the project navigator, select your project. Add `libReactNativeFfmpeg.a` to your project's `Build Phases` ➜ `Link Binary With Libraries`
-4. Run your project (`Cmd+R`)<
+3. Enable log callback.
+    ```
+    logCallback = (logData) => {
+        console.log(logData.log);
+    };
+    ...
+    RNFFmpeg.enableLogCallback(this.logCallback);
+    ```
 
-#### Android
+4. Enable statistics callback.
+    ```
+    statisticsCallback = (statisticsData) => {
+        console.log('Statistics; frame: ' + statisticsData.videoFrameNumber.toFixed(1) + ', fps: ' + statisticsData.videoFps.toFixed(1) + ', quality: ' + statisticsData.videoQuality.toFixed(1) +
+        ', size: ' + statisticsData.size + ', time: ' + statisticsData.time);
+    };
+    ...
+    RNFFmpeg.enableStatisticsCallback(this.statisticsCallback);
+    ```
+    
+#### 4. Test Application
 
-1. Open up `android/app/src/main/java/[...]/MainActivity.java`
-  - Add `import com.arthenica.reactnative.ReactNativeFFmpegPackage;` to the imports at the top of the file
-  - Add `new ReactNativeFfmpegPackage()` to the list returned by the `getPackages()` method
-2. Append the following lines to `android/settings.gradle`:
-  	```
-  	include ':react-native-ffmpeg'
-  	project(':react-native-ffmpeg').projectDir = new File(rootProject.projectDir, 	'../node_modules/react-native-ffmpeg/android')
-  	```
-3. Insert the following lines inside the dependencies block in `android/app/build.gradle`:
-  	```
-      compile project(':react-native-ffmpeg')
-  	```
+You can see how `React Native FFmpeg` is used inside an application by running test application provided under `test-app` folder.
 
+### 5. License
 
-## Usage
-```javascript
-import ReactNativeFFpeg from 'react-native-ffmpeg';
+This project is licensed under the LGPL v3.0.
 
-// TODO: What to do with the module?
-ReactNativeFfmpeg;
-```
-  
+Digital assets used in test applications are published in the public domain.
+
+### 6. Contributing
+
+Feel free to submit issues or pull requests.
+
+### 7. See Also
+
+- [MobileFFmpeg](https://github.com/tanersener/mobile-ffmpeg)
+- [FFmpeg License and Legal Considerations](https://ffmpeg.org/legal.html)

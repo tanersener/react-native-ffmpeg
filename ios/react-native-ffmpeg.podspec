@@ -1,12 +1,12 @@
 Pod::Spec.new do |s|
-    s.name              = 'react-native-ffmpeg-https-gpl'
+    s.name              = 'react-native-ffmpeg'
     s.version           = '0.0.1'
     s.summary           = 'FFmpeg for React Native'
-    s.description       = 'React Native FFmpeg based on mobile-ffmpeg-https-gpl'
+    s.description       = 'React Native FFmpeg based on mobile-ffmpeg-https'
     s.homepage          = 'https://github.com/tanersener/react-native-ffmpeg'
 
     s.author            = { 'Taner Sener' => 'tanersener@gmail.com' }
-    s.license           = { :type => 'GPL-3.0' }
+    s.license           = { :type => 'LGPL-3.0' }
 
     s.platform          = :ios
     s.requires_arc      = true
@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
     s.source_files      = 'RNFFmpegModule.m',
                           'RNFFmpegModule.h'
 
-    s.dependency        'mobile-ffmpeg-https-gpl'
+    s.dependency        'mobile-ffmpeg-https'
 
     s.xcconfig = { 'HEADER_SEARCH_PATHS' => '"${PODS_ROOT}/Headers/Public"/**' }
 
