@@ -218,8 +218,10 @@ class ReactNativeFFmpeg {
 
     /**
      * Registers fonts inside the given path, so they are available to use in FFmpeg filters.
+     *
+     * @param path which contains fonts (.ttf, .otf files)
      */
-    setFontDirectory() {
+    setFontDirectory(path) {
         RNFFmpegModule.setFontDirectory(path);
     }
 

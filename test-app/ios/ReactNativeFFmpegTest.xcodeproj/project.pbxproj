@@ -949,14 +949,14 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ReactNativeFFmpegTest/Pods-ReactNativeFFmpegTest-frameworks.sh",
-				"${PODS_ROOT}/mobile-ffmpeg-min/mobileffmpeg.framework",
-				"${PODS_ROOT}/mobile-ffmpeg-min/libavcodec.framework",
-				"${PODS_ROOT}/mobile-ffmpeg-min/libavdevice.framework",
-				"${PODS_ROOT}/mobile-ffmpeg-min/libavfilter.framework",
-				"${PODS_ROOT}/mobile-ffmpeg-min/libavformat.framework",
-				"${PODS_ROOT}/mobile-ffmpeg-min/libavutil.framework",
-				"${PODS_ROOT}/mobile-ffmpeg-min/libswresample.framework",
-				"${PODS_ROOT}/mobile-ffmpeg-min/libswscale.framework",
+				"${PODS_ROOT}/mobile-ffmpeg-https/mobileffmpeg.framework",
+				"${PODS_ROOT}/mobile-ffmpeg-https/libavcodec.framework",
+				"${PODS_ROOT}/mobile-ffmpeg-https/libavdevice.framework",
+				"${PODS_ROOT}/mobile-ffmpeg-https/libavfilter.framework",
+				"${PODS_ROOT}/mobile-ffmpeg-https/libavformat.framework",
+				"${PODS_ROOT}/mobile-ffmpeg-https/libavutil.framework",
+				"${PODS_ROOT}/mobile-ffmpeg-https/libswresample.framework",
+				"${PODS_ROOT}/mobile-ffmpeg-https/libswscale.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
