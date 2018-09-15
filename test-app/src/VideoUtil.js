@@ -21,7 +21,7 @@ function iosResourcePath(resourceName) {
 class VideoClass {
 
     generateEncodeVideoScript(image1Path, image2Path, image3Path, videoFilePath, videoCodec, customOptions) {
-        return "-y -loop 1 -i " + image1Path + " " +
+        return "-hide_banner -y -loop 1 -i " + image1Path + " " +
             "-loop 1 -i " + image2Path + " " +
             "-loop 1 -i " + image3Path + " " +
             "-filter_complex " +

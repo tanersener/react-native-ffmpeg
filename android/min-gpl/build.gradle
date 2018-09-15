@@ -19,10 +19,17 @@ android {
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
-        project.archivesBaseName = "react-native-ffmpeg"
+        project.archivesBaseName = "react-native-ffmpeg-min-gpl"
     }
     lintOptions {
         abortOnError false
+    }
+    sourceSets {
+        main {
+            java.srcDirs = ['../src/main/java']
+            res.srcDirs = ['../src/main/res']
+            manifest.srcFile '../src/main/AndroidManifest.xml'
+        }
     }
 }
 
@@ -38,6 +45,6 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.arthenica:mobile-ffmpeg-https:' + mobileFFmpegVersion
+    implementation 'com.arthenica:mobile-ffmpeg-min-gpl:' + mobileFFmpegVersion
     implementation 'com.facebook.react:react-native:+'
 }
