@@ -106,8 +106,8 @@ You can see how `React Native FFmpeg` is used inside an application by running t
 
 ### 5. License
 
-This project is licensed under the `LGPL v3.0`. However, if installation is customized to use a package with `-gpl` 
-postfix (`min-gpl`, `https-gpl`, `full-gpl`) then `ReactNativeFFmpeg` is subject to the `GPL v3.0` license.
+This project is licensed under the LGPL v3.0. However, if installation is customized to use a package with `-gpl` 
+postfix (min-gpl, https-gpl, full-gpl) then ReactNativeFFmpeg is subject to the GPL v3.0 license.
 
 Digital assets used in test applications are published in the public domain.
 
