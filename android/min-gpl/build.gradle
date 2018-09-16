@@ -17,8 +17,8 @@ android {
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 1
-        versionName "1.0"
+        versionCode 11
+        versionName "0.1.1"
         project.archivesBaseName = "react-native-ffmpeg-min-gpl"
     }
     lintOptions {
@@ -34,7 +34,7 @@ android {
 }
 
 ext {
-    mobileFFmpegVersion = '2.1'
+    mobileFFmpegVersion = '2.1.1'
 }
 
 repositories {

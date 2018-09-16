@@ -3,7 +3,7 @@
 
 FFmpeg for React Native
 
-<img src="https://github.com/tanersener/react-native-ffmpeg/blob/master/docs/assets/react-native-ffmpeg-logo-v2.png" width="280">
+<img src="https://github.com/tanersener/react-native-ffmpeg/raw/master/docs/assets/react-native-ffmpeg-logo-v2.png" width="280">
 
 ### 1. Features
 - Based on MobileFFmpeg
@@ -102,7 +102,7 @@ the name. After that run `pod install` again.
 
 You can see how `React Native FFmpeg` is used inside an application by running test application provided under `test-app` folder. Current implementation performs command execution and video encoding operations.
 
-<img src="https://github.com/tanersener/react-native-ffmpeg/blob/master/docs/assets/ios_test_app.gif" width="240">
+<img src="https://github.com/tanersener/react-native-ffmpeg/raw/master/docs/assets/ios_test_app.gif" width="240">
 
 ### 5. License
 
