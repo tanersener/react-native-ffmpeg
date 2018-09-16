@@ -16,7 +16,7 @@ FFmpeg for React Native
 
 ### 2. Installation
 
-`$ npm install react-native-ffmpeg --save`
+`$ yarn add react-native-ffmpeg`
 
 #### 2.1 Android
 
