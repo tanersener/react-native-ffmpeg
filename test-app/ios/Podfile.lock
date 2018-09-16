@@ -9,7 +9,7 @@ PODS:
   - mobile-ffmpeg-https (2.1.1)
   - React (0.56.1):
     - React/Core (= 0.56.1)
-  - react-native-ffmpeg (0.1.0):
+  - react-native-ffmpeg (0.1.1):
     - mobile-ffmpeg-https
   - React/Core (0.56.1):
     - yoga (= 0.56.1.React)
@@ -94,7 +94,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   react-native-ffmpeg:
-    :commit: 97c1c9f47a62ae7dd59b5068b09fd2f08ba456aa
+    :commit: ca81be4fad8b3d5431695441d7c41c5bd86d5841
     :git: https://github.com/tanersener/react-native-ffmpeg.git
 
 SPEC CHECKSUMS:
@@ -104,7 +104,7 @@ SPEC CHECKSUMS:
   glog: cffdcd539a4fed795bdf0146afde6dd4a981576c
   mobile-ffmpeg-https: 7d7c1fea8950cca139f6bb3b6c012084d5e6bacd
   React: 1fe0eb13d90b625d94c3b117c274dcfd2e760e11
-  react-native-ffmpeg: 816e1d9dd08bf8ef2a3c4f417e3ba67dce3d9e33
+  react-native-ffmpeg: ae16e3625677f98cfbd29689ebcd4ea36cbef5d8
   RNFS: bbb1a64eb245763daf34aea86f97c97c4e85f74c
   yoga: b1ce48b6cf950b98deae82838f5173ea7cf89e85
 

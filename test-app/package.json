@@ -1,6 +1,6 @@
 {
   "name": "ReactNativeFFmpegTest",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start"
@@ -8,7 +8,7 @@
   "dependencies": {
     "react": "16.4.1",
     "react-native": "^0.56",
-    "react-native-ffmpeg": "^0.1.0",
+    "react-native-ffmpeg": "^0.1.1",
     "react-native-fs": "^2.11.15",
     "react-navigation": "^2.6.2"
   }
