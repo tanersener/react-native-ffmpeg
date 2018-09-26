@@ -94,7 +94,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   react-native-ffmpeg:
-    :commit: ca81be4fad8b3d5431695441d7c41c5bd86d5841
+    :commit: a38356b455efa4244c39325b908d8fcf795af901
     :git: https://github.com/tanersener/react-native-ffmpeg.git
 
 SPEC CHECKSUMS:
