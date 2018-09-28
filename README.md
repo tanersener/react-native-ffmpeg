@@ -24,13 +24,15 @@ FFmpeg for React Native
     
 #### 2.2 iOS
 
-- Add `react-native-ffmpeg` pod to your `Podfile`
+##### 2.2.1 Basic
+  - Add `react-native-ffmpeg` pod to your `Podfile` and run `pod install`
 
     ```
     pod 'react-native-ffmpeg', :podspec => '../node_modules/react-native-ffmpeg/ios/react-native-ffmpeg.podspec'
     ```
 
-- Run `pod install`
+##### 2.2.2 Advanced
+  - See [react-native-ffmpeg-test](https://github.com/tanersener/react-native-ffmpeg-test) for linking alternatives
 
 #### 2.3 Using Packages
 
