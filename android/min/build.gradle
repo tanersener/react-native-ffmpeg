@@ -3,7 +3,7 @@ apply plugin: 'com.android.library'
 buildscript {
     repositories {
         jcenter()
-        google()
+        maven { url 'https://maven.google.com'  }
     }
 
     dependencies {
@@ -41,7 +41,7 @@ repositories {
     maven { url "$rootDir/node_modules/react-native/android" }
     mavenCentral()
     jcenter()
-    google()
+    maven { url 'https://maven.google.com'  }
 }
 
 dependencies {
