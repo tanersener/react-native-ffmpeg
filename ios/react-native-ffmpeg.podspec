@@ -17,7 +17,6 @@ Pod::Spec.new do |s|
                           'ios/RNFFmpegModule.h'
 
     s.dependency        'mobile-ffmpeg-https'
-
-    s.xcconfig = { 'HEADER_SEARCH_PATHS' => '"${PODS_ROOT}/Headers/Public"/**' }
+    s.dependency        'React'
 
 end
