@@ -1,4 +1,4 @@
-# React Native FFmpeg [![Join the chat at https://gitter.im/react-native-ffmpeg/Lobby](https://badges.gitter.im/react-native-ffmpeg/Lobby.svg)](https://gitter.im/react-native-ffmpeg/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) ![GitHub release](https://img.shields.io/badge/release-v0.1.1-blue.svg) [![npm](https://img.shields.io/npm/v/react-native-ffmpeg.svg)](react-native-ffmpeg)
+# React Native FFmpeg [![Join the chat at https://gitter.im/react-native-ffmpeg/Lobby](https://badges.gitter.im/react-native-ffmpeg/Lobby.svg)](https://gitter.im/react-native-ffmpeg/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) ![GitHub release](https://img.shields.io/badge/release-v0.1.2-blue.svg) [![npm](https://img.shields.io/npm/v/react-native-ffmpeg.svg)](react-native-ffmpeg)
 
 
 FFmpeg for React Native
@@ -6,13 +6,13 @@ FFmpeg for React Native
 <img src="https://github.com/tanersener/react-native-ffmpeg/raw/master/docs/assets/react-native-ffmpeg-logo-v2.png" width="280">
 
 ### 1. Features
-- Based on MobileFFmpeg
+- Based on Mobile FFmpeg
 - Supports both Android and IOS
 - Includes eight different packages with different external libraries enabled in FFmpeg
 
 | min | min-gpl | https | https-gpl | audio | video | full | full-gpl |
 | :----: | :----: | :----: | :----: | :----: | :----: | :----: | :----: |
-|  -  |  vid.stab <br/> x264 <br/> x265 <br/> xvidcore  |  gnutls  |  gnutls <br/> vid.stab <br/> x264 <br/> x265 <br/> xvidcore  |  chromaprint <br/> lame <br/> libilbc <br/> libvorbis <br/> opencore-amr <br/> opus <br/> shine <br/> soxr <br/> speex <br/> wavpack  |  fontconfig <br/> freetype <br/> fribidi <br/> kvazaar <br/> libaom <br/> libass <br/> libiconv <br/> libtheora <br/> libvpx <br/> snappy  |  chromaprint <br/> fontconfig <br/> freetype <br/> fribidi <br/> gmp <br/> gnutls <br/> kvazaar <br/> lame <br/> libaom <br/> libass <br/> libiconv <br/> libilbc <br/> libtheora <br/> libvorbis <br/> libvpx <br/> libwebp <br/> libxml2 <br/> opencore-amr <br/> opus <br/> shine <br/> snappy <br/> soxr <br/> speex <br/> wavpack  |  chromaprint <br/> fontconfig <br/> freetype <br/> fribidi <br/> gmp <br/> gnutls <br/> kvazaar <br/> lame <br/> libaom <br/> libass <br/> libiconv <br/> libilbc <br/> libtheora <br/> libvorbis <br/> libvpx <br/> libwebp <br/> libxml2 <br/> opencore-amr <br/> opus <br/> shine <br/> snappy <br/> soxr <br/> speex <br/> vid.stab <br/> wavpack <br/> x264 <br/> x265 <br/> xvidcore  |
+|  -  |  <sup>vid.stab</sup></sup> <br/> <sup>x264</sup> <br/> <sup>x265</sup> <br/> <sup>xvidcore</sup>  |  <sup>gnutls</sup>  |  <sup>gnutls</sup> <br/> <sup>vid.stab</sup> <br/> <sup>x264</sup> <br/> <sup>x265</sup> <br/> <sup>xvidcore</sup>  |  <sup>chromaprint</sup> <br/> <sup>lame</sup> <br/> <sup>libilbc</sup> <br/> <sup>libvorbis</sup> <br/> <sup>opencore-amr</sup> <br/> <sup>opus</sup> <br/> <sup>shine</sup> <br/> <sup>soxr</sup> <br/> <sup>speex</sup> <br/> <sup>wavpack</sup>  |  <sup>fontconfig</sup> <br/> <sup>freetype</sup> <br/> <sup>fribidi</sup> <br/> <sup>kvazaar</sup> <br/> <sup>libaom</sup> <br/> <sup>libass</sup> <br/> <sup>libiconv</sup> <br/> <sup>libtheora</sup> <br/> <sup>libvpx</sup> <br/> <sup>snappy</sup>  |  <sup>chromaprint</sup> <br/> <sup>fontconfig</sup> <br/> <sup>freetype</sup> <br/> <sup>fribidi</sup> <br/> <sup>gmp</sup> <br/> <sup>gnutls</sup> <br/> <sup>kvazaar</sup> <br/> <sup>lame</sup> <br/> <sup>libaom</sup> <br/> <sup>libass</sup> <br/> <sup>libiconv</sup> <br/> <sup>libilbc</sup> <br/> <sup>libtheora</sup> <br/> <sup>libvorbis</sup> <br/> <sup>libvpx</sup> <br/> <sup>libwebp</sup> <br/> <sup>libxml2</sup> <br/> <sup>opencore-amr</sup> <br/> <sup>opus</sup> <br/> <sup>shine</sup> <br/> <sup>snappy</sup> <br/> <sup>soxr</sup> <br/> <sup>speex</sup> <br/> <sup>wavpack</sup>  |  <sup>chromaprint</sup> <br/> <sup>fontconfig</sup> <br/> <sup>freetype</sup> <br/> <sup>fribidi</sup> <br/> <sup>gmp</sup> <br/> <sup>gnutls</sup> <br/> <sup>kvazaar</sup> <br/> <sup>lame</sup> <br/> <sup>libaom</sup> <br/> <sup>libass</sup> <br/> <sup>libiconv</sup> <br/> <sup>libilbc</sup> <br/> <sup>libtheora</sup> <br/> <sup>libvorbis</sup> <br/> <sup>libvpx</sup> <br/> <sup>libwebp</sup> <br/> <sup>libxml2</sup> <br/> <sup>opencore-amr</sup> <br/> <sup>opus</sup> <br/> <sup>shine</sup> <br/> <sup>snappy</sup> <br/> <sup>soxr</sup> <br/> <sup>speex</sup> <br/> <sup>vid.stab</sup> <br/> <sup>wavpack</sup> <br/> <sup>x264</sup> <br/> <sup>x265</sup> <br/> <sup>xvidcore</sup>  |
 
 ### 2. Installation
 
@@ -98,25 +98,73 @@ the name. After that run `pod install` again.
     RNFFmpeg.setFontDirectory('<folder with fonts>');
     ```
     
-#### 4. Test Application
+### 4. Versions
 
-You can see how `React Native FFmpeg` is used inside an application by running test application provided under `test-app` folder. Current implementation performs command execution and video encoding operations.
+- `master` includes latest released version `v0.1.2`
+- `development` branch includes new features and unreleased fixes
+
+### 5. Updates
+
+Refer to [Changelog](CHANGELOG.md) for updates.
+
+### 6. Tips
+
+Apply provided solutions if you encounter one of the following issues.
+
+- Sometimes `react-native run-ios` fails with weird build errors. Execute commands below and try again.
+
+    ```
+    rm -rf ios/Pods ios/build ios/Podfile.lock
+    cd ios
+    pod install
+    ```
+
+- Add `"postinstall": "sed -i '' 's\/#import <RCTAnimation\\/RCTValueAnimatedNode.h>\/#import \"RCTValueAnimatedNode.h\"\/' ./node_modules/react-native/Libraries/NativeAnimation/RCTNativeAnimatedNodesManager.h"` 
+line to the scripts section of your package.json as recommended in [react-native issue # 13198](https://github.com/facebook/react-native/issues/13198#issuecomment-302917321), 
+if your build receives the following error for IOS.
+
+    ```
+    ../node_modules/react-native/Libraries/NativeAnimation/RCTNativeAnimatedNodesManager.h:10:9: fatal error: 'RCTAnimation/RCTValueAnimatedNode.h' file not found
+    #import <RCTAnimation/RCTValueAnimatedNode.h>
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1 error generated.
+    ```
+
+- When `pod install` is not successful with the following message, delete `Podfile.lock` file and run `pod install` again.
+
+    ```
+    [!] Unable to find a specification for 'react-native-ffmpeg'.
+    ```
+
+- If `react-native link` is used for IOS linking, building may fail with this error. Running `pod install` again 
+fixes this issue.
+
+    ```
+    ../node_modules/react-native-ffmpeg/ios/Pods/Target Support Files/Pods-ReactNativeFFmpeg/Pods-ReactNativeFFmpeg.debug.xcconfig: unable to open file (in target "ReactNativeFFmpeg" in project "ReactNativeFFmpeg") (in target 'ReactNativeFFmpeg')
+    ```
+
+### 7. Test Application
+
+You can see how `React Native FFmpeg` is used inside an application by running test applications provided under 
+[react-native-ffmpeg-test](https://github.com/tanersener/react-native-ffmpeg-test) repository. All applications provide
+the same functionality; performs command execution and video encoding operations. The difference between them is IOS 
+dependency management mechanism applied.
 
 <img src="https://github.com/tanersener/react-native-ffmpeg/raw/master/docs/assets/ios_test_app.gif" width="240">
 
-### 5. License
+### 8. License
 
 This project is licensed under the LGPL v3.0. However, if installation is customized to use a package with `-gpl` 
-postfix (min-gpl, https-gpl, full-gpl) then ReactNativeFFmpeg is subject to the GPL v3.0 license.
+postfix (min-gpl, https-gpl, full-gpl) then `React Native FFmpeg` is subject to the GPL v3.0 license.
 
 Digital assets used in test applications are published in the public domain.
 
-### 6. Contributing
+### 9. Contributing
 
 Feel free to submit issues or pull requests.
 
-### 7. See Also
+### 10. See Also
 
 - [FFmpeg](https://www.ffmpeg.org)
-- [MobileFFmpeg Wiki](https://github.com/tanersener/mobile-ffmpeg/wiki)
+- [Mobile FFmpeg Wiki](https://github.com/tanersener/mobile-ffmpeg/wiki)
 - [FFmpeg License and Legal Considerations](https://ffmpeg.org/legal.html)

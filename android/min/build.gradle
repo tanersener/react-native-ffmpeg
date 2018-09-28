@@ -3,7 +3,7 @@ apply plugin: 'com.android.library'
 buildscript {
     repositories {
         jcenter()
-        google()
+        maven { url 'https://maven.google.com'  }
     }
 
     dependencies {
@@ -18,7 +18,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 27
         versionCode 11
-        versionName "0.1.1"
+        versionName "0.1.2"
         project.archivesBaseName = "react-native-ffmpeg-min"
     }
     lintOptions {
@@ -41,7 +41,7 @@ repositories {
     maven { url "$rootDir/node_modules/react-native/android" }
     mavenCentral()
     jcenter()
-    google()
+    maven { url 'https://maven.google.com'  }
 }
 
 dependencies {
