@@ -18,7 +18,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 27
         versionCode 11
-        versionName "0.1.1"
+        versionName "0.1.2"
         project.archivesBaseName = "react-native-ffmpeg"
     }
     lintOptions {
