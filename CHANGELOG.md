@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## 0.1.2 - 2018-09-28
+## 0.1.3 - 2018-09-28
 - React.project deleted from Xcode workspace
 - React dependency added, header search path customizations removed for .podspec files
 - google() method replaced with maven repository declaration in build.gradle files
