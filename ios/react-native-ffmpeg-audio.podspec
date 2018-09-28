@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name              = 'react-native-ffmpeg-audio'
-    s.version           = '0.1.2'
+    s.version           = '0.1.3'
     s.summary           = 'FFmpeg for React Native'
     s.description       = 'React Native FFmpeg based on mobile-ffmpeg-audio'
     s.homepage          = 'https://github.com/tanersener/react-native-ffmpeg'
