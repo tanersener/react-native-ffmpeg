@@ -98,27 +98,72 @@ the name. After that run `pod install` again.
     RNFFmpeg.setFontDirectory('<folder with fonts>');
     ```
     
-#### 4. Test Application
+### 4. Versions
+
+- `master` includes latest released version `v0.1.2`
+- `development` branch includes new features and unreleased fixes
+
+### 5. Updates
+
+Refer to [Changelog](CHANGELOG.md) for updates.
+
+### 6. Tips
+
+Apply provided solutions if you encounter one of the following issues.
+
+- Sometimes `react-native run-ios` fails with weird build errors. Execute commands below and try again.
+
+    ```
+    rm -rf ios/Pods ios/build ios/Podfile.lock
+    cd ios
+    pod install
+    ```
+
+- Add `"postinstall": "sed -i '' 's\/#import <RCTAnimation\\/RCTValueAnimatedNode.h>\/#import \"RCTValueAnimatedNode.h\"\/' ./node_modules/react-native/Libraries/NativeAnimation/RCTNativeAnimatedNodesManager.h"` 
+line to the scripts section of your package.json as recommended in [react-native issue # 13198](https://github.com/facebook/react-native/issues/13198#issuecomment-302917321), 
+if your build receives the following error for IOS.
+
+    ```
+    ../node_modules/react-native/Libraries/NativeAnimation/RCTNativeAnimatedNodesManager.h:10:9: fatal error: 'RCTAnimation/RCTValueAnimatedNode.h' file not found
+    #import <RCTAnimation/RCTValueAnimatedNode.h>
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1 error generated.
+    ```
+
+- When `pod install` is not successful with the following message, delete `Podfile.lock` file and run `pod install` again.
+
+    ```
+    [!] Unable to find a specification for 'react-native-ffmpeg'.
+    ```
+
+- If `react-native link` is used for IOS linking, building may fail with this error. Running `pod install` again 
+fixes this issue.
+
+    ```
+    ../node_modules/react-native-ffmpeg/ios/Pods/Target Support Files/Pods-ReactNativeFFmpeg/Pods-ReactNativeFFmpeg.debug.xcconfig: unable to open file (in target "ReactNativeFFmpeg" in project "ReactNativeFFmpeg") (in target 'ReactNativeFFmpeg')
+    ```
+
+### 7. Test Application
 
 You can see how `React Native FFmpeg` is used inside an application by running test applications provided under 
 [react-native-ffmpeg-test](https://github.com/tanersener/react-native-ffmpeg-test) repository. All applications provide
 the same functionality; performs command execution and video encoding operations. The difference between them is IOS 
-dependency management implemented.
+dependency management mechanism applied.
 
 <img src="https://github.com/tanersener/react-native-ffmpeg/raw/master/docs/assets/ios_test_app.gif" width="240">
 
-### 5. License
+### 8. License
 
 This project is licensed under the LGPL v3.0. However, if installation is customized to use a package with `-gpl` 
 postfix (min-gpl, https-gpl, full-gpl) then `React Native FFmpeg` is subject to the GPL v3.0 license.
 
 Digital assets used in test applications are published in the public domain.
 
-### 6. Contributing
+### 9. Contributing
 
 Feel free to submit issues or pull requests.
 
-### 7. See Also
+### 10. See Also
 
 - [FFmpeg](https://www.ffmpeg.org)
 - [Mobile FFmpeg Wiki](https://github.com/tanersener/mobile-ffmpeg/wiki)
