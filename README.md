@@ -6,7 +6,7 @@ FFmpeg for React Native
 <img src="https://github.com/tanersener/react-native-ffmpeg/raw/master/docs/assets/react-native-ffmpeg-logo-v2.png" width="280">
 
 ### 1. Features
-- Based on MobileFFmpeg
+- Based on Mobile FFmpeg
 - Supports both Android and IOS
 - Includes eight different packages with different external libraries enabled in FFmpeg
 
@@ -100,14 +100,17 @@ the name. After that run `pod install` again.
     
 #### 4. Test Application
 
-You can see how `React Native FFmpeg` is used inside an application by running test application provided under `test-app` folder. Current implementation performs command execution and video encoding operations.
+You can see how `React Native FFmpeg` is used inside an application by running test applications provided under 
+[react-native-ffmpeg-test](https://github.com/tanersener/react-native-ffmpeg-test) repository. All applications provide
+the same functionality; performs command execution and video encoding operations. The difference between them is IOS 
+dependency management implemented.
 
 <img src="https://github.com/tanersener/react-native-ffmpeg/raw/master/docs/assets/ios_test_app.gif" width="240">
 
 ### 5. License
 
 This project is licensed under the LGPL v3.0. However, if installation is customized to use a package with `-gpl` 
-postfix (min-gpl, https-gpl, full-gpl) then ReactNativeFFmpeg is subject to the GPL v3.0 license.
+postfix (min-gpl, https-gpl, full-gpl) then `React Native FFmpeg` is subject to the GPL v3.0 license.
 
 Digital assets used in test applications are published in the public domain.
 
@@ -118,5 +121,5 @@ Feel free to submit issues or pull requests.
 ### 7. See Also
 
 - [FFmpeg](https://www.ffmpeg.org)
-- [MobileFFmpeg Wiki](https://github.com/tanersener/mobile-ffmpeg/wiki)
+- [Mobile FFmpeg Wiki](https://github.com/tanersener/mobile-ffmpeg/wiki)
 - [FFmpeg License and Legal Considerations](https://ffmpeg.org/legal.html)
