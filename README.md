@@ -142,6 +142,21 @@ fixes this issue.
     ```
     ../node_modules/react-native-ffmpeg/ios/Pods/Target Support Files/Pods-ReactNativeFFmpeg/Pods-ReactNativeFFmpeg.debug.xcconfig: unable to open file (in target "ReactNativeFFmpeg" in project "ReactNativeFFmpeg") (in target 'ReactNativeFFmpeg')
     ```
+    
+- Using `cocoapods` for IOS dependency management may produce duplicate symbols for `libReact.a` and `libyoga.a`. 
+Add the following block to your `Podfile` and run `pod install` again.
+ 
+    ```
+    post_install do |installer|
+        installer.pods_project.targets.each do |target|
+          targets_to_ignore = %w(React yoga)
+          if targets_to_ignore.include? target.name
+            target.remove_from_project
+          end
+        end
+    end
+
+    ```
 
 ### 7. Test Application
 
