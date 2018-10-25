@@ -33,8 +33,10 @@ import com.arthenica.mobileffmpeg.FFmpeg;
 import com.arthenica.mobileffmpeg.Level;
 import com.arthenica.mobileffmpeg.LogCallback;
 import com.arthenica.mobileffmpeg.LogMessage;
+import com.arthenica.mobileffmpeg.MediaInformation;
 import com.arthenica.mobileffmpeg.Statistics;
 import com.arthenica.mobileffmpeg.StatisticsCallback;
+import com.arthenica.mobileffmpeg.StreamInformation;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -44,6 +46,7 @@ import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableMapKeySetIterator;
 import com.facebook.react.bridge.ReadableType;
+import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
@@ -53,6 +56,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class RNFFmpegModule extends ReactContextBaseJavaModule {
 
@@ -62,6 +66,9 @@ public class RNFFmpegModule extends ReactContextBaseJavaModule {
     public static final String KEY_VERSION = "version";
     public static final String KEY_RC = "rc";
     public static final String KEY_PLATFORM = "platform";
+    public static final String KEY_PACKAGE_NAME = "packageName";
+    public static final String KEY_LAST_RC = "lastRc";
+    public static final String KEY_LAST_COMMAND_OUTPUT = "lastCommandOutput";
 
     public static final String KEY_LOG_TEXT = "log";
     public static final String KEY_LOG_LEVEL = "level";
@@ -103,9 +110,9 @@ public class RNFFmpegModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void execute(final String arguments, final Promise promise) {
+    public void executeWithArguments(final ReadableArray readableArray, final Promise promise) {
 
-        /* PREPARING ARGUMENTS
+        /* PREPARING ARGUMENTS */
         final List<String> arguments = new ArrayList<>();
         for (int i = 0; i < readableArray.size(); i++) {
             final ReadableType type = readableArray.getType(i);
@@ -116,10 +123,25 @@ public class RNFFmpegModule extends ReactContextBaseJavaModule {
         }
 
         final String[] argumentsArray = arguments.toArray(new String[arguments.size()]);
-*/
-        Log.d(LIBRARY_NAME, String.format("Running FFmpeg with arguments: %s", arguments));
 
-        int rc = FFmpeg.execute(arguments);
+        Log.d(LIBRARY_NAME, String.format("Running FFmpeg with arguments: %s.", Arrays.toString(argumentsArray)));
+
+        int rc = FFmpeg.execute(argumentsArray);
+
+        Log.d(LIBRARY_NAME, String.format("FFmpeg exited with rc: %d", rc));
+
+        promise.resolve(toIntMap(KEY_RC, rc));
+    }
+
+    @ReactMethod
+    public void execute(final String command, String delimiter, final Promise promise) {
+        if (delimiter == null) {
+            delimiter = " ";
+        }
+
+        Log.d(LIBRARY_NAME, String.format("Running FFmpeg command: %s with delimiter %s.", command, delimiter));
+
+        int rc = FFmpeg.execute(command, delimiter);
 
         Log.d(LIBRARY_NAME, String.format("FFmpeg exited with rc: %d", rc));
 
@@ -242,6 +264,43 @@ public class RNFFmpegModule extends ReactContextBaseJavaModule {
         Config.setFontDirectory(reactContext, path, map);
     }
 
+    @ReactMethod
+    public void getPackageName(final Promise promise) {
+        final String packageName = Config.getPackageName();
+        promise.resolve(toStringMap(KEY_PACKAGE_NAME, packageName));
+    }
+
+    @ReactMethod
+    public void getExternalLibraries(final Promise promise) {
+        final List<String> externalLibraries = Config.getExternalLibraries();
+        promise.resolve(toStringArray(externalLibraries));
+    }
+
+    @ReactMethod
+    public void getLastReturnCode(final Promise promise) {
+        int lastReturnCode = FFmpeg.getLastReturnCode();
+        promise.resolve(toStringMap(KEY_LAST_RC, String.valueOf(lastReturnCode)));
+    }
+
+    @ReactMethod
+    public void getLastCommandOutput(final Promise promise) {
+        final String lastCommandOutput = FFmpeg.getLastCommandOutput();
+        promise.resolve(toStringMap(KEY_LAST_COMMAND_OUTPUT, lastCommandOutput));
+    }
+
+    @ReactMethod
+    public void getMediaInformation(final String path, final Double timeout, final Promise promise) {
+        final MediaInformation mediaInformation;
+        if (timeout == null) {
+            Log.d(LIBRARY_NAME, String.format("Getting media information for %s", path));
+            mediaInformation = FFmpeg.getMediaInformation(path);
+        } else {
+            Log.d(LIBRARY_NAME, String.format("Getting media information for %s with timeout %d.", path, timeout.longValue()));
+            mediaInformation = FFmpeg.getMediaInformation(path, timeout.longValue());
+        }
+        promise.resolve(toMediaInformationMap(mediaInformation));
+    }
+
     protected void emitLogMessage(final LogMessage logMessage) {
         final DeviceEventManagerModule.RCTDeviceEventEmitter jsModule = reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class);
         final WritableMap logMap = Arguments.createMap();
@@ -263,6 +322,18 @@ public class RNFFmpegModule extends ReactContextBaseJavaModule {
         final WritableMap map = new WritableNativeMap();
         map.putString(key, value);
         return map;
+    }
+
+    public static WritableArray toStringArray(final List<String> list) {
+        final WritableArray array = Arguments.createArray();
+
+        if (list != null) {
+            for (String item : list) {
+                array.pushString(item);
+            }
+        }
+
+        return array;
     }
 
     public static WritableMap toIntMap(final String key, final int value) {
@@ -306,4 +377,139 @@ public class RNFFmpegModule extends ReactContextBaseJavaModule {
         return statisticsMap;
     }
 
+    public static WritableMap toMediaInformationMap(final MediaInformation mediaInformation) {
+        final WritableMap map = Arguments.createMap();
+
+        if (mediaInformation != null) {
+            if (mediaInformation.getFormat() != null) {
+                map.putString("format", mediaInformation.getFormat());
+            }
+            if (mediaInformation.getPath() != null) {
+                map.putString("path", mediaInformation.getPath());
+            }
+            if (mediaInformation.getStartTime() != null) {
+                map.putInt("startTime", mediaInformation.getStartTime().intValue());
+            }
+            if (mediaInformation.getDuration() != null) {
+                map.putInt("duration", mediaInformation.getDuration().intValue());
+            }
+            if (mediaInformation.getBitrate() != null) {
+                map.putInt("bitrate", mediaInformation.getBitrate().intValue());
+            }
+            if (mediaInformation.getRawInformation() != null) {
+                map.putString("rawInformation", mediaInformation.getRawInformation());
+            }
+
+            final Set<Map.Entry<String, String>> metadata = mediaInformation.getMetadataEntries();
+            if ((metadata != null) && (metadata.size() > 0)) {
+                final WritableMap metadataMap = Arguments.createMap();
+
+                for (Map.Entry<String, String> entry : metadata) {
+                    metadataMap.putString(entry.getKey(), entry.getValue());
+                }
+
+                map.putMap("metadata", metadataMap);
+            }
+
+            final List<StreamInformation> streams = mediaInformation.getStreams();
+            if ((streams != null) && (streams.size() > 0)) {
+                final WritableArray array = Arguments.createArray();
+
+                for (StreamInformation streamInformation : streams) {
+                    array.pushMap(toStreamInformationMap(streamInformation));
+                }
+
+                map.putArray("streams", array);
+            }
+        }
+
+        return map;
+    }
+
+    public static WritableMap toStreamInformationMap(final StreamInformation streamInformation) {
+        final WritableMap map = Arguments.createMap();
+
+        if (streamInformation != null) {
+            if (streamInformation.getIndex() != null) {
+                map.putInt("index", streamInformation.getIndex().intValue());
+            }
+            if (streamInformation.getType() != null) {
+                map.putString("type", streamInformation.getType());
+            }
+            if (streamInformation.getCodec() != null) {
+                map.putString("codec", streamInformation.getCodec());
+            }
+            if (streamInformation.getFullCodec() != null) {
+                map.putString("fullCodec", streamInformation.getFullCodec());
+            }
+            if (streamInformation.getFormat() != null) {
+                map.putString("format", streamInformation.getFormat());
+            }
+            if (streamInformation.getFullFormat() != null) {
+                map.putString("fullFormat", streamInformation.getFullFormat());
+            }
+            if (streamInformation.getWidth() != null) {
+                map.putInt("width", streamInformation.getWidth().intValue());
+            }
+            if (streamInformation.getHeight() != null) {
+                map.putInt("height", streamInformation.getHeight().intValue());
+            }
+            if (streamInformation.getBitrate() != null) {
+                map.putInt("bitrate", streamInformation.getBitrate().intValue());
+            }
+            if (streamInformation.getSampleRate() != null) {
+                map.putInt("sampleRate", streamInformation.getSampleRate().intValue());
+            }
+            if (streamInformation.getSampleFormat() != null) {
+                map.putString("sampleFormat", streamInformation.getSampleFormat());
+            }
+            if (streamInformation.getChannelLayout() != null) {
+                map.putString("channelLayout", streamInformation.getChannelLayout());
+            }
+            if (streamInformation.getSampleAspectRatio() != null) {
+                map.putString("sampleAspectRatio", streamInformation.getSampleAspectRatio());
+            }
+            if (streamInformation.getDisplayAspectRatio() != null) {
+                map.putString("displayAspectRatio", streamInformation.getDisplayAspectRatio());
+            }
+            if (streamInformation.getAverageFrameRate() != null) {
+                map.putString("averageFrameRate", streamInformation.getAverageFrameRate());
+            }
+            if (streamInformation.getRealFrameRate() != null) {
+                map.putString("realFrameRate", streamInformation.getRealFrameRate());
+            }
+            if (streamInformation.getTimeBase() != null) {
+                map.putString("timeBase", streamInformation.getTimeBase());
+            }
+            if (streamInformation.getCodecTimeBase() != null) {
+                map.putString("codecTimeBase", streamInformation.getCodecTimeBase());
+            }
+
+            final Set<Map.Entry<String, String>> metadata = streamInformation.getMetadataEntries();
+            if ((metadata != null) && (metadata.size() > 0)) {
+                final WritableMap metadataMap = Arguments.createMap();
+
+                for (Map.Entry<String, String> entry : metadata) {
+                    metadataMap.putString(entry.getKey(), entry.getValue());
+                }
+
+                map.putMap("metadata", metadataMap);
+            }
+        }
+
+        return map;
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+

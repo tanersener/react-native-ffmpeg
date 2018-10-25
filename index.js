@@ -110,11 +110,22 @@ class ReactNativeFFmpeg {
     /**
      * Executes FFmpeg with arguments provided.
      *
-     * @param parameters arguments string
+     * @param commandArguments FFmpeg command options/arguments as string array
      * @returns return code stored in rc field
      */
-    execute(parameters) {
-        return RNFFmpegModule.execute(parameters);
+    executeWithArguments(commandArguments) {
+        return RNFFmpegModule.executeWithArguments(commandArguments);
+    }
+
+    /**
+     * Executes FFmpeg command provided. Command is split into arguments using provided delimiter.
+     *
+     * @param command FFmpeg command
+     * @param delimiter delimiter used between arguments, default value is space character
+     * @returns return code stored in rc field
+     */
+    execute(command, delimiter) {
+        return RNFFmpegModule.execute(command, delimiter);
     }
 
     /**
@@ -223,6 +234,58 @@ class ReactNativeFFmpeg {
      */
     setFontDirectory(path) {
         RNFFmpegModule.setFontDirectory(path);
+    }
+
+    /**
+     * Returns MobileFFmpeg package name.
+     *
+     * @return guessed package name according to supported external libraries
+     */
+    getPackageName() {
+        return RNFFmpegModule.getPackageName();
+    }
+
+    /**
+     * Returns supported external libraries.
+     *
+     * @return list of supported external libraries
+     */
+    getExternalLibraries() {
+        return RNFFmpegModule.getExternalLibraries();
+    }
+
+    /**
+     * Returns return code of last executed command.
+     *
+     * @return return code of last executed command
+     */
+    getLastReturnCode() {
+        return RNFFmpegModule.getLastReturnCode();
+    }
+
+    /**
+     * <p>Returns log output of last executed command. Please note that disabling redirection using
+     * disableRedirection() method also disables this functionality.
+     *
+     * @return output of last executed command
+     */
+    getLastCommandOutput() {
+        return RNFFmpegModule.getLastCommandOutput();
+    }
+
+    /**
+     * Returns media information for given file.
+     *
+     * @param path path or uri of media file
+     * @param timeout complete timeout in ms, default value is 10000
+     * @return media information
+     */
+    getMediaInformation(path, timeout) {
+        if (timeout) {
+            return RNFFmpegModule.getMediaInformation(path, timeout);
+        } else {
+            return RNFFmpegModule.getMediaInformation(path, Number(10000));
+        }
     }
 
     /**
