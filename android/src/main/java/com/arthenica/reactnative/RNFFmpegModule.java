@@ -51,8 +51,6 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -111,41 +109,14 @@ public class RNFFmpegModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void executeWithArguments(final ReadableArray readableArray, final Promise promise) {
-
-        /* PREPARING ARGUMENTS */
-        final List<String> arguments = new ArrayList<>();
-        for (int i = 0; i < readableArray.size(); i++) {
-            final ReadableType type = readableArray.getType(i);
-
-            if (type == ReadableType.String) {
-                arguments.add(readableArray.getString(i));
-            }
-        }
-
-        final String[] argumentsArray = arguments.toArray(new String[arguments.size()]);
-
-        Log.d(LIBRARY_NAME, String.format("Running FFmpeg with arguments: %s.", Arrays.toString(argumentsArray)));
-
-        int rc = FFmpeg.execute(argumentsArray);
-
-        Log.d(LIBRARY_NAME, String.format("FFmpeg exited with rc: %d", rc));
-
-        promise.resolve(toIntMap(KEY_RC, rc));
+        final RNFFmpegExecuteAsyncArgumentsTask asyncTask = new RNFFmpegExecuteAsyncArgumentsTask(promise);
+        asyncTask.execute(readableArray);
     }
 
     @ReactMethod
     public void execute(final String command, String delimiter, final Promise promise) {
-        if (delimiter == null) {
-            delimiter = " ";
-        }
-
-        Log.d(LIBRARY_NAME, String.format("Running FFmpeg command: %s with delimiter %s.", command, delimiter));
-
-        int rc = FFmpeg.execute(command, delimiter);
-
-        Log.d(LIBRARY_NAME, String.format("FFmpeg exited with rc: %d", rc));
-
-        promise.resolve(toIntMap(KEY_RC, rc));
+        final RNFFmpegExecuteAsyncCommandTask asyncTask = new RNFFmpegExecuteAsyncCommandTask(delimiter, promise);
+        asyncTask.execute(command);
     }
 
     @ReactMethod
@@ -290,15 +261,8 @@ public class RNFFmpegModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void getMediaInformation(final String path, final Double timeout, final Promise promise) {
-        final MediaInformation mediaInformation;
-        if (timeout == null) {
-            Log.d(LIBRARY_NAME, String.format("Getting media information for %s", path));
-            mediaInformation = FFmpeg.getMediaInformation(path);
-        } else {
-            Log.d(LIBRARY_NAME, String.format("Getting media information for %s with timeout %d.", path, timeout.longValue()));
-            mediaInformation = FFmpeg.getMediaInformation(path, timeout.longValue());
-        }
-        promise.resolve(toMediaInformationMap(mediaInformation));
+        final RNFFmpegGetMediaInformationAsyncTask asyncTask = new RNFFmpegGetMediaInformationAsyncTask(timeout, promise);
+        asyncTask.execute(path);
     }
 
     protected void emitLogMessage(final LogMessage logMessage) {
