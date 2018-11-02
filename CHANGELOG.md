@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.2.1 - 2018-11-02
+- Fixes issue #10: UI freezes while executing ffmpeg command 
+
 ## 0.2.0 - 2018-10-25
 - Applied mobile-ffmpeg-v3.0 API changes
 
