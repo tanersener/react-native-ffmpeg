@@ -81,7 +81,7 @@ RCT_EXPORT_METHOD(getFFmpegVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCT
 RCT_EXPORT_METHOD(executeWithArguments:(NSArray*)arguments resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     RCTLogInfo(@"Running FFmpeg with arguments: %@.\n", arguments);
 
-    dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         int rc = [MobileFFmpeg executeWithArguments:arguments];
 
         RCTLogInfo(@"FFmpeg exited with rc: %d\n", rc);
@@ -97,7 +97,7 @@ RCT_EXPORT_METHOD(execute:(NSString*)command delimiter:(NSString*)delimiter reso
 
     RCTLogInfo(@"Running FFmpeg command: %@ with delimiter %@.\n", command, delimiter);
 
-    dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         int rc = [MobileFFmpeg execute:command delimiter:delimiter];
 
         RCTLogInfo(@"FFmpeg exited with rc: %d\n", rc);
@@ -182,8 +182,11 @@ RCT_EXPORT_METHOD(getLastCommandOutput:(RCTPromiseResolveBlock)resolve rejecter:
 
 RCT_EXPORT_METHOD(getMediaInformation:(NSString*)path timeout:(NSNumber*_Nonnull)timeout resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     RCTLogInfo(@"Getting media information for %@ with timeout %ld.\n", path, [timeout longLongValue]);
-    MediaInformation *mediaInformation = [MobileFFmpeg getMediaInformation:path timeout:[timeout longLongValue]];
-    resolve([RNFFmpegModule toMediaInformationDictionary:mediaInformation]);
+
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        MediaInformation *mediaInformation = [MobileFFmpeg getMediaInformation:path timeout:[timeout longLongValue]];
+        resolve([RNFFmpegModule toMediaInformationDictionary:mediaInformation]);
+    });
 }
 
 - (void)logCallback: (int)level :(NSString*)message {
