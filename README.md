@@ -8,12 +8,12 @@ FFmpeg for React Native
 - Based on Mobile FFmpeg
 - Supports
     - Both Android and IOS
-    - FFmpeg `v4.0.x` and `v4.1-dev-x` (master) releases
+    - FFmpeg `v4.1` and `v4.2-dev-x` (master) releases
     - `arm-v7a`, `arm-v7a-neon`, `arm64-v8a`, `x86` and `x86_64` architectures on Android
-    - `armv7`, `armv7s`, `arm64`, `i386` and `x86_64` architectures on IOS
-    - 27 external libraries
+    - `armv7`, `armv7s`, `arm64`, `arm64e`, `i386` and `x86_64` architectures on IOS
+    - 24 external libraries
     
-        `chromaprint`, `fontconfig`, `freetype`, `fribidi`, `gmp`, `gnutls`, `kvazaar`, `lame`, `libaom`, `libass`, `libiconv`, `libilbc`, `libtheora`, `libvorbis`, `libvpx`, `libwebp`, `libxml2`, `opencore-amr`, `opus`, `sdl`, `shine`, `snappy`, `soxr`, `speex`, `tesseract`, `twolame`, `wavpack`
+        `fontconfig`, `freetype`, `fribidi`, `gmp`, `gnutls`, `kvazaar`, `lame`, `libaom`, `libass`, `libiconv`, `libilbc`, `libtheora`, `libvorbis`, `libvpx`, `libwebp`, `libxml2`, `opencore-amr`, `opus`, `shine`, `snappy`, `soxr`, `speex`, `twolame`, `wavpack`
     
     - 4 external libraries with GPL license
     
@@ -46,10 +46,10 @@ FFmpeg for React Native
 <td align="center"><sup>vid.stab</sup><br><sup>x264</sup><br><sup>x265</sup><br><sup>xvidcore</sup></td>
 <td align="center"><sup>gmp</sup><br><sup>gnutls</sup></td>
 <td align="center"><sup>gmp</sup><br><sup>gnutls</sup><br><sup>vid.stab</sup><br><sup>x264</sup><br><sup>x265</sup><br><sup>xvidcore</sup></td>
-<td align="center"><sup>chromaprint</sup><br><sup>lame</sup><br><sup>libilbc</sup><br><sup>libvorbis</sup><br><sup>opencore-amr</sup><br><sup>opus</sup><br><sup>shine</sup><br><sup>soxr</sup><br><sup>speex</sup><br><sup>twolame</sup><br><sup>wavpack</sup></td>
+<td align="center"><sup>lame</sup><br><sup>libilbc</sup><br><sup>libvorbis</sup><br><sup>opencore-amr</sup><br><sup>opus</sup><br><sup>shine</sup><br><sup>soxr</sup><br><sup>speex</sup><br><sup>twolame</sup><br><sup>wavpack</sup></td>
 <td align="center"><sup>fontconfig</sup><br><sup>freetype</sup><br><sup>fribidi</sup><br><sup>kvazaar</sup><br><sup>libaom</sup><br><sup>libass</sup><br><sup>libiconv</sup><br><sup>libtheora</sup><br><sup>libvpx</sup><br><sup>libwebp</sup><br><sup>snappy</sup></td>
-<td align="center"><sup>chromaprint</sup><br><sup>fontconfig</sup><br><sup>freetype</sup><br><sup>fribidi</sup><br><sup>gmp</sup><br><sup>gnutls</sup><br><sup>kvazaar</sup><br><sup>lame</sup><br><sup>libaom</sup><br><sup>libass</sup><br><sup>libiconv</sup><br><sup>libilbc</sup><br><sup>libtheora</sup><br><sup>libvorbis</sup><br><sup>libvpx</sup><br><sup>libwebp</sup><br><sup>libxml2</sup><br><sup>opencore-amr</sup><br><sup>opus</sup><br><sup>sdl</sup><br><sup>shine</sup><br><sup>snappy</sup><br><sup>soxr</sup><br><sup>speex</sup><br><sup>tesseract</sup><br><sup>twolame</sup><br><sup>wavpack</sup></td>
-<td align="center"><sup>chromaprint</sup><br><sup>fontconfig</sup><br><sup>freetype</sup><br><sup>fribidi</sup><br><sup>gmp</sup><br><sup>gnutls</sup><br><sup>kvazaar</sup><br><sup>lame</sup><br><sup>libaom</sup><br><sup>libass</sup><br><sup>libiconv</sup><br><sup>libilbc</sup><br><sup>libtheora</sup><br><sup>libvorbis</sup><br><sup>libvpx</sup><br><sup>libwebp</sup><br><sup>libxml2</sup><br><sup>opencore-amr</sup><br><sup>opus</sup><br><sup>sdl</sup><br><sup>shine</sup><br><sup>snappy</sup><br><sup>soxr</sup><br><sup>speex</sup><br><sup>tesseract</sup><br><sup>twolame</sup><br><sup>vid.stab</sup><br><sup>wavpack</sup><br><sup>x264</sup><br><sup>x265</sup><br><sup>xvidcore</sup></td>
+<td align="center"><sup>fontconfig</sup><br><sup>freetype</sup><br><sup>fribidi</sup><br><sup>gmp</sup><br><sup>gnutls</sup><br><sup>kvazaar</sup><br><sup>lame</sup><br><sup>libaom</sup><br><sup>libass</sup><br><sup>libiconv</sup><br><sup>libilbc</sup><br><sup>libtheora</sup><br><sup>libvorbis</sup><br><sup>libvpx</sup><br><sup>libwebp</sup><br><sup>libxml2</sup><br><sup>opencore-amr</sup><br><sup>opus</sup><br><sup>shine</sup><br><sup>snappy</sup><br><sup>soxr</sup><br><sup>speex</sup><br><sup>twolame</sup><br><sup>wavpack</sup></td>
+<td align="center"><sup>fontconfig</sup><br><sup>freetype</sup><br><sup>fribidi</sup><br><sup>gmp</sup><br><sup>gnutls</sup><br><sup>kvazaar</sup><br><sup>lame</sup><br><sup>libaom</sup><br><sup>libass</sup><br><sup>libiconv</sup><br><sup>libilbc</sup><br><sup>libtheora</sup><br><sup>libvorbis</sup><br><sup>libvpx</sup><br><sup>libwebp</sup><br><sup>libxml2</sup><br><sup>opencore-amr</sup><br><sup>opus</sup><br><sup>shine</sup><br><sup>snappy</sup><br><sup>soxr</sup><br><sup>speex</sup><br><sup>twolame</sup><br><sup>vid.stab</sup><br><sup>wavpack</sup><br><sup>x264</sup><br><sup>x265</sup><br><sup>xvidcore</sup></td>
 </tr>
 <tr>
 <td align="center"><sup>android system libraries</sup></td>
@@ -88,7 +88,7 @@ FFmpeg for React Native
 Default installation of `ReactNativeFFmpeg` using instructions in `2.1` and `2.2` enables the default package, which is based 
 on `https` package. It is possible to enable other installed packages using following steps.  
 
-#### 2.3.1 Android
+##### 2.3.1 Android
 
 - Edit `android/settings.gradle` file and modify `projectDir` for `react-native-ffmpeg` by appending package name at
 the end of the path.
@@ -96,13 +96,21 @@ the end of the path.
     project(':react-native-ffmpeg').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-ffmpeg/android/<package name>')
     ```
 
-#### 2.3.2 IOS
+##### 2.3.2 IOS
 
 - Edit `ios/Podfile` file and modify `podspec` path for `react-native-ffmpeg` by appending package name at the end of 
 the name. After that run `pod install` again.
     ```
     pod 'react-native-ffmpeg-<package name>', :podspec => '../node_modules/react-native-ffmpeg/ios/react-native-ffmpeg-<package name>.podspec'
     ```
+
+##### 2.3.3 Android Camera Support
+  `mobile-ffmpeg v4.2` adds supports for `android_camera` device in main releases (non-LTS). If you want to access `Android` camera, enable support by selecting a non-LTS version for `mobile-ffmpeg` inside `build.gradle` file imported, under `../node_modules/react-native-ffmpeg/android` path. 
+  
+  Please note that `devices with deprecated camera HAL 1.0 implementations (camera devices that have the LEGACY hardware level) are not supported` as described in [Android NDK Native API](https://developer.android.com/ndk/guides/stable_apis#camera) documentation.
+
+##### 2.3.4 IOS arm64e Support
+  `mobile-ffmpeg` supports `arm64e` architecture in main releases (non-LTS) since `v4.2`. You can enable support for `arm64e` architecture by specifying a non-LTS version for `mobile-ffmpeg` inside imported `./node_modules/react-native-ffmpeg/ios/react-native-ffmpeg.podspec` file.
 
 ### 3. Using
 
@@ -178,10 +186,11 @@ the name. After that run `pod install` again.
 
 - `0.1.x` releases are based on `FFmpeg v4.0.2` and `MobileFFmpeg v2.x` 
 - `0.2.x` releases are based on `FFmpeg v4.1-dev` and `MobileFFmpeg v3.x`
+- `0.3.0` release is based on `FFmpeg v4.2-dev` and `MobileFFmpeg v4.2`
 
 #### 4.1 Source Code
 
-- `master` includes latest released version `v0.2.1`
+- `master` includes latest released version `v0.3.0`
 - `development` branch includes new features and unreleased fixes
 
 ### 5. Updates

@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.3.0 - 2018-12-29
+- Using mobile-ffmpeg-v4.2.LTS
+
 ## 0.2.1 - 2018-11-02
 - Fixes issue #10: UI freezes while executing ffmpeg command 
 
