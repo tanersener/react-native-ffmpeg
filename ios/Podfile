@@ -3,5 +3,5 @@ platform :ios
 use_frameworks!
 
 target "ReactNativeFFmpeg" do
-    pod 'mobile-ffmpeg-https', '~> 3.0'
+    pod 'mobile-ffmpeg-https', '4.2.LTS'
 end

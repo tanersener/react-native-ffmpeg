@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name              = 'react-native-ffmpeg-full-gpl'
-    s.version           = '0.2.1'
+    s.version           = '0.3.0'
     s.summary           = 'FFmpeg for React Native'
     s.description       = 'React Native FFmpeg based on mobile-ffmpeg-full-gpl'
     s.homepage          = 'https://github.com/tanersener/react-native-ffmpeg'
@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
     s.source_files      = 'ios/RNFFmpegModule.m',
                           'ios/RNFFmpegModule.h'
 
-    s.dependency        'mobile-ffmpeg-full-gpl'
+    s.dependency        'mobile-ffmpeg-full-gpl', '4.2.LTS'
     s.dependency        'React'
 
 end
