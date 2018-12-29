@@ -1,4 +1,4 @@
-# React Native FFmpeg [![Join the chat at https://gitter.im/react-native-ffmpeg/Lobby](https://badges.gitter.im/react-native-ffmpeg/Lobby.svg)](https://gitter.im/react-native-ffmpeg/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) ![GitHub release](https://img.shields.io/badge/release-v0.2.1-blue.svg) [![npm](https://img.shields.io/npm/v/react-native-ffmpeg.svg)](react-native-ffmpeg)
+# React Native FFmpeg [![Join the chat at https://gitter.im/react-native-ffmpeg/Lobby](https://badges.gitter.im/react-native-ffmpeg/Lobby.svg)](https://gitter.im/react-native-ffmpeg/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) ![GitHub release](https://img.shields.io/badge/release-v0.3.0-blue.svg) [![npm](https://img.shields.io/npm/v/react-native-ffmpeg.svg)](react-native-ffmpeg)
 
 FFmpeg for React Native
 
