@@ -79,6 +79,8 @@ FFmpeg for React Native
     ```
     pod 'react-native-ffmpeg', :podspec => '../node_modules/react-native-ffmpeg/ios/react-native-ffmpeg.podspec'
     ```
+    
+  - **DO NOT USE** `react-native link` **on IOS.** `react-native link` breaks Cocoapods dependencies.
 
 ##### 2.2.2 Advanced
   - See [react-native-ffmpeg-test](https://github.com/tanersener/react-native-ffmpeg-test) for linking alternatives
@@ -188,7 +190,7 @@ the name. After that run `pod install` again.
 - `0.2.x` releases are based on `FFmpeg v4.1-dev` and `MobileFFmpeg v3.x`
 - `0.3.0` release is based on `FFmpeg v4.2-dev` and `MobileFFmpeg v4.2`
 
-#### 4.1 Source Code
+#### 4.2 Source Code
 
 - `master` includes latest released version `v0.3.0`
 - `development` branch includes new features and unreleased fixes
