@@ -80,7 +80,7 @@ FFmpeg for React Native
     pod 'react-native-ffmpeg', :podspec => '../node_modules/react-native-ffmpeg/ios/react-native-ffmpeg.podspec'
     ```
     
-  **DO NOT USE **`react-native link react-native-ffmpeg`** on IOS.** `react-native link` breaks Cocoapods dependencies.
+  - **DO NOT USE **`react-native link react-native-ffmpeg`** on IOS.** `react-native link` breaks Cocoapods dependencies.
 
 ##### 2.2.2 Advanced
   - See [react-native-ffmpeg-test](https://github.com/tanersener/react-native-ffmpeg-test) for linking alternatives
