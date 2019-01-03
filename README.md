@@ -5,7 +5,7 @@ FFmpeg for React Native
 <img src="https://github.com/tanersener/react-native-ffmpeg/raw/master/docs/assets/react-native-ffmpeg-logo-v2.png" width="280">
 
 ### 1. Features
-- Based on Mobile FFmpeg
+- Based on MobileFFmpeg
 - Supports
     - Both Android and IOS
     - FFmpeg `v4.1` and `v4.2-dev-x` (master) releases
@@ -85,10 +85,10 @@ FFmpeg for React Native
 ##### 2.2.2 Advanced
   - See [react-native-ffmpeg-test](https://github.com/tanersener/react-native-ffmpeg-test) for linking alternatives
 
-#### 2.3 Using Packages
+#### 2.3 Packages
 
 Default installation of `ReactNativeFFmpeg` using instructions in `2.1` and `2.2` enables the default package, which is based 
-on `https` package. It is possible to enable other installed packages using following steps.  
+on `https` package. It is possible to enable other installed packages using the following steps.  
 
 ##### 2.3.1 Android
 
@@ -105,14 +105,6 @@ the name. After that run `pod install` again.
     ```
     pod 'react-native-ffmpeg-<package name>', :podspec => '../node_modules/react-native-ffmpeg/ios/react-native-ffmpeg-<package name>.podspec'
     ```
-
-##### 2.3.3 Android Camera Support
-  `mobile-ffmpeg v4.2` adds supports for `android_camera` device in main releases (non-LTS). If you want to access `Android` camera, enable support by selecting a non-LTS version for `mobile-ffmpeg` inside `build.gradle` file imported, under `../node_modules/react-native-ffmpeg/android` path. 
-  
-  Please note that `devices with deprecated camera HAL 1.0 implementations (camera devices that have the LEGACY hardware level) are not supported` as described in [Android NDK Native API](https://developer.android.com/ndk/guides/stable_apis#camera) documentation.
-
-##### 2.3.4 IOS arm64e Support
-  `mobile-ffmpeg` supports `arm64e` architecture in main releases (non-LTS) since `v4.2`. You can enable support for `arm64e` architecture by specifying a non-LTS version for `mobile-ffmpeg` inside imported `./node_modules/react-native-ffmpeg/ios/react-native-ffmpeg.podspec` file.
 
 ### 3. Using
 
@@ -195,9 +187,32 @@ the name. After that run `pod install` again.
 - `master` includes latest released version `v0.3.0`
 - `development` branch includes new features and unreleased fixes
 
-### 5. Updates
+### 5. MobileFFmpeg
 
-Refer to [Changelog](CHANGELOG.md) for updates.
+`react-native-ffmpeg` uses [MobileFFmpeg](https://github.com/tanersener/mobile-ffmpeg) in its core. 
+
+Starting from `v4.2`, `MobileFFmpeg` binaries are published in two different variants: `Main Release` and `LTS Release`. 
+
+- Main releases include complete functionality of the library and support the latest SDK/API features
+
+- LTS releases are customized to support a wide range of devices. They are built using older API/SDK versions, so some features are not available for them
+
+By default, `react-native-ffmpeg` releases depend on `LTS` releases, to be backward compatible with its earlier versions. But you can change `MobileFFmpeg` variant and/or version used to support a specific feature/architecture.
+
+- To do that on Android, set a different value to `mobileFFmpegVersion` variable inside `build.gradle` file imported, under `../node_modules/react-native-ffmpeg/android` path.
+
+- On IOS, specify a different version for `mobile-ffmpeg` dependency inside imported `.podspec` file under `../node_modules/react-native-ffmpeg/ios` path.
+
+#### 5.1 Main Release vs LTS Release
+
+|        | Main Release | LTS Release |
+| :----: | :----: | :----: |
+| Android API Level | 24 | 21 | 
+| Android Camera Access | x | - |
+| Android Architectures | arm-v7a-neon<br/>arm64-v8a<br/>x86<br/>x86-64</br> | arm-v7a<br/>arm-v7a-neon<br/>arm64-v8a<br/>x86<br/>x86-64</br> |
+| IOS SDK | 12.1 | 9.3 |
+| Xcode Support | 10.1 | 7.3.1 |
+| IOS Architectures | arm64<br/>arm64e<br/>x86-64</br> | armv7<br/>arm64<br/>i386<br/>x86-64</br> | 
 
 ### 6. Tips
 
@@ -256,17 +271,21 @@ You can see how `React Native FFmpeg` is used inside an application by running t
 
 <img src="https://github.com/tanersener/react-native-ffmpeg/raw/master/docs/assets/ios_test_app.gif" width="240">
 
-### 8. License
+### 8. Updates
+
+Refer to [Changelog](CHANGELOG.md) for updates.
+
+### 9. License
 
 This project is licensed under the LGPL v3.0. However, if installation is customized to use a package with `-gpl` postfix (min-gpl, https-gpl, full-gpl) then `React Native FFmpeg` is subject to the GPL v3.0 license.
 
 Digital assets used in test applications are published in the public domain.
 
-### 9. Contributing
+### 10. Contributing
 
 Feel free to submit issues or pull requests.
 
-### 10. See Also
+### 11. See Also
 
 - [FFmpeg](https://www.ffmpeg.org)
 - [Mobile FFmpeg Wiki](https://github.com/tanersener/mobile-ffmpeg/wiki)
