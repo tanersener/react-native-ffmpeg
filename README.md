@@ -197,7 +197,7 @@ Starting from `v4.2`, `MobileFFmpeg` binaries are published in two different var
 
 - LTS releases are customized to support a wide range of devices. They are built using older API/SDK versions, so some features are not available for them
 
-You may need to change `MobileFFmpeg` variant and/or version used to support a specific feature/architecture.
+By default, `react-native-ffmpeg` releases depend on `LTS` releases, to be backward compatible with its earlier versions. But you can change `MobileFFmpeg` variant and/or version used to support a specific feature/architecture.
 
 - To do that on Android, set a different value to `mobileFFmpegVersion` variable inside `build.gradle` file imported, under `../node_modules/react-native-ffmpeg/android` path.
 
