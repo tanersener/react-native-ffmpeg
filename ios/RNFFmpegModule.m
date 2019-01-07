@@ -31,7 +31,6 @@
 #import <mobileffmpeg/ArchDetect.h>
 #import <mobileffmpeg/MediaInformation.h>
 
-static NSString *const LIBRARY_NAME = @"react-native-ffmpeg";
 static NSString *const PLATFORM_NAME = @"ios";
 
 static NSString *const KEY_VERSION = @"version";
@@ -181,7 +180,7 @@ RCT_EXPORT_METHOD(getLastCommandOutput:(RCTPromiseResolveBlock)resolve rejecter:
 }
 
 RCT_EXPORT_METHOD(getMediaInformation:(NSString*)path timeout:(NSNumber*_Nonnull)timeout resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
-    RCTLogInfo(@"Getting media information for %@ with timeout %ld.\n", path, [timeout longLongValue]);
+    RCTLogInfo(@"Getting media information for %@ with timeout %d.\n", path, [timeout intValue]);
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         MediaInformation *mediaInformation = [MobileFFmpeg getMediaInformation:path timeout:[timeout longLongValue]];
