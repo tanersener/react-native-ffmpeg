@@ -108,14 +108,25 @@ the name. After that run `pod install` again.
 
 ### 3. Using
 
-1. Execute commands.
+1. Execute commands. 
+
+    - Use execute() method with a single command line and an argument delimiter  
+
     ```
     import { LogLevel, RNFFmpeg } from 'react-native-ffmpeg';
     
-    RNFFmpeg.execute('-i file1.mp4 -c:v mpeg4 file2.mp4');
+    RNFFmpeg.execute('-i file1.mp4 -c:v mpeg4 file2.mp4', ' ').then(result => console.log("FFmpeg process exited with rc " + result.rc));
     ```
 
-2. Check execution output.
+    - Use executeWithArguments() method with an array of arguments  
+
+    ```
+    import { LogLevel, RNFFmpeg } from 'react-native-ffmpeg';
+    
+    RNFFmpeg.executeWithArguments(["-i", "file1.mp4", "-c:v", "mpeg4", "file2.mp4"]).then(result => console.log("FFmpeg process exited with rc " + result.rc));
+    ```
+
+2. Check execution output. Zero represents successful execution, non-zero values represent failure.
     ```
     RNFFmpeg.getLastReturnCode().then(result => {
         console.log("Last return code: " + result.lastRc);
@@ -126,26 +137,54 @@ the name. After that run `pod install` again.
     });
     ```
 
-3. Stop an ongoing operation.
+3. Stop an ongoing operation. Note that this function does not wait for termination to complete and returns immediately.
     ```
     RNFFmpeg.cancel();
     ```
 
 4. Get media information for a file.
+    - Print all fields
     ```
     RNFFmpeg.getMediaInformation('<file path or uri>').then(info => {
         console.log('Result: ' + JSON.stringify(info));
     });
     ```
-
-5. List enabled external libraries.
+    - Print selected fields
     ```
-    RNFFmpeg.getExternalLibraries().then(externalLibraries => {
-        console.log(externalLibraries);
+    RNFFmpeg.getMediaInformation('<file path or uri>').then(info => {
+        console.log('Result: ' + JSON.stringify(info));
+        console.log('Media Information');
+        console.log('Path: ' + info.path);
+        console.log('Format: ' + info.format);
+        console.log('Duration: ' + info.duration);
+        console.log('Start time: ' + info.startTime);
+        console.log('Bitrate: ' + info.bitrate);
+        if (info.streams) {
+            for (var i = 0; i < info.streams.length; i++) {
+                console.log('Stream id: ' + info.streams[i].index);
+                console.log('Stream type: ' + info.streams[i].type);
+                console.log('Stream codec: ' + info.streams[i].codec);
+                console.log('Stream full codec: ' + info.streams[i].fullCodec);
+                console.log('Stream format: ' + info.streams[i].format);
+                console.log('Stream full format: ' + info.streams[i].fullFormat);
+                console.log('Stream width: ' + info.streams[i].width);
+                console.log('Stream height: ' + info.streams[i].height);
+                console.log('Stream bitrate: ' + info.streams[i].bitrate);
+                console.log('Stream sample rate: ' + info.streams[i].sampleRate);
+                console.log('Stream sample format: ' + info.streams[i].sampleFormat);
+                console.log('Stream channel layout: ' + info.streams[i].channelLayout);
+                console.log('Stream sar: ' + info.streams[i].sampleAspectRatio);
+                console.log('Stream dar: ' + info.streams[i].displayAspectRatio);
+                console.log('Stream average frame rate: ' + info.streams[i].averageFrameRate);
+                console.log('Stream real frame rate: ' + info.streams[i].realFrameRate);
+                console.log('Stream time base: ' + info.streams[i].timeBase);
+                console.log('Stream codec time base: ' + info.streams[i].codecTimeBase);
+            }
+        }
     });
     ```
 
-6. Enable log callback.
+5. Enable log callback and redirect all `FFmpeg` logs to a console/file/widget.
     ```
     logCallback = (logData) => {
         console.log(logData.log);
@@ -154,7 +193,7 @@ the name. After that run `pod install` again.
     RNFFmpeg.enableLogCallback(this.logCallback);
     ```
 
-7. Enable statistics callback.
+6. Enable statistics callback and follow the progress of an ongoing operation.
     ```
     statisticsCallback = (statisticsData) => {
         console.log('Statistics; frame: ' + statisticsData.videoFrameNumber.toFixed(1) + ', fps: ' + statisticsData.videoFps.toFixed(1) + ', quality: ' + statisticsData.videoQuality.toFixed(1) +
@@ -163,15 +202,47 @@ the name. After that run `pod install` again.
     ...
     RNFFmpeg.enableStatisticsCallback(this.statisticsCallback);
     ```
-    
+
+7. Poll statistics without implementing statistics callback.
+    ```
+    RNFFmpeg.getLastReceivedStatistics().then(stats => console.log('Stats: ' + JSON.stringify(stats)));
+    ```
+
+8. Reset statistics before starting a new operation.
+    ```
+    RNFFmpeg.resetStatistics();
+    ```
+
 8. Set log level.
     ```
     RNFFmpeg.setLogLevel(LogLevel.AV_LOG_WARNING);
     ```
 
-9. Register custom fonts directory.
+8. Register your own fonts by specifying a custom fonts directory, so they are available to use in `FFmpeg` filters.
     ```
     RNFFmpeg.setFontDirectory('<folder with fonts>');
+    ```
+
+9. Use your own `fontconfig` configuration.
+    ```
+    RNFFmpeg.setFontconfigConfigurationPath('<fontconfig configuration directory>');
+    ```
+
+10. Disable log functionality of the library. Logs will not be printed to console and log callback will be disabled.
+    ```
+    RNFFmpeg.disableLogs();
+    ```
+
+11. Disable statistics functionality of the library. Statistics callback will be disabled but the last received statistics data will be still available.
+    ```
+    RNFFmpeg.disableStatistics();
+    ```
+
+12. List enabled external libraries.
+    ```
+    RNFFmpeg.getExternalLibraries().then(externalLibraries => {
+        console.log(externalLibraries);
+    });
     ```
     
 ### 4. Versions
