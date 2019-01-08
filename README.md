@@ -110,7 +110,7 @@ the name. After that run `pod install` again.
 
 1. Execute commands. 
 
-    - Use `execute()` method with a single command line and an argument delimiter  
+    - Use execute() method with a single command line and an argument delimiter  
 
     ```
     import { LogLevel, RNFFmpeg } from 'react-native-ffmpeg';
@@ -118,7 +118,7 @@ the name. After that run `pod install` again.
     RNFFmpeg.execute('-i file1.mp4 -c:v mpeg4 file2.mp4', ' ').then(result => console.log("FFmpeg process exited with rc " + result.rc));
     ```
 
-    - Use `executeWithArguments()` method with an array of arguments  
+    - Use executeWithArguments() method with an array of arguments  
 
     ```
     import { LogLevel, RNFFmpeg } from 'react-native-ffmpeg';
