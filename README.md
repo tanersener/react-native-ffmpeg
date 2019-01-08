@@ -213,32 +213,32 @@ the name. After that run `pod install` again.
     RNFFmpeg.resetStatistics();
     ```
 
-8. Set log level.
+9. Set log level.
     ```
     RNFFmpeg.setLogLevel(LogLevel.AV_LOG_WARNING);
     ```
 
-8. Register your own fonts by specifying a custom fonts directory, so they are available to use in `FFmpeg` filters.
+10. Register your own fonts by specifying a custom fonts directory, so they are available to use in `FFmpeg` filters.
     ```
     RNFFmpeg.setFontDirectory('<folder with fonts>');
     ```
 
-9. Use your own `fontconfig` configuration.
+11. Use your own `fontconfig` configuration.
     ```
     RNFFmpeg.setFontconfigConfigurationPath('<fontconfig configuration directory>');
     ```
 
-10. Disable log functionality of the library. Logs will not be printed to console and log callback will be disabled.
+12. Disable log functionality of the library. Logs will not be printed to console and log callback will be disabled.
     ```
     RNFFmpeg.disableLogs();
     ```
 
-11. Disable statistics functionality of the library. Statistics callback will be disabled but the last received statistics data will be still available.
+13. Disable statistics functionality of the library. Statistics callback will be disabled but the last received statistics data will be still available.
     ```
     RNFFmpeg.disableStatistics();
     ```
 
-12. List enabled external libraries.
+14. List enabled external libraries.
     ```
     RNFFmpeg.getExternalLibraries().then(externalLibraries => {
         console.log(externalLibraries);
