@@ -350,7 +350,7 @@ Add the following block to your `Podfile` and run `pod install` again.
 
 ### 7. Test Application
 
-You can see how `React Native FFmpeg` is used inside an application by running test applications provided under [react-native-ffmpeg-test](https://github.com/tanersener/react-native-ffmpeg-test) repository. All applications provide the same functionality; performs command execution and video encoding operations. The difference between them is IOS dependency management mechanism applied.
+You can see how `React Native FFmpeg` is used inside an application by running test applications provided under [react-native-ffmpeg-test](https://github.com/tanersener/react-native-ffmpeg-test) repository.
 
 <img src="https://github.com/tanersener/react-native-ffmpeg/raw/master/docs/assets/ios_test_app.gif" width="240">
 
