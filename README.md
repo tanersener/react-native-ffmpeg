@@ -1,4 +1,4 @@
-# React Native FFmpeg [![Join the chat at https://gitter.im/react-native-ffmpeg/Lobby](https://badges.gitter.im/react-native-ffmpeg/Lobby.svg)](https://gitter.im/react-native-ffmpeg/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) ![GitHub release](https://img.shields.io/badge/release-v0.3.0-blue.svg) [![npm](https://img.shields.io/npm/v/react-native-ffmpeg.svg)](react-native-ffmpeg)
+# React Native FFmpeg [![Join the chat at https://gitter.im/react-native-ffmpeg/Lobby](https://badges.gitter.im/react-native-ffmpeg/Lobby.svg)](https://gitter.im/react-native-ffmpeg/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) ![GitHub release](https://img.shields.io/badge/release-v0.3.1-blue.svg) [![npm](https://img.shields.io/npm/v/react-native-ffmpeg.svg)](react-native-ffmpeg)
 
 FFmpeg for React Native
 
@@ -87,7 +87,7 @@ FFmpeg for React Native
 
 #### 2.3 Packages
 
-Default installation of `ReactNativeFFmpeg` using instructions in `2.1` and `2.2` enables the default package, which is based 
+Installation of `react-native-ffmpeg` using instructions in `2.1` and `2.2` enables the default package, which is based 
 on `https` package. It is possible to enable other installed packages using the following steps.  
 
 ##### 2.3.1 Android
@@ -218,9 +218,14 @@ the name. After that run `pod install` again.
     RNFFmpeg.setLogLevel(LogLevel.AV_LOG_WARNING);
     ```
 
-10. Register your own fonts by specifying a custom fonts directory, so they are available to use in `FFmpeg` filters.
+10. Register your own fonts by specifying a custom fonts directory, so they are available to use in `FFmpeg` filters. Please note that this function can not work on relative paths, you need to provide full file system path.
+    - Without any font name mappings
     ```
-    RNFFmpeg.setFontDirectory('<folder with fonts>');
+    RNFFmpeg.setFontDirectory('<folder with fonts>', null);
+    ```
+    - Apply custom font name mappings. This functionality is very useful if your font name includes ' ' (space) characters in it.
+    ```
+    RNFFmpeg.setFontDirectory('<folder with fonts>', { my_easy_font_name: "my complex font name" });
     ```
 
 11. Use your own `fontconfig` configuration.
@@ -251,11 +256,11 @@ the name. After that run `pod install` again.
 
 - `0.1.x` releases are based on `FFmpeg v4.0.2` and `MobileFFmpeg v2.x` 
 - `0.2.x` releases are based on `FFmpeg v4.1-dev` and `MobileFFmpeg v3.x`
-- `0.3.0` release is based on `FFmpeg v4.2-dev` and `MobileFFmpeg v4.2`
+- `0.3.0` and `0.3.1` releases are based on `FFmpeg v4.2-dev` and `MobileFFmpeg v4.2`
 
 #### 4.2 Source Code
 
-- `master` includes latest released version `v0.3.0`
+- `master` includes the latest released version `v0.3.1`
 - `development` branch includes new features and unreleased fixes
 
 ### 5. MobileFFmpeg
@@ -289,7 +294,14 @@ By default, `react-native-ffmpeg` releases depend on `LTS` releases, to be backw
 
 Apply provided solutions if you encounter one of the following issues.
 
-- Sometimes `react-native run-ios` fails with weird build errors. Execute commands below and try again.
+- You should not use double quotes (") to define your complex filters or map definitions.
+    ```
+     -filter_complex [0:v]scale=1280:-1[v] -map [v]
+    ```
+    
+- If your commands include unnecessary quotes or space characters your command will fail with `No such filter: ' '` errors. Please check your command and remove them.
+
+- Sometimes `react-native run-ios` fails with weird build errors. Execute the following commands and try again.
 
     ```
     rm -rf ios/Pods ios/build ios/Podfile.lock

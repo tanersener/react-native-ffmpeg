@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.3.1 - 2019-01-31
+- Includes fixes and enhancements for issues #41, #42 and #43.
+
 ## 0.3.0 - 2018-12-29
 - Using mobile-ffmpeg-v4.2.LTS
 
