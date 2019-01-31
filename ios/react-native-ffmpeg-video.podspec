@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
     s.ios.deployment_target = '8.0'
     s.static_framework  = true
 
-    s.source            = { :git => 'https://github.com/tanersener/react-native-ffmpeg.git' }
+    s.source            = { :git => 'https://github.com/tanersener/react-native-ffmpeg.git', :tag => 'v0.3.0'}
     s.source_files      = 'ios/RNFFmpegModule.m',
                           'ios/RNFFmpegModule.h'
 
