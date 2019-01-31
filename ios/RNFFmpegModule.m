@@ -155,8 +155,8 @@ RCT_EXPORT_METHOD(setFontconfigConfigurationPath:(NSString*)path) {
     [MobileFFmpegConfig setFontconfigConfigurationPath:path];
 }
 
-RCT_EXPORT_METHOD(setFontDirectory:(NSString*)fontDirectoryPath) {
-    [MobileFFmpegConfig setFontDirectory:fontDirectoryPath with:nil];
+RCT_EXPORT_METHOD(setFontDirectory:(NSString*)fontDirectoryPath with:(NSDictionary*)fontNameMap) {
+    [MobileFFmpegConfig setFontDirectory:fontDirectoryPath with:fontNameMap];
 }
 
 RCT_EXPORT_METHOD(getPackageName:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {

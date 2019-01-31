@@ -199,17 +199,7 @@ public class RNFFmpegModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void setFontconfigConfigurationPath(final ReadableArray readableArray) {
-        String path = null;
-
-        for (int i = 0; i < readableArray.size(); i++) {
-            final ReadableType type = readableArray.getType(i);
-
-            if (type == ReadableType.String) {
-                path = readableArray.getString(i);
-            }
-        }
-
+    public void setFontconfigConfigurationPath(final String path) {
         try {
             Config.setFontconfigConfigurationPath(path);
         } catch (final ErrnoException e) {
@@ -218,21 +208,8 @@ public class RNFFmpegModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void setFontDirectory(final ReadableArray readableArray) {
-        String path = null;
-        Map<String, String> map = null;
-
-        for (int i = 0; i < readableArray.size(); i++) {
-            final ReadableType type = readableArray.getType(i);
-
-            if (type == ReadableType.String) {
-                path = readableArray.getString(i);
-            } else if (type == ReadableType.Map) {
-                map = toMap(readableArray.getMap(i));
-            }
-        }
-
-        Config.setFontDirectory(reactContext, path, map);
+    public void setFontDirectory(final String fontDirectoryPath, final ReadableMap fontNameMap) {
+        Config.setFontDirectory(reactContext, fontDirectoryPath, toMap(fontNameMap));
     }
 
     @ReactMethod
@@ -309,15 +286,17 @@ public class RNFFmpegModule extends ReactContextBaseJavaModule {
     public static Map<String, String> toMap(final ReadableMap readableMap) {
         final Map<String, String> map = new HashMap<>();
 
-        final ReadableMapKeySetIterator iterator = readableMap.keySetIterator();
-        while (iterator.hasNextKey()) {
-            final String key = iterator.nextKey();
-            final ReadableType type = readableMap.getType(key);
+        if (readableMap != null) {
+            final ReadableMapKeySetIterator iterator = readableMap.keySetIterator();
+            while (iterator.hasNextKey()) {
+                final String key = iterator.nextKey();
+                final ReadableType type = readableMap.getType(key);
 
-            switch (type) {
-                case String:
-                    map.put(key, readableMap.getString(key));
-                    break;
+                switch (type) {
+                    case String:
+                        map.put(key, readableMap.getString(key));
+                        break;
+                }
             }
         }
 
