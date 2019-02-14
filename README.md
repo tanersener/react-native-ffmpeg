@@ -309,7 +309,6 @@ Apply provided solutions if you encounter one of the following issues.
         void log(int, byte[]);
         void statistics(int, float, float, long , int, double, double);
     }
-
     ```
 
 - By default, Xcode compresses `PNG` files during packaging. If you use `.png` files in your commands make sure you set the following two settings to `NO`. If one of them is set to `YES`, your operations may fail with `Error while decoding stream #0:0: Generic error in an external library` error.
