@@ -301,6 +301,17 @@ Apply provided solutions if you encounter one of the following issues.
 
 - If your commands include unnecessary quotes or space characters your command will fail with `No such filter: ' '` errors. Please check your command and remove them.
 
+- Enabling `ProGuard` on Android causes linking errors. Please add the following rule inside your `proguard-rules.pro` file to preserve necessary method names and prevent linking errors.
+                                                        
+    ```
+    -keep class com.arthenica.mobileffmpeg.Config {
+        native <methods>;
+        void log(int, byte[]);
+        void statistics(int, float, float, long , int, double, double);
+    }
+
+    ```
+
 - By default, Xcode compresses `PNG` files during packaging. If you use `.png` files in your commands make sure you set the following two settings to `NO`. If one of them is set to `YES`, your operations may fail with `Error while decoding stream #0:0: Generic error in an external library` error.
 
     <img width="720" alt="png_settings" src="https://user-images.githubusercontent.com/10158439/45798948-794c9f80-bcb4-11e8-8881-8c61789b283c.png">
@@ -354,7 +365,7 @@ Add the following block to your `Podfile` and run `pod install` again.
 
 ### 7. Test Application
 
-You can see how `React Native FFmpeg` is used inside an application by running test applications provided under [react-native-ffmpeg-test](https://github.com/tanersener/react-native-ffmpeg-test) repository. All applications provide the same functionality; performs command execution and video encoding operations. The difference between them is IOS dependency management mechanism applied.
+You can see how `React Native FFmpeg` is used inside an application by running test applications provided under [react-native-ffmpeg-test](https://github.com/tanersener/react-native-ffmpeg-test) repository.
 
 <img src="https://github.com/tanersener/react-native-ffmpeg/raw/master/docs/assets/ios_test_app.gif" width="240">
 
