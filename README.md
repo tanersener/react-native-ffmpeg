@@ -298,7 +298,7 @@ Apply provided solutions if you encounter one of the following issues.
     ```
      -filter_complex [0:v]scale=1280:-1[v] -map [v]
     ```
-    
+
 - If your commands include unnecessary quotes or space characters your command will fail with `No such filter: ' '` errors. Please check your command and remove them.
 
 - Enabling `ProGuard` on Android causes linking errors. Please add the following rule inside your `proguard-rules.pro` file to preserve necessary method names and prevent linking errors.
