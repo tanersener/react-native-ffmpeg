@@ -322,3 +322,5 @@ class ReactNativeFFmpeg {
 }
 
 export const RNFFmpeg = new ReactNativeFFmpeg();
+
+export default RNFFmpeg;
