@@ -14,7 +14,7 @@ declare module 'react-native-ffmpeg' {
 
     export interface LogMessage {
         level: Level;
-        text: string;
+        log: string;
     }
 
     export interface Statistics {
