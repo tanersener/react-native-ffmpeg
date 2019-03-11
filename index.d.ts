@@ -53,26 +53,27 @@ declare module 'react-native-ffmpeg' {
         rawInformation?: string;
     }
 
-    export function getFFmpegVersion(): Promise<[string, string]>;
-    export function getPlatform(): Promise<[string, string]>;
-    export function executeWithArguments(arguments: string[]): Promise<[string, string]>;
-    export function execute(command: string, delimiter: string): Promise<[string, string]>;
-    export function cancel(): void;
-    export function disableRedirection(): void;
-    export function getLogLevel(): Promise<[string, string]>;
-    export function setLogLevel(level: number): void;
-    export function disableLogs(): void;
-    export function disableStatistics(): void;
-    export function enableLogCallback(newCallback:(log: LogMessage) => void): void;
-    export function enableStatisticsCallback(newCallback:(statistics: Statistics) => void): void;
-    export function getLastReceivedStatistics(): Promise<Statistics>;
-    export function resetStatistics(): void;
-    export function setFontconfigConfigurationPath(path: string): void;
-    export function setFontDirectory(path: string, mapping: [string, string]): void;
-    export function getPackageName(): Promise<[string, string]>;
-    export function getExternalLibraries(): Promise<string[]>;
-    export function getLastReturnCode(): Promise<[string, string]>;
-    export function getLastCommandOutput(): Promise<[string, string]>;
-    export function getMediaInformation(path: string, timeout: number): Promise<MediaInformation>;
-
+    export class RNFFmpeg {
+        getFFmpegVersion(): Promise<[string, string]>;
+        getPlatform(): Promise<[string, string]>;
+        executeWithArguments(arguments: string[]): Promise<[string, string]>;
+        execute(command: string, delimiter: string): Promise<[string, string]>;
+        cancel(): void;
+        disableRedirection(): void;
+        getLogLevel(): Promise<[string, string]>;
+        setLogLevel(level: number): void;
+        disableLogs(): void;
+        disableStatistics(): void;
+        enableLogCallback(newCallback: (log: LogMessage) => void): void;
+        enableStatisticsCallback(newCallback: (statistics: Statistics) => void): void;
+        getLastReceivedStatistics(): Promise<Statistics>;
+        resetStatistics(): void;
+        setFontconfigConfigurationPath(path: string): void;
+        setFontDirectory(path: string, mapping: [string, string]): void;
+        getPackageName(): Promise<[string, string]>;
+        getExternalLibraries(): Promise<string[]>;
+        getLastReturnCode(): Promise<[string, string]>;
+        getLastCommandOutput(): Promise<[string, string]>;
+        getMediaInformation(path: string, timeout: number): Promise<MediaInformation>;
+    }
 }
