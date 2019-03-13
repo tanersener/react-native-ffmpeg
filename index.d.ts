@@ -1,19 +1,19 @@
 declare module 'react-native-ffmpeg' {
 
-    enum Level {
-        AV_LOG_QUIET = -8,
-        AV_LOG_PANIC = 0,
-        AV_LOG_FATAL = 8,
-        AV_LOG_ERROR = 16,
-        AV_LOG_WARNING = 24,
-        AV_LOG_INFO = 32,
-        AV_LOG_VERBOSE = 40,
-        AV_LOG_DEBUG = 48,
-        AV_LOG_TRACE = 56
+    export class LogLevel {
+        static AV_LOG_QUIET: number;
+        static AV_LOG_PANIC: number;
+        static AV_LOG_FATAL: number;
+        static AV_LOG_ERROR: number;
+        static AV_LOG_WARNING: number;
+        static AV_LOG_INFO: number;
+        static AV_LOG_VERBOSE: number;
+        static AV_LOG_DEBUG: number;
+        static AV_LOG_TRACE: number;
     }
 
     export interface LogMessage {
-        level: Level;
+        level: LogLevel;
         log: string;
     }
 
@@ -40,6 +40,13 @@ declare module 'react-native-ffmpeg' {
         sampleRate?: number;
         sampleFormat?: string;
         channelLayout?: string;
+        sampleAspectRatio?: string;
+        displayAspectRatio?: string;
+        averageFrameRate?: string;
+        realFrameRate?: string;
+        timeBase?: string;
+        codecTimeBase?: string;
+        metadata?: [string, string];
     }
 
     export interface MediaInformation {
@@ -53,27 +60,56 @@ declare module 'react-native-ffmpeg' {
         rawInformation?: string;
     }
 
-    export class RNFFmpeg {
-        getFFmpegVersion(): Promise<[string, string]>;
-        getPlatform(): Promise<[string, string]>;
-        executeWithArguments(arguments: string[]): Promise<[string, string]>;
-        execute(command: string, delimiter: string): Promise<[string, string]>;
-        cancel(): void;
-        disableRedirection(): void;
-        getLogLevel(): Promise<[string, string]>;
-        setLogLevel(level: number): void;
-        disableLogs(): void;
-        disableStatistics(): void;
-        enableLogCallback(newCallback: (log: LogMessage) => void): void;
-        enableStatisticsCallback(newCallback: (statistics: Statistics) => void): void;
-        getLastReceivedStatistics(): Promise<Statistics>;
-        resetStatistics(): void;
-        setFontconfigConfigurationPath(path: string): void;
-        setFontDirectory(path: string, mapping: [string, string]): void;
-        getPackageName(): Promise<[string, string]>;
-        getExternalLibraries(): Promise<string[]>;
-        getLastReturnCode(): Promise<[string, string]>;
-        getLastCommandOutput(): Promise<[string, string]>;
-        getMediaInformation(path: string, timeout: number): Promise<MediaInformation>;
+    interface GetFFmpegVersionResponse {
+        version: string;
     }
+
+    interface GetPlatformResponse {
+        platform: string;
+    }
+
+    interface ExecuteResponse {
+        rc: number;
+    }
+
+    interface GetLogLevelResponse {
+        level: number;
+    }
+
+    interface GetPackageNameResponse {
+        packageName: string;
+    }
+
+    interface GetLastReturnCodeResponse {
+        lastRc: number;
+    }
+
+    interface GetLastCommandOutputResponse {
+        lastCommandOutput: string;
+    }
+
+    export class RNFFmpeg {
+        static getFFmpegVersion(): Promise<GetFFmpegVersionResponse>;
+        static getPlatform(): Promise<GetPlatformResponse>;
+        static executeWithArguments(arguments: string[]): Promise<ExecuteResponse>;
+        static execute(command: string, delimiter: string): Promise<ExecuteResponse>;
+        static cancel(): void;
+        static disableRedirection(): void;
+        static getLogLevel(): Promise<GetLogLevelResponse>;
+        static setLogLevel(level: number): void;
+        static disableLogs(): void;
+        static disableStatistics(): void;
+        static enableLogCallback(newCallback: (log: LogMessage) => void): void;
+        static enableStatisticsCallback(newCallback: (statistics: Statistics) => void): void;
+        static getLastReceivedStatistics(): Promise<Statistics>;
+        static resetStatistics(): void;
+        static setFontconfigConfigurationPath(path: string): void;
+        static setFontDirectory(path: string, mapping: [string, string]): void;
+        static getPackageName(): Promise<GetPackageNameResponse>;
+        static getExternalLibraries(): Promise<string[]>;
+        static getLastReturnCode(): Promise<GetLastReturnCodeResponse>;
+        static getLastCommandOutput(): Promise<GetLastCommandOutputResponse>;
+        static getMediaInformation(path: string, timeout?: number): Promise<MediaInformation>;
+    }
+
 }
