@@ -38,3 +38,4 @@ buck-out/
 \.buckd/
 *.keystore
       
+/.gradle/

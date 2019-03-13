@@ -60,42 +60,14 @@ declare module 'react-native-ffmpeg' {
         rawInformation?: string;
     }
 
-    interface GetFFmpegVersionResponse {
-        version: string;
-    }
-
-    interface GetPlatformResponse {
-        platform: string;
-    }
-
-    interface ExecuteResponse {
-        rc: number;
-    }
-
-    interface GetLogLevelResponse {
-        level: number;
-    }
-
-    interface GetPackageNameResponse {
-        packageName: string;
-    }
-
-    interface GetLastReturnCodeResponse {
-        lastRc: number;
-    }
-
-    interface GetLastCommandOutputResponse {
-        lastCommandOutput: string;
-    }
-
     export class RNFFmpeg {
-        static getFFmpegVersion(): Promise<GetFFmpegVersionResponse>;
-        static getPlatform(): Promise<GetPlatformResponse>;
-        static executeWithArguments(arguments: string[]): Promise<ExecuteResponse>;
-        static execute(command: string, delimiter: string): Promise<ExecuteResponse>;
+        static getFFmpegVersion(): Promise<{version: string}>;
+        static getPlatform(): Promise<{platform: string}>;
+        static executeWithArguments(arguments: string[]): Promise<{rc: number}>;
+        static execute(command: string, delimiter: string): Promise<{rc: number}>;
         static cancel(): void;
         static disableRedirection(): void;
-        static getLogLevel(): Promise<GetLogLevelResponse>;
+        static getLogLevel(): Promise<{level: number}>;
         static setLogLevel(level: number): void;
         static disableLogs(): void;
         static disableStatistics(): void;
@@ -105,10 +77,10 @@ declare module 'react-native-ffmpeg' {
         static resetStatistics(): void;
         static setFontconfigConfigurationPath(path: string): void;
         static setFontDirectory(path: string, mapping?: { [key: string]: string }): void;
-        static getPackageName(): Promise<GetPackageNameResponse>;
+        static getPackageName(): Promise<{packageName: string}>;
         static getExternalLibraries(): Promise<string[]>;
-        static getLastReturnCode(): Promise<GetLastReturnCodeResponse>;
-        static getLastCommandOutput(): Promise<GetLastCommandOutputResponse>;
+        static getLastReturnCode(): Promise<{lastRc: number}>;
+        static getLastCommandOutput(): Promise<{lastCommandOutput: string}>;
         static getMediaInformation(path: string, timeout?: number): Promise<MediaInformation>;
     }
 

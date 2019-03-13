@@ -61,23 +61,20 @@ class LogLevel {
 /**
  * Main class for FFmpeg operations. Provides execute() method to execute FFmpeg commands.
  */
-class RNFFmpeg {
-
-    static logCallback;
-    static statisticsCallback;
+class ReactNativeFFmpeg {
 
     constructor() {
         const reactNativeFFmpegModuleEvents = new NativeEventEmitter(RNFFmpegModule);
         reactNativeFFmpegModuleEvents.addListener(eventLog, event => {
-            if (RNFFmpeg.logCallback === undefined) {
+            if (this.logCallback === undefined) {
                 console.log(event.log);
             } else {
-                RNFFmpeg.logCallback(event);
+                this.logCallback(event);
             }
         });
         reactNativeFFmpegModuleEvents.addListener(statisticsLog, statistics => {
-            if (RNFFmpeg.statisticsCallback !== undefined) {
-                RNFFmpeg.statisticsCallback(statistics);
+            if (this.statisticsCallback !== undefined) {
+                this.statisticsCallback(statistics);
             }
         });
 
@@ -97,7 +94,7 @@ class RNFFmpeg {
      *
      * @returns FFmpeg version stored in version field
      */
-    static getFFmpegVersion() {
+    getFFmpegVersion() {
         return RNFFmpegModule.getFFmpegVersion();
     }
 
@@ -106,7 +103,7 @@ class RNFFmpeg {
      *
      * @returns platform name stored in platform field
      */
-    static getPlatform() {
+    getPlatform() {
         return RNFFmpegModule.getPlatform();
     }
 
@@ -116,7 +113,7 @@ class RNFFmpeg {
      * @param commandArguments FFmpeg command options/arguments as string array
      * @returns return code stored in rc field
      */
-    static executeWithArguments(commandArguments) {
+    executeWithArguments(commandArguments) {
         return RNFFmpegModule.executeWithArguments(commandArguments);
     }
 
@@ -127,14 +124,14 @@ class RNFFmpeg {
      * @param delimiter delimiter used between arguments, default value is space character
      * @returns return code stored in rc field
      */
-    static execute(command, delimiter) {
+    execute(command, delimiter) {
         return RNFFmpegModule.execute(command, delimiter);
     }
 
     /**
      * Cancels an ongoing operation.
      */
-    static cancel() {
+    cancel() {
         RNFFmpegModule.cancel();
     }
 
@@ -147,7 +144,7 @@ class RNFFmpeg {
      * printed anywhere and only saved as <code>lastReceivedStatistics</code> data which can be polled with
      * {@link #getLastReceivedStatistics()}.
      */
-    static disableRedirection() {
+    disableRedirection() {
         RNFFmpegModule.disableRedirection();
     }
 
@@ -156,7 +153,7 @@ class RNFFmpeg {
      *
      * @returns log level stored in level field
      */
-    static getLogLevel() {
+    getLogLevel() {
         return RNFFmpegModule.getLogLevel();
     }
 
@@ -165,7 +162,7 @@ class RNFFmpeg {
      *
      * @param logLevel log level
      */
-    static setLogLevel(logLevel) {
+    setLogLevel(logLevel) {
         RNFFmpegModule.setLogLevel(logLevel);
     }
 
@@ -173,7 +170,7 @@ class RNFFmpeg {
      * Disables log functionality of the library. Logs will not be printed to console and log callback will be disabled.
      * Note that log functionality is enabled by default.
      */
-    static disableLogs() {
+    disableLogs() {
         RNFFmpegModule.disableLogEvents();
     }
 
@@ -182,7 +179,7 @@ class RNFFmpeg {
      * statistics data will be still available.
      * Note that statistics functionality is enabled by default.
      */
-    static disableStatistics() {
+    disableStatistics() {
         RNFFmpegModule.disableStatisticsEvents();
     }
 
@@ -191,8 +188,8 @@ class RNFFmpeg {
      *
      * @param newCallback new log callback function or undefined to disable a previously defined callback
      */
-    static enableLogCallback(newCallback) {
-        RNFFmpeg.logCallback = newCallback;
+    enableLogCallback(newCallback) {
+        this.logCallback = newCallback;
     }
 
     /**
@@ -200,8 +197,8 @@ class RNFFmpeg {
      *
      * @param newCallback new statistics callback function or undefined to disable a previously defined callback
      */
-    static enableStatisticsCallback(newCallback) {
-        RNFFmpeg.statisticsCallback = newCallback;
+    enableStatisticsCallback(newCallback) {
+        this.statisticsCallback = newCallback;
     }
 
     /**
@@ -210,14 +207,14 @@ class RNFFmpeg {
      * @returns last received statistics data stored in bitrate, size, speed, time, videoFps, videoFrameNumber and
      * videoQuality fields
      */
-    static getLastReceivedStatistics() {
+    getLastReceivedStatistics() {
         return RNFFmpegModule.getLastReceivedStatistics();
     }
 
     /**
      * Resets last received statistics. It is recommended to call it before starting a new execution.
      */
-    static resetStatistics() {
+    resetStatistics() {
         RNFFmpegModule.resetStatistics();
     }
 
@@ -226,7 +223,7 @@ class RNFFmpeg {
      *
      * @param path directory which contains fontconfig configuration (fonts.conf)
      */
-    static setFontconfigConfigurationPath(path) {
+    setFontconfigConfigurationPath(path) {
         RNFFmpegModule.setFontconfigConfigurationPath(path);
     }
 
@@ -236,7 +233,7 @@ class RNFFmpeg {
      * @param path which contains fonts (.ttf, .otf files)
      * @param mapping font name mapping like {"my_easy_font_name":"my complex font name"}
      */
-    static setFontDirectory(path, mapping) {
+    setFontDirectory(path, mapping) {
         RNFFmpegModule.setFontDirectory(path, mapping);
     }
 
@@ -245,7 +242,7 @@ class RNFFmpeg {
      *
      * @return guessed package name according to supported external libraries
      */
-    static getPackageName() {
+    getPackageName() {
         return RNFFmpegModule.getPackageName();
     }
 
@@ -254,7 +251,7 @@ class RNFFmpeg {
      *
      * @return list of supported external libraries
      */
-    static getExternalLibraries() {
+    getExternalLibraries() {
         return RNFFmpegModule.getExternalLibraries();
     }
 
@@ -263,7 +260,7 @@ class RNFFmpeg {
      *
      * @return return code of last executed command
      */
-    static getLastReturnCode() {
+    getLastReturnCode() {
         return RNFFmpegModule.getLastReturnCode();
     }
 
@@ -273,7 +270,7 @@ class RNFFmpeg {
      *
      * @return output of last executed command
      */
-    static getLastCommandOutput() {
+    getLastCommandOutput() {
         return RNFFmpegModule.getLastCommandOutput();
     }
 
@@ -284,7 +281,7 @@ class RNFFmpeg {
      * @param timeout complete timeout in ms, default value is 10000
      * @return media information
      */
-    static getMediaInformation(path, timeout) {
+    getMediaInformation(path, timeout) {
         if (timeout) {
             return RNFFmpegModule.getMediaInformation(path, timeout);
         } else {
@@ -298,7 +295,7 @@ class RNFFmpeg {
      * @param level log level integer
      * @returns log level string
      */
-    static logLevelToString(level) {
+    logLevelToString(level) {
         switch (level) {
             case LogLevel.AV_LOG_TRACE:
                 return "TRACE";
@@ -324,8 +321,6 @@ class RNFFmpeg {
 
 }
 
-const _rnFFmpegInstance = new RNFFmpeg();
-
-export { LogLevel };
+export const RNFFmpeg = new ReactNativeFFmpeg();
 
 export default RNFFmpeg;
