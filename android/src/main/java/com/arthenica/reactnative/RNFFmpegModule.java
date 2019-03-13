@@ -227,7 +227,7 @@ public class RNFFmpegModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void getLastReturnCode(final Promise promise) {
         int lastReturnCode = FFmpeg.getLastReturnCode();
-        promise.resolve(toStringMap(KEY_LAST_RC, String.valueOf(lastReturnCode)));
+        promise.resolve(toIntMap(KEY_LAST_RC, lastReturnCode));
     }
 
     @ReactMethod

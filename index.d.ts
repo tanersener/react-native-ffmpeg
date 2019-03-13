@@ -104,7 +104,7 @@ declare module 'react-native-ffmpeg' {
         static getLastReceivedStatistics(): Promise<Statistics>;
         static resetStatistics(): void;
         static setFontconfigConfigurationPath(path: string): void;
-        static setFontDirectory(path: string, mapping: [string, string]): void;
+        static setFontDirectory(path: string, mapping?: { [key: string]: string }): void;
         static getPackageName(): Promise<GetPackageNameResponse>;
         static getExternalLibraries(): Promise<string[]>;
         static getLastReturnCode(): Promise<GetLastReturnCodeResponse>;
