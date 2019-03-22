@@ -267,13 +267,13 @@ Installation of `react-native-ffmpeg` using instructions in `2.1` and `2.2` enab
 
 ### 5. LTS Releases
 
-Starting from `v3.1`, `react-native-ffmpeg` packages are published in two different variants: `Main Release` and `LTS Release`. 
+Starting from `v3.0`, `react-native-ffmpeg` packages are published in two different variants: `Main Release` and `LTS Release`. 
 
 - Main releases include complete functionality of the library and support the latest SDK/API features
 
 - LTS releases are customized to support a wide range of devices. They are built using older API/SDK versions, so some features are not available for them
 
-LTS release packages include `-lts` postfix appended to their names. For example, while `full-gpl` package name specifies `full-gpl` package of Main release, `full-gpl-lts` package name specifies `full-gpl` package of LTS release.
+Packages from LTS variant includes `-lts` postfix in their names. So if you want use a package from LTS release, you need to append `-lts` to package name. For example, to use `full-gpl` package of a LTS release you need to use `full-gpl-lts`.
 
 #### 5.1 Main Release vs LTS Release
 
