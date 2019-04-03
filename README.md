@@ -1,4 +1,4 @@
-# React Native FFmpeg ![GitHub release](https://img.shields.io/badge/release-v0.3.1-blue.svg) [![npm](https://img.shields.io/npm/v/react-native-ffmpeg.svg)](react-native-ffmpeg)
+# React Native FFmpeg ![GitHub release](https://img.shields.io/badge/release-v0.3.2-blue.svg) [![npm](https://img.shields.io/npm/v/react-native-ffmpeg.svg)](react-native-ffmpeg)
 
 FFmpeg for React Native
 
@@ -258,11 +258,11 @@ Installation of `react-native-ffmpeg` using instructions in `2.1` and `2.2` enab
 
 - `0.1.x` releases are based on `FFmpeg v4.0.2` and `MobileFFmpeg v2.x` 
 - `0.2.x` releases are based on `FFmpeg v4.1-dev` and `MobileFFmpeg v3.x`
-- `0.3.0` and `0.3.1` releases are based on `FFmpeg v4.2-dev` and `MobileFFmpeg v4.2`
+- `0.3.x` releases are based on `FFmpeg v4.2-dev` and `MobileFFmpeg v4.2.x`
 
 #### 4.2 Source Code
 
-- `master` includes the latest released version `v0.3.1`
+- `master` includes the latest released version `v0.3.2`
 - `development` branch includes new features and unreleased fixes
 
 ### 5. LTS Releases
@@ -357,6 +357,20 @@ Add the following block to your `Podfile` and run `pod install` again.
     end
 
     ```
+    
+- GPL licensed packages of `react-native-ffmpeg` include `libc++_shared.so` native library. If a second library which also includes `libc++_shared.so` is added as a dependency, `gradle` fails with `More than one file was found with OS independent path 'lib/x86/libc++_shared.so'` error message.
+
+  You can fix this error by adding the following block into your `build.gradle`.
+  ```
+  android {
+      packagingOptions {
+          pickFirst 'lib/x86/libc++_shared.so'
+          pickFirst 'lib/x86_64/libc++_shared.so'
+          pickFirst 'lib/armeabi-v7a/libc++_shared.so'
+          pickFirst 'lib/arm64-v8a/libc++_shared.so'
+      }
+  }
+  ```
 
 ### 7. Test Application
 
