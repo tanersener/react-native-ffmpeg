@@ -22,7 +22,7 @@ FFmpeg for React Native
     - `zlib` and `MediaCodec` Android system libraries
     - `bzip2`, `zlib` IOS system libraries and `AudioToolbox`, `CoreImage`, `VideoToolbox`, `AVFoundation` IOS system frameworks
 
--
+- Includes Typescript definitions
 - Licensed under LGPL 3.0, can be customized to support GPL v3.0
 - Includes eight different packages with different external libraries enabled in FFmpeg
 
