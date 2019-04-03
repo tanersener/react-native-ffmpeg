@@ -363,7 +363,7 @@ Add the following block to your `Podfile` and run `pod install` again.
 
     ```
     
-- GPL licensed packages of `react-native-ffmpeg` include `libc++_shared.so` native library. If a second library which also includes `libc++_shared.so` is added as a dependency, `gradle` fails with `More than one file was found with OS independent path 'lib/x86/libc++_shared.so'` error message.
+- Some `react-native-ffmpeg` packages include `libc++_shared.so` native library. If a second library which also includes `libc++_shared.so` is added as a dependency, `gradle` fails with `More than one file was found with OS independent path 'lib/x86/libc++_shared.so'` error message.
 
   You can fix this error by adding the following block into your `build.gradle`.
   ```
