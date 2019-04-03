@@ -2,8 +2,8 @@ def safePackageName(prop) {
     prop.replace("-lts", "")
 }
 
-def safePackageVersion(prop, version) {
-    prop.contains("-lts") ? version + ".LTS" : version
+def safePackageVersion(prop, version, ltsVersion) {
+    prop.contains("-lts") ? ltsVersion + ".LTS" : version
 }
 
 def safeExtGet(prop, fallback) {
@@ -19,18 +19,18 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.1'
+        classpath 'com.android.tools.build:gradle:3.3.2'
     }
 }
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 28
 
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 27
-        versionCode 31
-        versionName "0.3.1"
+        targetSdkVersion 28
+        versionCode 32
+        versionName "0.3.2"
         project.archivesBaseName = "react-native-ffmpeg"
     }
     lintOptions {
@@ -46,6 +46,6 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.arthenica:mobile-ffmpeg-' + safePackageName(safeExtGet('reactNativeFFmpegPackage', 'https')) + ':' + safePackageVersion(safeExtGet('reactNativeFFmpegPackage', 'https'), '4.2')
+    implementation 'com.arthenica:mobile-ffmpeg-' + safePackageName(safeExtGet('reactNativeFFmpegPackage', 'https')) + ':' + safePackageVersion(safeExtGet('reactNativeFFmpegPackage', 'https'), '4.2.1', '4.2')
     implementation 'com.facebook.react:react-native:+'
 }

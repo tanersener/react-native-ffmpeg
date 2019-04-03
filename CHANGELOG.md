@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.3.2 - 2019-04-03
+- Includes Typescript declarations
+- Adds React Native 0.59 support
+- Simpler version and package selection
+
 ## 0.3.1 - 2019-01-31
 - Includes fixes and enhancements for issues #41, #42 and #43.
 
