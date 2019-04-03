@@ -22,6 +22,7 @@ FFmpeg for React Native
     - `zlib` and `MediaCodec` Android system libraries
     - `bzip2`, `zlib` IOS system libraries and `AudioToolbox`, `CoreImage`, `VideoToolbox`, `AVFoundation` IOS system frameworks
 
+-
 - Licensed under LGPL 3.0, can be customized to support GPL v3.0
 - Includes eight different packages with different external libraries enabled in FFmpeg
 
@@ -296,6 +297,10 @@ Apply provided solutions if you encounter one of the following issues.
     ```
 
 - If your commands include unnecessary quotes or space characters your command will fail with `No such filter: ' '` errors. Please check your command and remove them.
+
+- `execute` method has an optional delimiter parameter. Delimiter defines how a command string will be split into arguments. When a delimiter is not specified then space character is used as default delimiter. 
+Consequently if you have a space character in one of your command arguments, in filename or in `-filter_complex` block, then your command string will be split into invalid arguments and execution will fail. 
+You can fix this error by splitting your command string into array yourself and calling `executeWithArguments` method or using a different delimiter character in your command string and specifying it in `execute` call.
 
 - Enabling `ProGuard` on Android causes linking errors. Please add the following rule inside your `proguard-rules.pro` file to preserve necessary method names and prevent linking errors.
                                                         
