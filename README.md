@@ -1,4 +1,4 @@
-# React Native FFmpeg [![Join the chat at https://gitter.im/react-native-ffmpeg/Lobby](https://badges.gitter.im/react-native-ffmpeg/Lobby.svg)](https://gitter.im/react-native-ffmpeg/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) ![GitHub release](https://img.shields.io/badge/release-v0.3.1-blue.svg) [![npm](https://img.shields.io/npm/v/react-native-ffmpeg.svg)](react-native-ffmpeg)
+# React Native FFmpeg ![GitHub release](https://img.shields.io/badge/release-v0.3.2-blue.svg) [![npm](https://img.shields.io/npm/v/react-native-ffmpeg.svg)](react-native-ffmpeg)
 
 FFmpeg for React Native
 
@@ -22,6 +22,7 @@ FFmpeg for React Native
     - `zlib` and `MediaCodec` Android system libraries
     - `bzip2`, `zlib` IOS system libraries and `AudioToolbox`, `CoreImage`, `VideoToolbox`, `AVFoundation` IOS system frameworks
 
+- Includes Typescript definitions
 - Licensed under LGPL 3.0, can be customized to support GPL v3.0
 - Includes eight different packages with different external libraries enabled in FFmpeg
 
@@ -87,23 +88,25 @@ FFmpeg for React Native
 
 #### 2.3 Packages
 
-Installation of `react-native-ffmpeg` using instructions in `2.1` and `2.2` enables the default package, which is based 
-on `https` package. It is possible to enable other installed packages using the following steps.  
+Installation of `react-native-ffmpeg` using instructions in `2.1` and `2.2` enables the default package, which is based on `https` package. It is possible to enable other installed packages using the following steps.  
 
 ##### 2.3.1 Android
 
-- Edit `android/settings.gradle` file and modify `projectDir` for `react-native-ffmpeg` by appending package name at
-the end of the path.
+- Edit `android/build.gradle` file and define package name in `ext.reactNativeFFmpegPackage` variable.
+
     ```
-    project(':react-native-ffmpeg').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-ffmpeg/android/<package name>')
+    ext {
+        reactNativeFFmpegPackage = "<package name>"
+    }
+
     ```
 
 ##### 2.3.2 IOS
 
-- Edit `ios/Podfile` file and modify `podspec` path for `react-native-ffmpeg` by appending package name at the end of 
-the name. After that run `pod install` again.
+- Edit `ios/Podfile` file and add package name as `subspec`. After that run `pod install` again.
+
     ```
-    pod 'react-native-ffmpeg-<package name>', :podspec => '../node_modules/react-native-ffmpeg/ios/react-native-ffmpeg-<package name>.podspec'
+    pod 'react-native-ffmpeg/<package name>', :podspec => '../node_modules/react-native-ffmpeg/ios/react-native-ffmpeg.podspec'
     ```
 
 ### 3. Using
@@ -256,35 +259,29 @@ the name. After that run `pod install` again.
 
 - `0.1.x` releases are based on `FFmpeg v4.0.2` and `MobileFFmpeg v2.x` 
 - `0.2.x` releases are based on `FFmpeg v4.1-dev` and `MobileFFmpeg v3.x`
-- `0.3.0` and `0.3.1` releases are based on `FFmpeg v4.2-dev` and `MobileFFmpeg v4.2`
+- `0.3.x` releases are based on `FFmpeg v4.2-dev` and `MobileFFmpeg v4.2.x`
 
 #### 4.2 Source Code
 
-- `master` includes the latest released version `v0.3.1`
+- `master` includes the latest released version `v0.3.2`
 - `development` branch includes new features and unreleased fixes
 
-### 5. MobileFFmpeg
+### 5. LTS Releases
 
-`react-native-ffmpeg` uses [MobileFFmpeg](https://github.com/tanersener/mobile-ffmpeg) in its core. 
-
-Starting from `v4.2`, `MobileFFmpeg` binaries are published in two different variants: `Main Release` and `LTS Release`. 
+Starting from `v3.0`, `react-native-ffmpeg` packages are published in two different variants: `Main Release` and `LTS Release`. 
 
 - Main releases include complete functionality of the library and support the latest SDK/API features
 
 - LTS releases are customized to support a wide range of devices. They are built using older API/SDK versions, so some features are not available for them
 
-By default, `react-native-ffmpeg` releases depend on `LTS` releases, to be backward compatible with its earlier versions. But you can change `MobileFFmpeg` variant and/or version used to support a specific feature/architecture.
-
-- To do that on Android, set a different value to `mobileFFmpegVersion` variable inside `build.gradle` file imported, under `../node_modules/react-native-ffmpeg/android` path.
-
-- On IOS, specify a different version for `mobile-ffmpeg` dependency inside imported `.podspec` file under `../node_modules/react-native-ffmpeg/ios` path.
+Packages from LTS variant includes `-lts` postfix in their names. So if you want use a package from LTS release, you need to append `-lts` to package name. For example, to use `full-gpl` package of a LTS release you need to use `full-gpl-lts`.
 
 #### 5.1 Main Release vs LTS Release
 
 |        | Main Release | LTS Release |
 | :----: | :----: | :----: |
 | Android API Level | 24 | 21 | 
-| Android Camera Access | x | - |
+| Android Camera Access | Yes | - |
 | Android Architectures | arm-v7a-neon<br/>arm64-v8a<br/>x86<br/>x86-64</br> | arm-v7a<br/>arm-v7a-neon<br/>arm64-v8a<br/>x86<br/>x86-64</br> |
 | IOS SDK | 12.1 | 9.3 |
 | Xcode Support | 10.1 | 7.3.1 |
@@ -299,7 +296,11 @@ Apply provided solutions if you encounter one of the following issues.
      -filter_complex [0:v]scale=1280:-1[v] -map [v]
     ```
 
-- If your commands include unnecessary quotes or space characters your command will fail with `No such filter: ' '` errors. Please check your command and remove them.
+- If your commands include unnecessary quotes or space characters, your command will fail with `No such filter: ' '` errors. Please check your command and remove them.
+
+- `execute` method has an optional delimiter parameter. Delimiter defines how a command string will be split into arguments. When a delimiter is not specified then space character is used as default delimiter. 
+Consequently if you have a space character in one of your command arguments, in filename or in `-filter_complex` block, then your command string will be split into invalid arguments and execution will fail. 
+You can fix this error by splitting your command string into array yourself and calling `executeWithArguments` method or using a different delimiter character in your command string and specifying it in `execute` call.
 
 - Enabling `ProGuard` on Android causes linking errors. Please add the following rule inside your `proguard-rules.pro` file to preserve necessary method names and prevent linking errors.
                                                         
@@ -309,7 +310,6 @@ Apply provided solutions if you encounter one of the following issues.
         void log(int, byte[]);
         void statistics(int, float, float, long , int, double, double);
     }
-
     ```
 
 - By default, Xcode compresses `PNG` files during packaging. If you use `.png` files in your commands make sure you set the following two settings to `NO`. If one of them is set to `YES`, your operations may fail with `Error while decoding stream #0:0: Generic error in an external library` error.
@@ -362,6 +362,20 @@ Add the following block to your `Podfile` and run `pod install` again.
     end
 
     ```
+    
+- Some `react-native-ffmpeg` packages include `libc++_shared.so` native library. If a second library which also includes `libc++_shared.so` is added as a dependency, `gradle` fails with `More than one file was found with OS independent path 'lib/x86/libc++_shared.so'` error message.
+
+  You can fix this error by adding the following block into your `build.gradle`.
+  ```
+  android {
+      packagingOptions {
+          pickFirst 'lib/x86/libc++_shared.so'
+          pickFirst 'lib/x86_64/libc++_shared.so'
+          pickFirst 'lib/armeabi-v7a/libc++_shared.so'
+          pickFirst 'lib/arm64-v8a/libc++_shared.so'
+      }
+  }
+  ```
 
 ### 7. Test Application
 
