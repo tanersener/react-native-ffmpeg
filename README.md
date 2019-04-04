@@ -296,7 +296,7 @@ Apply provided solutions if you encounter one of the following issues.
      -filter_complex [0:v]scale=1280:-1[v] -map [v]
     ```
 
-- If your commands include unnecessary quotes or space characters your command will fail with `No such filter: ' '` errors. Please check your command and remove them.
+- If your commands include unnecessary quotes or space characters, your command will fail with `No such filter: ' '` errors. Please check your command and remove them.
 
 - `execute` method has an optional delimiter parameter. Delimiter defines how a command string will be split into arguments. When a delimiter is not specified then space character is used as default delimiter. 
 Consequently if you have a space character in one of your command arguments, in filename or in `-filter_complex` block, then your command string will be split into invalid arguments and execution will fail. 
