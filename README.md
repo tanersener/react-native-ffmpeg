@@ -88,7 +88,8 @@ FFmpeg for React Native
 
 #### 2.3 Packages
 
-Installation of `react-native-ffmpeg` using instructions in `2.1` and `2.2` enables the default package, which is based on `https` package. It is possible to enable other installed packages using the following steps.  
+Installation of `react-native-ffmpeg` using instructions in `2.1` and `2.2` enables the default package, which is based on `https` package. 
+It is possible to enable other installed packages using the following steps.  
 
 ##### 2.3.1 Android
 
@@ -108,6 +109,12 @@ Installation of `react-native-ffmpeg` using instructions in `2.1` and `2.2` enab
     ```
     pod 'react-native-ffmpeg/<package name>', :podspec => '../node_modules/react-native-ffmpeg/ios/react-native-ffmpeg.podspec'
     ```
+    
+#### 2.4 LTS Release
+
+When a package name is not specified, `react-native-ffmpeg` is installed in the `Main Release` variant described in [LTS Releases](#5-lts-releases) section.
+
+In order to install the `LTS` variant, install the `https-lts` package using instructions in `2.3` or append `-lts` to the package name you are using. 
 
 ### 3. Using
 
