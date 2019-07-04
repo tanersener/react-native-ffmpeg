@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.3.3 - 2019-07-04
+- Supports API Level 16 on Android
+
 ## 0.3.2 - 2019-04-03
 - Includes Typescript declarations
 - Adds React Native 0.59 support

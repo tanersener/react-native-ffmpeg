@@ -24,9 +24,6 @@
 
 package com.arthenica.reactnative;
 
-import android.system.ErrnoException;
-import android.util.Log;
-
 import com.arthenica.mobileffmpeg.AbiDetect;
 import com.arthenica.mobileffmpeg.Config;
 import com.arthenica.mobileffmpeg.FFmpeg;
@@ -200,11 +197,7 @@ public class RNFFmpegModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void setFontconfigConfigurationPath(final String path) {
-        try {
-            Config.setFontconfigConfigurationPath(path);
-        } catch (final ErrnoException e) {
-            Log.w(LIBRARY_NAME, String.format("Setting fontconfig configuration path failed for %s", path), e);
-        }
+        Config.setFontconfigConfigurationPath(path);
     }
 
     @ReactMethod
