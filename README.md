@@ -1,4 +1,4 @@
-# React Native FFmpeg ![GitHub release](https://img.shields.io/badge/release-v0.3.2-blue.svg) [![npm](https://img.shields.io/npm/v/react-native-ffmpeg.svg)](react-native-ffmpeg)
+# React Native FFmpeg ![GitHub release](https://img.shields.io/badge/release-v0.3.3-blue.svg) [![npm](https://img.shields.io/npm/v/react-native-ffmpeg.svg)](react-native-ffmpeg)
 
 FFmpeg for React Native
 
@@ -7,10 +7,12 @@ FFmpeg for React Native
 ### 1. Features
 - Based on MobileFFmpeg
 - Supports
-    - Both Android and IOS
+    - Both Android and iOS
     - FFmpeg `v4.1` and `v4.2-dev-x` (master) releases
     - `arm-v7a`, `arm-v7a-neon`, `arm64-v8a`, `x86` and `x86_64` architectures on Android
-    - `armv7`, `armv7s`, `arm64`, `arm64e`, `i386` and `x86_64` architectures on IOS
+    - `Android API Level 16` or later 
+    - `armv7`, `armv7s`, `arm64`, `arm64e`, `i386` and `x86_64` architectures on iOS
+    - `iOS SDK 9.3` or later
     - 24 external libraries
     
         `fontconfig`, `freetype`, `fribidi`, `gmp`, `gnutls`, `kvazaar`, `lame`, `libaom`, `libass`, `libiconv`, `libilbc`, `libtheora`, `libvorbis`, `libvpx`, `libwebp`, `libxml2`, `opencore-amr`, `opus`, `shine`, `snappy`, `soxr`, `speex`, `twolame`, `wavpack`
@@ -20,7 +22,7 @@ FFmpeg for React Native
         `vid.stab`, `x264`, `x265`, `xvidcore`
         
     - `zlib` and `MediaCodec` Android system libraries
-    - `bzip2`, `zlib` IOS system libraries and `AudioToolbox`, `CoreImage`, `VideoToolbox`, `AVFoundation` IOS system frameworks
+    - `bzip2`, `zlib` iOS system libraries and `AudioToolbox`, `CoreImage`, `VideoToolbox`, `AVFoundation` iOS system frameworks
 
 - Includes Typescript definitions
 - Licensed under LGPL 3.0, can be customized to support GPL v3.0
@@ -81,7 +83,7 @@ FFmpeg for React Native
     pod 'react-native-ffmpeg', :podspec => '../node_modules/react-native-ffmpeg/ios/react-native-ffmpeg.podspec'
     ```
     
-  - **DO NOT USE** `react-native link` **on IOS.** `react-native link` breaks Cocoapods dependencies.
+  - **DO NOT USE** `react-native link` **on iOS.** `react-native link` breaks Cocoapods dependencies.
 
 ##### 2.2.2 Advanced
   - See [react-native-ffmpeg-test](https://github.com/tanersener/react-native-ffmpeg-test) for linking alternatives
@@ -102,7 +104,7 @@ It is possible to enable other installed packages using the following steps.
 
     ```
 
-##### 2.3.2 IOS
+##### 2.3.2 iOS
 
 - Edit `ios/Podfile` file and add package name as `subspec`. After that run `pod install` again.
 
@@ -270,7 +272,7 @@ In order to install the `LTS` variant, install the `https-lts` package using ins
 
 #### 4.2 Source Code
 
-- `master` includes the latest released version `v0.3.2`
+- `master` includes the latest released version `v0.3.3`
 - `development` branch includes new features and unreleased fixes
 
 ### 5. LTS Releases
@@ -287,12 +289,12 @@ Packages from LTS variant includes `-lts` postfix in their names. So if you want
 
 |        | Main Release | LTS Release |
 | :----: | :----: | :----: |
-| Android API Level | 24 | 21 | 
+| Android API Level | 24 | 16 | 
 | Android Camera Access | Yes | - |
-| Android Architectures | arm-v7a-neon<br/>arm64-v8a<br/>x86<br/>x86-64</br> | arm-v7a<br/>arm-v7a-neon<br/>arm64-v8a<br/>x86<br/>x86-64</br> |
-| IOS SDK | 12.1 | 9.3 |
+| Android Architectures | arm-v7a-neon<br/>arm64-v8a<br/>x86<br/>x86-64 | arm-v7a<br/>arm-v7a-neon<br/>arm64-v8a<br/>x86<br/>x86-64 |
 | Xcode Support | 10.1 | 7.3.1 |
-| IOS Architectures | arm64<br/>arm64e<br/>x86-64</br> | armv7<br/>arm64<br/>i386<br/>x86-64</br> | 
+| iOS SDK | 12.1 | 9.3 |
+| iOS Architectures | arm64<br/>arm64e<br/>x86-64 | armv7<br/>arm64<br/>i386<br/>x86-64 |
 
 ### 6. Tips
 
@@ -312,7 +314,7 @@ When delimiter is not specified the space character is used as the default delim
 Based on this, if one or more of your command arguments include a space character, in filename path or in `-filter_complex` block, then your command string will be split into invalid arguments and execution will fail. 
 You can fix this error by splitting your command string into array yourself and calling `executeWithArguments` method or using a different delimiter character in your command string and specifying it in `execute` call.
 
-- Enabling `ProGuard` on Android causes linking errors. Please add the following rule inside your `proguard-rules.pro` file to preserve necessary method names and prevent linking errors.
+- Enabling `ProGuard` on releases older than `v0.3.3` causes linking errors. Please add the following rule inside your `proguard-rules.pro` file to preserve necessary method names and prevent linking errors.
                                                         
     ```
     -keep class com.arthenica.mobileffmpeg.Config {
@@ -340,7 +342,7 @@ You can overcome this situation by registering a font using `RNFFmpeg.setFontDir
 
 - Add `"postinstall": "sed -i '' 's\/#import <RCTAnimation\\/RCTValueAnimatedNode.h>\/#import \"RCTValueAnimatedNode.h\"\/' ./node_modules/react-native/Libraries/NativeAnimation/RCTNativeAnimatedNodesManager.h"` 
 line to the scripts section of your package.json as recommended in [react-native issue # 13198](https://github.com/facebook/react-native/issues/13198#issuecomment-302917321), 
-if your build receives the following error for IOS.
+if your build receives the following error for iOS.
 
     ```
     ../node_modules/react-native/Libraries/NativeAnimation/RCTNativeAnimatedNodesManager.h:10:9: fatal error: 'RCTAnimation/RCTValueAnimatedNode.h' file not found
@@ -355,14 +357,14 @@ if your build receives the following error for IOS.
     [!] Unable to find a specification for 'react-native-ffmpeg'.
     ```
 
-- If `react-native link` is used for IOS linking, building may fail with this error. Running `pod install` again 
+- If `react-native link` is used for iOS linking, building may fail with this error. Running `pod install` again 
 fixes this issue.
 
     ```
     ../node_modules/react-native-ffmpeg/ios/Pods/Target Support Files/Pods-ReactNativeFFmpeg/Pods-ReactNativeFFmpeg.debug.xcconfig: unable to open file (in target "ReactNativeFFmpeg" in project "ReactNativeFFmpeg") (in target 'ReactNativeFFmpeg')
     ```
     
-- Using `cocoapods` for IOS dependency management may produce duplicate symbols for `libReact.a` and `libyoga.a`. 
+- Using `cocoapods` for iOS dependency management may produce duplicate symbols for `libReact.a` and `libyoga.a`. 
 Add the following block to your `Podfile` and run `pod install` again.
  
     ```
