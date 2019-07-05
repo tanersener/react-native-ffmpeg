@@ -2,7 +2,9 @@
 All notable changes to this project will be documented in this file.
 
 ## 0.3.3 - 2019-07-04
-- Supports API Level 16 on Android
+- Adds support for Android devices with API Level 16+
+- Removes conflicting attributes from AndroidManifest.xml
+- Includes ProGuard configuration file inside
 
 ## 0.3.2 - 2019-04-03
 - Includes Typescript declarations
