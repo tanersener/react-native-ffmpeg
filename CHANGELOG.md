@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.3.4 - 2019-07-05
+- Implements side data information parsing
+
 ## 0.3.3 - 2019-07-04
 - Adds support for Android devices with API Level 16+
 - Removes conflicting attributes from AndroidManifest.xml

@@ -431,6 +431,17 @@ public class RNFFmpegModule extends ReactContextBaseJavaModule {
 
                 map.putMap("metadata", metadataMap);
             }
+
+            final Set<Map.Entry<String, String>> sidedata = streamInformation.getSidedataEntries();
+            if ((sidedata != null) && (sidedata.size() > 0)) {
+                final WritableMap sidedataMap = Arguments.createMap();
+
+                for (Map.Entry<String, String> entry : sidedata) {
+                    sidedataMap.putString(entry.getKey(), entry.getValue());
+                }
+
+                map.putMap("sidedata", sidedataMap);
+            }
         }
 
         return map;

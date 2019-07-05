@@ -1,4 +1,4 @@
-# React Native FFmpeg ![GitHub release](https://img.shields.io/badge/release-v0.3.3-blue.svg) [![npm](https://img.shields.io/npm/v/react-native-ffmpeg.svg)](react-native-ffmpeg)
+# React Native FFmpeg ![GitHub release](https://img.shields.io/badge/release-v0.3.4-blue.svg) [![npm](https://img.shields.io/npm/v/react-native-ffmpeg.svg)](react-native-ffmpeg)
 
 FFmpeg for React Native
 
@@ -191,6 +191,17 @@ In order to install the `LTS` variant, install the `https-lts` package using ins
                 console.log('Stream real frame rate: ' + info.streams[i].realFrameRate);
                 console.log('Stream time base: ' + info.streams[i].timeBase);
                 console.log('Stream codec time base: ' + info.streams[i].codecTimeBase);
+                
+                if (info.streams[i].metadata) {
+                    console.log('Stream metadata encoder: ' + info.streams[i].metadata.encoder);
+                    console.log('Stream metadata rotate: ' + info.streams[i].metadata.rotate);
+                    console.log('Stream metadata creation time: ' + info.streams[i].metadata.creation_time);
+                    console.log('Stream metadata handler name: ' + info.streams[i].metadata.handler_name);
+                }
+    
+                if (info.streams[i].sidedata) {
+                    console.log('Stream side data displaymatrix: ' + info.streams[i].sidedata.displaymatrix);
+                }
             }
         }
     });
@@ -272,7 +283,7 @@ In order to install the `LTS` variant, install the `https-lts` package using ins
 
 #### 4.2 Source Code
 
-- `master` includes the latest released version `v0.3.3`
+- `master` includes the latest released version `v0.3.4`
 - `development` branch includes new features and unreleased fixes
 
 ### 5. LTS Releases
