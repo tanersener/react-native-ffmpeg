@@ -352,6 +352,11 @@ RCT_EXPORT_METHOD(getMediaInformation:(NSString*)path timeout:(NSNumber*_Nonnull
         if (metadataDictionary != nil && ([metadataDictionary count] > 0)) {
             dictionary[@"metadata"] = metadataDictionary;
         }
+
+        NSDictionary *sidedataDictionary = [streamInformation getSidedataEntries];
+        if (sidedataDictionary != nil && ([sidedataDictionary count] > 0)) {
+            dictionary[@"sidedata"] = sidedataDictionary;
+        }
     }
 
     return dictionary;
