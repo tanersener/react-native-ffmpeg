@@ -47,6 +47,7 @@ declare module 'react-native-ffmpeg' {
         timeBase?: string;
         codecTimeBase?: string;
         metadata?: [string, string];
+        sidedata?: [string, string];
     }
 
     export interface MediaInformation {

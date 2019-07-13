@@ -72,6 +72,8 @@ FFmpeg for React Native
 
 #### 2.1 Android
 
+On React Native < 0.60, manually link the module by running the following command.
+
     $ react-native link react-native-ffmpeg
     
 #### 2.2 iOS
