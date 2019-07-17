@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.3.5 - 2019-07-17
+- Adds support for single quotes and double quotes in command strings
+
 ## 0.3.4 - 2019-07-05
 - Implements side data information parsing
 

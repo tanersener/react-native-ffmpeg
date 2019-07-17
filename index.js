@@ -118,14 +118,13 @@ class ReactNativeFFmpeg {
     }
 
     /**
-     * Executes FFmpeg command provided. Command is split into arguments using provided delimiter.
+     * Executes FFmpeg command provided.
      *
      * @param command FFmpeg command
-     * @param delimiter delimiter used between arguments, default value is space character
      * @returns return code stored in rc field
      */
-    execute(command, delimiter) {
-        return RNFFmpegModule.execute(command, delimiter);
+    execute(command) {
+        return RNFFmpegModule.executeWithArguments(this.parseArguments(command));
     }
 
     /**
@@ -317,6 +316,63 @@ class ReactNativeFFmpeg {
             default:
                 return "";
         }
+    }
+
+    /**
+     * Parses the given command into arguments.
+     *
+     * @param command string command
+     * @return array of arguments
+     */
+    parseArguments(command) {
+        var argumentList = [];
+        var currentArgument = "";
+
+        var singleQuoteStarted = 0;
+        var doubleQuoteStarted = 0;
+
+        for (var i = 0; i < command.length; i++) {
+            let previousChar;
+            if (i > 0) {
+                previousChar = command.charAt(i - 1);
+            } else {
+                previousChar = null;
+            }
+            let currentChar = command.charAt(i);
+
+            if (currentChar === ' ') {
+                if (singleQuoteStarted === 1 || doubleQuoteStarted === 1) {
+                    currentArgument += currentChar;
+                } else if (currentArgument.length > 0) {
+                    argumentList.push(currentArgument);
+                    currentArgument = "";
+                }
+            } else if (currentChar === '\'' && (previousChar == null || previousChar !== '\\')) {
+                if (singleQuoteStarted === 1) {
+                    singleQuoteStarted = 0;
+                } else if (doubleQuoteStarted === 1) {
+                    currentArgument += currentChar;
+                } else {
+                    singleQuoteStarted = 1;
+                }
+            } else if (currentChar === '\"' && (previousChar == null || previousChar !== '\\')) {
+                if (doubleQuoteStarted === 1) {
+                    doubleQuoteStarted = 0;
+                } else if (singleQuoteStarted === 1) {
+                    currentArgument += currentChar;
+                } else {
+                    doubleQuoteStarted = 1;
+                }
+            } else {
+                currentArgument += currentChar;
+            }
+        }
+
+        if (currentArgument.length > 0) {
+            argumentList.push(currentArgument);
+        }
+
+        return argumentList;
     }
 
 }

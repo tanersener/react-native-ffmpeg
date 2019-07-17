@@ -65,7 +65,7 @@ declare module 'react-native-ffmpeg' {
         static getFFmpegVersion(): Promise<{version: string}>;
         static getPlatform(): Promise<{platform: string}>;
         static executeWithArguments(arguments: string[]): Promise<{rc: number}>;
-        static execute(command: string, delimiter: string): Promise<{rc: number}>;
+        static execute(command: string): Promise<{rc: number}>;
         static cancel(): void;
         static disableRedirection(): void;
         static getLogLevel(): Promise<{level: number}>;
@@ -83,6 +83,7 @@ declare module 'react-native-ffmpeg' {
         static getLastReturnCode(): Promise<{lastRc: number}>;
         static getLastCommandOutput(): Promise<{lastCommandOutput: string}>;
         static getMediaInformation(path: string, timeout?: number): Promise<MediaInformation>;
+        static parseArguments(command: string): string[];
     }
 
 }

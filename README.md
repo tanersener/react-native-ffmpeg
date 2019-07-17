@@ -1,4 +1,4 @@
-# React Native FFmpeg ![GitHub release](https://img.shields.io/badge/release-v0.3.4-blue.svg) [![npm](https://img.shields.io/npm/v/react-native-ffmpeg.svg)](react-native-ffmpeg)
+# React Native FFmpeg ![GitHub release](https://img.shields.io/badge/release-v0.3.5-blue.svg) [![npm](https://img.shields.io/npm/v/react-native-ffmpeg.svg)](react-native-ffmpeg)
 
 FFmpeg for React Native
 
@@ -285,7 +285,7 @@ In order to install the `LTS` variant, install the `https-lts` package using ins
 
 #### 4.2 Source Code
 
-- `master` includes the latest released version `v0.3.4`
+- `master` includes the latest released version `v0.3.5`
 - `development` branch includes new features and unreleased fixes
 
 ### 5. LTS Releases
@@ -313,19 +313,7 @@ Packages from LTS variant includes `-lts` postfix in their names. So if you want
 
 Apply provided solutions if you encounter one of the following issues.
 
-- You should not use double quotes (") to define your complex filters or map definitions.
-    ```
-     -filter_complex [0:v]scale=1280:-1[v] -map [v]
-    ```
-
-- If your commands include unnecessary quotes or space characters, your command will fail with `No such filter: ' '` errors. Please check your command and remove them.
-
-- `react-native-ffmpeg` uses file system paths, it does not know what an assets folder or project folder is. So you can't use resources on those folders directly, you need to provide full paths of those resources.
-
-- `execute` method is overloaded and has an optional delimiter parameter. Delimiter defines how the command string will be split into arguments. 
-When delimiter is not specified the space character is used as the default delimiter. 
-Based on this, if one or more of your command arguments include a space character, in filename path or in `-filter_complex` block, then your command string will be split into invalid arguments and execution will fail. 
-You can fix this error by splitting your command string into array yourself and calling `executeWithArguments` method or using a different delimiter character in your command string and specifying it in `execute` call.
+- `react-native-ffmpeg` uses file system paths, it does not know what an `assets` folder or a `project` folder is. So you can't use resources on those folders directly, you need to provide full paths of those resources.
 
 - Enabling `ProGuard` on releases older than `v0.3.3` causes linking errors. Please add the following rule inside your `proguard-rules.pro` file to preserve necessary method names and prevent linking errors.
                                                         
@@ -354,7 +342,7 @@ You can overcome this situation by registering a font using `RNFFmpeg.setFontDir
     ```
 
 - Add `"postinstall": "sed -i '' 's\/#import <RCTAnimation\\/RCTValueAnimatedNode.h>\/#import \"RCTValueAnimatedNode.h\"\/' ./node_modules/react-native/Libraries/NativeAnimation/RCTNativeAnimatedNodesManager.h"` 
-line to the scripts section of your package.json as recommended in [react-native issue # 13198](https://github.com/facebook/react-native/issues/13198#issuecomment-302917321), 
+line to the `scripts` section of your `package.json` as recommended in [react-native issue # 13198](https://github.com/facebook/react-native/issues/13198#issuecomment-302917321), 
 if your build receives the following error for iOS.
 
     ```
@@ -364,20 +352,19 @@ if your build receives the following error for iOS.
     1 error generated.
     ```
 
-- When `pod install` is not successful with the following message, delete `Podfile.lock` file and run `pod install` again.
+- When `pod install` fails with the following message, delete `Podfile.lock` file and run `pod install` again.
 
     ```
     [!] Unable to find a specification for 'react-native-ffmpeg'.
     ```
 
-- If `react-native link` is used for iOS linking, building may fail with this error. Running `pod install` again 
-fixes this issue.
+- If `react-native link` is used for iOS, build may fail with the error below. Running `pod install` again fixes this issue.
 
     ```
     ../node_modules/react-native-ffmpeg/ios/Pods/Target Support Files/Pods-ReactNativeFFmpeg/Pods-ReactNativeFFmpeg.debug.xcconfig: unable to open file (in target "ReactNativeFFmpeg" in project "ReactNativeFFmpeg") (in target 'ReactNativeFFmpeg')
     ```
     
-- Using `cocoapods` for iOS dependency management may produce duplicate symbols for `libReact.a` and `libyoga.a`. 
+- On React Native < 0.60, using `cocoapods` for iOS dependency management may produce duplicate symbols for `libReact.a` and `libyoga.a`. 
 Add the following block to your `Podfile` and run `pod install` again.
  
     ```
