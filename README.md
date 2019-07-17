@@ -124,12 +124,12 @@ In order to install the `LTS` variant, install the `https-lts` package using ins
 
 1. Execute commands. 
 
-    - Use execute() method with a single command line and an argument delimiter  
+    - Use execute() method with a single command
 
     ```
     import { LogLevel, RNFFmpeg } from 'react-native-ffmpeg';
     
-    RNFFmpeg.execute('-i file1.mp4 -c:v mpeg4 file2.mp4', ' ').then(result => console.log("FFmpeg process exited with rc " + result.rc));
+    RNFFmpeg.execute('-i file1.mp4 -c:v mpeg4 file2.mp4').then(result => console.log("FFmpeg process exited with rc " + result.rc));
     ```
 
     - Use executeWithArguments() method with an array of arguments  
