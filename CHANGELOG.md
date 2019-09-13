@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.3.6 - 2019-09-13
+- Fixes LogLevel class exports
+
 ## 0.3.5 - 2019-07-17
 - Adds support for single quotes and double quotes in command strings
 

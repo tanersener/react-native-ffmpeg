@@ -1,4 +1,4 @@
-# React Native FFmpeg ![GitHub release](https://img.shields.io/badge/release-v0.3.5-blue.svg) [![npm](https://img.shields.io/npm/v/react-native-ffmpeg.svg)](react-native-ffmpeg)
+# React Native FFmpeg ![GitHub release](https://img.shields.io/badge/release-v0.3.6-blue.svg) [![npm](https://img.shields.io/npm/v/react-native-ffmpeg.svg)](react-native-ffmpeg)
 
 FFmpeg for React Native
 
@@ -285,7 +285,7 @@ In order to install the `LTS` variant, install the `https-lts` package using ins
 
 #### 4.2 Source Code
 
-- `master` includes the latest released version `v0.3.5`
+- `master` includes the latest released version `v0.3.6`
 - `development` branch includes new features and unreleased fixes
 
 ### 5. LTS Releases
