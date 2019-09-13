@@ -377,6 +377,10 @@ class ReactNativeFFmpeg {
 
 }
 
+export {
+    LogLevel
+}
+
 export const RNFFmpeg = new ReactNativeFFmpeg();
 
 export default RNFFmpeg;
