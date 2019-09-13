@@ -138,18 +138,10 @@ public class RNFFmpegModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void setLogLevel(final ReadableArray readableArray) {
-        int logLevelInt = Level.AV_LOG_TRACE.getValue();
-
-        for (int i = 0; i < readableArray.size(); i++) {
-            final ReadableType type = readableArray.getType(i);
-
-            if (type == ReadableType.Number) {
-                logLevelInt = readableArray.getInt(i);
-            }
+    public void setLogLevel(final Double level) {
+        if (level != null) {
+            Config.setLogLevel(Level.from(level.intValue()));
         }
-
-        Config.setLogLevel(Level.from(logLevelInt));
     }
 
     @ReactMethod

@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name              = 'react-native-ffmpeg'
-    s.version           = '0.3.5'
+    s.version           = '0.3.6'
     s.summary           = 'FFmpeg for React Native'
     s.description       = 'React Native FFmpeg based on mobile-ffmpeg'
     s.homepage          = 'https://github.com/tanersener/react-native-ffmpeg'
@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
     s.ios.deployment_target = '9.3'
     s.static_framework  = true
 
-    s.source            = { :git => 'https://github.com/tanersener/react-native-ffmpeg.git', :tag => 'v0.3.5'}
+    s.source            = { :git => 'https://github.com/tanersener/react-native-ffmpeg.git', :tag => 'v0.3.6'}
     s.source_files      = 'ios/RNFFmpegModule.m',
                           'ios/RNFFmpegModule.h'
 
