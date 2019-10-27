@@ -1,6 +1,6 @@
 {
   "name": "react-native-ffmpeg",
-  "version": "0.3.6",
+  "version": "0.4.0",
   "description": "FFmpeg for React Native",
   "main": "index.js",
   "typings": "index.d.ts",

@@ -64,6 +64,7 @@ public class RNFFmpegModule extends ReactContextBaseJavaModule {
     public static final String KEY_PACKAGE_NAME = "packageName";
     public static final String KEY_LAST_RC = "lastRc";
     public static final String KEY_LAST_COMMAND_OUTPUT = "lastCommandOutput";
+    public static final String KEY_PIPE = "pipe";
 
     public static final String KEY_LOG_TEXT = "log";
     public static final String KEY_LOG_LEVEL = "level";
@@ -225,6 +226,12 @@ public class RNFFmpegModule extends ReactContextBaseJavaModule {
     public void getMediaInformation(final String path, final Double timeout, final Promise promise) {
         final RNFFmpegGetMediaInformationAsyncTask asyncTask = new RNFFmpegGetMediaInformationAsyncTask(timeout, promise);
         asyncTask.execute(path);
+    }
+
+    @ReactMethod
+    public void registerNewFFmpegPipe(final Promise promise) {
+        final String pipe = Config.registerNewFFmpegPipe(reactContext);
+        promise.resolve(toStringMap(KEY_PIPE, pipe));
     }
 
     protected void emitLogMessage(final LogMessage logMessage) {

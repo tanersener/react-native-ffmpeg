@@ -83,6 +83,7 @@ declare module 'react-native-ffmpeg' {
         static getLastReturnCode(): Promise<{lastRc: number}>;
         static getLastCommandOutput(): Promise<{lastCommandOutput: string}>;
         static getMediaInformation(path: string, timeout?: number): Promise<MediaInformation>;
+        static registerNewFFmpegPipe(): Promise<{packageName: string}>;
         static parseArguments(command: string): string[];
     }
 

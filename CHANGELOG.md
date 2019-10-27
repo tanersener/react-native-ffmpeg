@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.4.0 - 2019-10-27
+- Implements registerNewFFmpegPipe API method
+
 ## 0.3.6 - 2019-09-13
 - Fixes LogLevel class exports
 

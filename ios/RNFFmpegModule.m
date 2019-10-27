@@ -39,6 +39,7 @@ static NSString *const KEY_PLATFORM = @"platform";
 static NSString *const KEY_PACKAGE_NAME = @"packageName";
 static NSString *const KEY_LAST_RC = @"lastRc";
 static NSString *const KEY_LAST_COMMAND_OUTPUT = @"lastCommandOutput";
+static NSString *const KEY_PIPE = @"pipe";
 
 static NSString *const KEY_LOG_TEXT = @"log";
 static NSString *const KEY_LOG_LEVEL = @"level";
@@ -186,6 +187,11 @@ RCT_EXPORT_METHOD(getMediaInformation:(NSString*)path timeout:(NSNumber*_Nonnull
         MediaInformation *mediaInformation = [MobileFFmpeg getMediaInformation:path timeout:[timeout longLongValue]];
         resolve([RNFFmpegModule toMediaInformationDictionary:mediaInformation]);
     });
+}
+
+RCT_EXPORT_METHOD(registerNewFFmpegPipe:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    NSString *pipe = [MobileFFmpegConfig registerNewFFmpegPipe];
+    resolve([RNFFmpegModule toStringDictionary:KEY_PIPE :pipe]);
 }
 
 - (void)logCallback: (int)level :(NSString*)message {
