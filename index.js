@@ -289,6 +289,15 @@ class ReactNativeFFmpeg {
     }
 
     /**
+     * Creates a new FFmpeg pipe.
+     *
+     * @return the path of created FFmpeg pipe. A pipe can be read/written like a file
+     */
+    registerNewFFmpegPipe() {
+        return RNFFmpegModule.registerNewFFmpegPipe();
+    }
+
+    /**
      * Returns log level string.
      *
      * @param level log level integer

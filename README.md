@@ -1,4 +1,4 @@
-# React Native FFmpeg ![GitHub release](https://img.shields.io/badge/release-v0.3.6-blue.svg) [![npm](https://img.shields.io/npm/v/react-native-ffmpeg.svg)](react-native-ffmpeg)
+# React Native FFmpeg ![GitHub release](https://img.shields.io/badge/release-v0.4.0-blue.svg) [![npm](https://img.shields.io/npm/v/react-native-ffmpeg.svg)](react-native-ffmpeg)
 
 FFmpeg for React Native
 
@@ -8,7 +8,7 @@ FFmpeg for React Native
 - Based on MobileFFmpeg
 - Supports
     - Both Android and iOS
-    - FFmpeg `v4.1` and `v4.2-dev-x` (master) releases
+    - FFmpeg `v4.1`, `v4.2-dev-x` and `v4.3-dev-x` (master) releases
     - `arm-v7a`, `arm-v7a-neon`, `arm64-v8a`, `x86` and `x86_64` architectures on Android
     - `Android API Level 16` or later 
     - `armv7`, `armv7s`, `arm64`, `arm64e`, `i386` and `x86_64` architectures on iOS
@@ -282,10 +282,11 @@ In order to install the `LTS` variant, install the `https-lts` package using ins
 - `0.1.x` releases are based on `FFmpeg v4.0.2` and `MobileFFmpeg v2.x` 
 - `0.2.x` releases are based on `FFmpeg v4.1-dev` and `MobileFFmpeg v3.x`
 - `0.3.x` releases are based on `FFmpeg v4.2-dev` and `MobileFFmpeg v4.2.x`
+- `0.4.x` releases are based on `FFmpeg v4.3-dev` and `MobileFFmpeg v4.3.x`
 
 #### 4.2 Source Code
 
-- `master` includes the latest released version `v0.3.6`
+- `master` includes the latest released version `v0.4.0`
 - `development` branch includes new features and unreleased fixes
 
 ### 5. LTS Releases
