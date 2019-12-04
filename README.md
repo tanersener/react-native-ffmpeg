@@ -79,6 +79,9 @@ On React Native < 0.60, manually link the module by running the following comman
 #### 2.2 iOS
 
 ##### 2.2.1 Basic
+
+On React Native < 0.60, manually link the module by running the following command.
+
   - Add `react-native-ffmpeg` pod to your `Podfile` and run `pod install`
 
     ```
