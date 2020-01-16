@@ -29,35 +29,45 @@ import android.util.Log;
 
 import com.arthenica.mobileffmpeg.FFmpeg;
 import com.facebook.react.bridge.Promise;
+import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableType;
 
-public class RNFFmpegExecuteAsyncCommandTask extends AsyncTask<String, Integer, Integer> {
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-    private String delimiter;
+public class RNFFmpegExecuteFFmpegAsyncArgumentsTask extends AsyncTask<String, Integer, Integer> {
+
     private final Promise promise;
+    private final String[] argumentsArray;
 
-    public RNFFmpegExecuteAsyncCommandTask(final String delimiter, final Promise promise) {
-        if (delimiter == null) {
-            this.delimiter = " ";
-        } else {
-            this.delimiter = delimiter;
+    RNFFmpegExecuteFFmpegAsyncArgumentsTask(final Promise promise, final ReadableArray... readableArrays) {
+        this.promise = promise;
+
+        /* PREPARING ARGUMENTS */
+        final List<String> arguments = new ArrayList<>();
+        if ((readableArrays != null) && (readableArrays.length > 0)) {
+            final ReadableArray readableArray = readableArrays[0];
+
+            for (int i = 0; i < readableArray.size(); i++) {
+                final ReadableType type = readableArray.getType(i);
+
+                if (type == ReadableType.String) {
+                    arguments.add(readableArray.getString(i));
+                }
+            }
         }
 
-        this.promise = promise;
+        this.argumentsArray = arguments.toArray(new String[0]);
     }
 
     @Override
-    protected Integer doInBackground(final String... strings) {
-        int rc = -1;
+    protected Integer doInBackground(final String... unusedArgs) {
+        Log.d(RNFFmpegModule.LIBRARY_NAME, String.format("Running FFmpeg with arguments: %s.", Arrays.toString(argumentsArray)));
 
-        if ((strings != null) && (strings.length > 0)) {
-            final String command = strings[0];
+        int rc = FFmpeg.execute(argumentsArray);
 
-            Log.d(RNFFmpegModule.LIBRARY_NAME, String.format("Running FFmpeg command: %s with delimiter %s.", command, delimiter));
-
-            rc = FFmpeg.execute(command, delimiter);
-
-            Log.d(RNFFmpegModule.LIBRARY_NAME, String.format("FFmpeg exited with rc: %d", rc));
-        }
+        Log.d(RNFFmpegModule.LIBRARY_NAME, String.format("FFmpeg exited with rc: %d", rc));
 
         return rc;
     }

@@ -8,6 +8,14 @@ const statisticsLog = "RNFFmpegStatisticsCallback";
 class LogLevel {
 
     /**
+     * This log level is used to specify logs printed to stderr by ffmpeg.
+     * Logs that has this level are not filtered and always redirected.
+     *
+     * @since 0.4.1
+     */
+    static AV_LOG_STDERR = -16;
+
+    /**
      * Print no output.
      */
     static AV_LOG_QUIET = -8;
@@ -59,9 +67,12 @@ class LogLevel {
 }
 
 /**
- * Main class for FFmpeg operations. Provides execute() method to execute FFmpeg commands.
+ * This class is used to configure ReactNativeFFmpeg library utilities/tools.
+ *
+ * @author Taner Sener
+ * @since v0.4.1
  */
-class ReactNativeFFmpeg {
+class ReactNativeFFmpegConfig {
 
     constructor() {
         const reactNativeFFmpegModuleEvents = new NativeEventEmitter(RNFFmpegModule);
@@ -105,33 +116,6 @@ class ReactNativeFFmpeg {
      */
     getPlatform() {
         return RNFFmpegModule.getPlatform();
-    }
-
-    /**
-     * Executes FFmpeg with arguments provided.
-     *
-     * @param commandArguments FFmpeg command options/arguments as string array
-     * @returns return code stored in rc field
-     */
-    executeWithArguments(commandArguments) {
-        return RNFFmpegModule.executeWithArguments(commandArguments);
-    }
-
-    /**
-     * Executes FFmpeg command provided.
-     *
-     * @param command FFmpeg command
-     * @returns return code stored in rc field
-     */
-    execute(command) {
-        return RNFFmpegModule.executeWithArguments(this.parseArguments(command));
-    }
-
-    /**
-     * Cancels an ongoing operation.
-     */
-    cancel() {
-        RNFFmpegModule.cancel();
     }
 
     /**
@@ -274,21 +258,6 @@ class ReactNativeFFmpeg {
     }
 
     /**
-     * Returns media information for given file.
-     *
-     * @param path path or uri of media file
-     * @param timeout complete timeout in ms, default value is 10000
-     * @return media information
-     */
-    getMediaInformation(path, timeout) {
-        if (timeout) {
-            return RNFFmpegModule.getMediaInformation(path, timeout);
-        } else {
-            return RNFFmpegModule.getMediaInformation(path, Number(10000));
-        }
-    }
-
-    /**
      * Creates a new FFmpeg pipe.
      *
      * @return the path of created FFmpeg pipe. A pipe can be read/written like a file
@@ -325,6 +294,36 @@ class ReactNativeFFmpeg {
             default:
                 return "";
         }
+    }
+
+}
+
+/**
+ * Main class for FFmpeg operations. Provides execute() method to execute FFmpeg commands.
+ *
+ * @author Taner Sener
+ * @since v0.4.1
+ */
+class ReactNativeFFmpeg {
+
+    /**
+     * Executes FFmpeg with arguments provided.
+     *
+     * @param commandArguments FFmpeg command options/arguments as string array
+     * @returns return code stored in rc field
+     */
+    executeWithArguments(commandArguments) {
+        return RNFFmpegModule.executeFFmpegWithArguments(commandArguments);
+    }
+
+    /**
+     * Executes FFmpeg command provided.
+     *
+     * @param command FFmpeg command
+     * @returns return code stored in rc field
+     */
+    execute(command) {
+        return RNFFmpegModule.executeFFmpegWithArguments(this.parseArguments(command));
     }
 
     /**
@@ -386,10 +385,52 @@ class ReactNativeFFmpeg {
 
 }
 
+/**
+ * Main class for FFprobe operations. Provides execute() method to execute FFprobe commands.
+ *
+ * @author Taner Sener
+ * @since v0.4.1
+ */
+class ReactNativeFFprobe {
+
+    /**
+     * Executes FFprobe with arguments provided.
+     *
+     * @param commandArguments FFprobe command options/arguments as string array
+     * @returns return code stored in rc field
+     */
+    executeWithArguments(commandArguments) {
+        return RNFFmpegModule.executeFFprobeWithArguments(commandArguments);
+    }
+
+    /**
+     * Executes FFprobe command provided.
+     *
+     * @param command FFprobe command
+     * @returns return code stored in rc field
+     */
+    execute(command) {
+        return RNFFmpegModule.executeFFprobeWithArguments(RNFFmpeg.parseArguments(command));
+    }
+
+    /**
+     * Returns media information for given file.
+     *
+     * @param path path or uri of media file
+     * @return media information
+     */
+    getMediaInformation(path) {
+        return RNFFmpegModule.getMediaInformation(path);
+    }
+
+}
+
 export {
     LogLevel
 }
 
+export const RNFFmpegConfig = new ReactNativeFFmpegConfig();
 export const RNFFmpeg = new ReactNativeFFmpeg();
+export const RNFFprobe = new ReactNativeFFprobe();
 
 export default RNFFmpeg;

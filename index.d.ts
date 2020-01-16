@@ -1,6 +1,7 @@
 declare module 'react-native-ffmpeg' {
 
     export class LogLevel {
+        static AV_LOG_STDERR: number;
         static AV_LOG_QUIET: number;
         static AV_LOG_PANIC: number;
         static AV_LOG_FATAL: number;
@@ -61,12 +62,9 @@ declare module 'react-native-ffmpeg' {
         rawInformation?: string;
     }
 
-    export class RNFFmpeg {
+    export class RNFFmpegConfig {
         static getFFmpegVersion(): Promise<{version: string}>;
         static getPlatform(): Promise<{platform: string}>;
-        static executeWithArguments(arguments: string[]): Promise<{rc: number}>;
-        static execute(command: string): Promise<{rc: number}>;
-        static cancel(): void;
         static disableRedirection(): void;
         static getLogLevel(): Promise<{level: number}>;
         static setLogLevel(level: number): void;
@@ -82,9 +80,20 @@ declare module 'react-native-ffmpeg' {
         static getExternalLibraries(): Promise<string[]>;
         static getLastReturnCode(): Promise<{lastRc: number}>;
         static getLastCommandOutput(): Promise<{lastCommandOutput: string}>;
-        static getMediaInformation(path: string, timeout?: number): Promise<MediaInformation>;
         static registerNewFFmpegPipe(): Promise<{packageName: string}>;
+    }
+
+    export class RNFFmpeg {
+        static executeWithArguments(arguments: string[]): Promise<{rc: number}>;
+        static execute(command: string): Promise<{rc: number}>;
+        static cancel(): void;
         static parseArguments(command: string): string[];
+    }
+
+    export class RNFFprobe {
+        static executeWithArguments(arguments: string[]): Promise<{rc: number}>;
+        static execute(command: string): Promise<{rc: number}>;
+        static getMediaInformation(path: string): Promise<MediaInformation>;
     }
 
 }

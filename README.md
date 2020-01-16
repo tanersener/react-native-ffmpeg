@@ -1,4 +1,4 @@
-# React Native FFmpeg ![GitHub release](https://img.shields.io/badge/release-v0.4.0-blue.svg) [![npm](https://img.shields.io/npm/v/react-native-ffmpeg.svg)](react-native-ffmpeg)
+# React Native FFmpeg ![GitHub release](https://img.shields.io/badge/release-v0.4.1-blue.svg) [![npm](https://img.shields.io/npm/v/react-native-ffmpeg.svg)](react-native-ffmpeg)
 
 FFmpeg for React Native
 
@@ -6,9 +6,10 @@ FFmpeg for React Native
 
 ### 1. Features
 - Based on MobileFFmpeg
+- Includes both `FFmpeg` and `FFprobe`
 - Supports
     - Both Android and iOS
-    - FFmpeg `v4.1`, `v4.2-dev-x` and `v4.3-dev-x` (master) releases
+    - FFmpeg `v4.1`, `v4.2` and `v4.3-dev` releases
     - `arm-v7a`, `arm-v7a-neon`, `arm64-v8a`, `x86` and `x86_64` architectures on Android
     - `Android API Level 16` or later 
     - `armv7`, `armv7s`, `arm64`, `arm64e`, `i386` and `x86_64` architectures on iOS
@@ -21,8 +22,9 @@ FFmpeg for React Native
     
         `vid.stab`, `x264`, `x265`, `xvidcore`
         
+    - Concurrent execution
     - `zlib` and `MediaCodec` Android system libraries
-    - `bzip2`, `zlib` iOS system libraries and `AudioToolbox`, `CoreImage`, `VideoToolbox`, `AVFoundation` iOS system frameworks
+    - `bzip2`, `zlib`, `iconv` iOS system libraries and `AudioToolbox`, `CoreImage`, `VideoToolbox`, `AVFoundation` iOS system frameworks
 
 - Includes Typescript definitions
 - Licensed under LGPL 3.0, can be customized to support GPL v3.0
@@ -60,7 +62,7 @@ FFmpeg for React Native
 </tr>
 <tr>
 <td align="center"><sup>ios system libraries</sup></td>
-<td align="center" colspan=8><sup>zlib</sup><br><sup>AudioToolbox</sup><br><sup>AVFoundation</sup><br><sup>CoreImage</sup><br><sup>VideoToolbox</sup><br><sup>bzip2</sup></td>
+<td align="center" colspan=8><sup>zlib</sup><br><sup>AudioToolbox</sup><br><sup>AVFoundation</sup><br><sup>CoreImage</sup><br><sup>iconv</sup><br><sup>VideoToolbox</sup><br><sup>bzip2</sup></td>
 </tr>
 </tbody>
 </table>
@@ -125,7 +127,7 @@ In order to install the `LTS` variant, install the `https-lts` package using ins
 
 ### 3. Using
 
-1. Execute commands. 
+1. Execute FFmpeg commands.
 
     - Use execute() method with a single command
 
@@ -143,32 +145,50 @@ In order to install the `LTS` variant, install the `https-lts` package using ins
     RNFFmpeg.executeWithArguments(["-i", "file1.mp4", "-c:v", "mpeg4", "file2.mp4"]).then(result => console.log("FFmpeg process exited with rc " + result.rc));
     ```
 
-2. Check execution output. Zero represents successful execution, non-zero values represent failure.
+2. Execute FFprobe commands.
+
+    - Use execute() method with a single command
+
     ```
-    RNFFmpeg.getLastReturnCode().then(result => {
+    import { LogLevel, RNFFprobe } from 'react-native-ffmpeg';
+    
+    RNFFprobe.execute('-i file1.mp4').then(result => console.log("FFprobe process exited with rc " + result.rc));
+    ```
+
+    - Use executeWithArguments() method with an array of arguments  
+
+    ```
+    import { LogLevel, RNFFprobe } from 'react-native-ffmpeg';
+    
+    RNFFprobe.executeWithArguments(["-i", "file1.mp4"]).then(result => console.log("FFprobe process exited with rc " + result.rc));
+    ```
+
+3. Check execution output. Zero represents successful execution, non-zero values represent failure.
+    ```
+    RNFFmpegConfig.getLastReturnCode().then(result => {
         console.log("Last return code: " + result.lastRc);
     });
 
-    RNFFmpeg.getLastCommandOutput().then(result => {
+    RNFFmpegConfig.getLastCommandOutput().then(result => {
         console.log("Last command output: " + result.lastCommandOutput);
     });
     ```
 
-3. Stop an ongoing operation. Note that this function does not wait for termination to complete and returns immediately.
+4. Stop an ongoing FFmpeg operation. Note that this function does not wait for termination to complete and returns immediately.
     ```
     RNFFmpeg.cancel();
     ```
 
-4. Get media information for a file.
+5. Get media information for a file.
     - Print all fields
     ```
-    RNFFmpeg.getMediaInformation('<file path or uri>').then(info => {
+    RNFFprobe.getMediaInformation('<file path or uri>').then(info => {
         console.log('Result: ' + JSON.stringify(info));
     });
     ```
     - Print selected fields
     ```
-    RNFFmpeg.getMediaInformation('<file path or uri>').then(info => {
+    RNFFprobe.getMediaInformation('<file path or uri>').then(info => {
         console.log('Result: ' + JSON.stringify(info));
         console.log('Media Information');
         console.log('Path: ' + info.path);
@@ -212,68 +232,68 @@ In order to install the `LTS` variant, install the `https-lts` package using ins
     });
     ```
 
-5. Enable log callback and redirect all `FFmpeg` logs to a console/file/widget.
+6. Enable log callback and redirect all `FFmpeg`/`FFprobe` logs to a console/file/widget.
     ```
     logCallback = (logData) => {
         console.log(logData.log);
     };
     ...
-    RNFFmpeg.enableLogCallback(this.logCallback);
+    RNFFmpegConfig.enableLogCallback(this.logCallback);
     ```
 
-6. Enable statistics callback and follow the progress of an ongoing operation.
+7. Enable statistics callback and follow the progress of an ongoing `FFmpeg` operation.
     ```
     statisticsCallback = (statisticsData) => {
         console.log('Statistics; frame: ' + statisticsData.videoFrameNumber.toFixed(1) + ', fps: ' + statisticsData.videoFps.toFixed(1) + ', quality: ' + statisticsData.videoQuality.toFixed(1) +
         ', size: ' + statisticsData.size + ', time: ' + statisticsData.time);
     };
     ...
-    RNFFmpeg.enableStatisticsCallback(this.statisticsCallback);
+    RNFFmpegConfig.enableStatisticsCallback(this.statisticsCallback);
     ```
 
-7. Poll statistics without implementing statistics callback.
+8. Poll statistics without implementing statistics callback.
     ```
-    RNFFmpeg.getLastReceivedStatistics().then(stats => console.log('Stats: ' + JSON.stringify(stats)));
-    ```
-
-8. Reset statistics before starting a new operation.
-    ```
-    RNFFmpeg.resetStatistics();
+    RNFFmpegConfig.getLastReceivedStatistics().then(stats => console.log('Stats: ' + JSON.stringify(stats)));
     ```
 
-9. Set log level.
+9. Reset statistics before starting a new operation.
     ```
-    RNFFmpeg.setLogLevel(LogLevel.AV_LOG_WARNING);
+    RNFFmpegConfig.resetStatistics();
     ```
 
-10. Register your own fonts by specifying a custom fonts directory, so they are available to use in `FFmpeg` filters. Please note that this function can not work on relative paths, you need to provide full file system path.
+10. Set log level.
+    ```
+    RNFFmpegConfig.setLogLevel(LogLevel.AV_LOG_WARNING);
+    ```
+
+11. Register your own fonts by specifying a custom fonts directory, so they are available to use in `FFmpeg` filters. Please note that this function can not work on relative paths, you need to provide full file system path.
     - Without any font name mappings
     ```
-    RNFFmpeg.setFontDirectory('<folder with fonts>', null);
+    RNFFmpegConfig.setFontDirectory('<folder with fonts>', null);
     ```
     - Apply custom font name mappings. This functionality is very useful if your font name includes ' ' (space) characters in it.
     ```
-    RNFFmpeg.setFontDirectory('<folder with fonts>', { my_easy_font_name: "my complex font name" });
+    RNFFmpegConfig.setFontDirectory('<folder with fonts>', { my_easy_font_name: "my complex font name" });
     ```
 
-11. Use your own `fontconfig` configuration.
+12. Use your own `fontconfig` configuration.
     ```
-    RNFFmpeg.setFontconfigConfigurationPath('<fontconfig configuration directory>');
-    ```
-
-12. Disable log functionality of the library. Logs will not be printed to console and log callback will be disabled.
-    ```
-    RNFFmpeg.disableLogs();
+    RNFFmpegConfig.setFontconfigConfigurationPath('<fontconfig configuration directory>');
     ```
 
-13. Disable statistics functionality of the library. Statistics callback will be disabled but the last received statistics data will be still available.
+13. Disable log functionality of the library. Logs will not be printed to console and log callback will be disabled.
     ```
-    RNFFmpeg.disableStatistics();
+    RNFFmpegConfig.disableLogs();
     ```
 
-14. List enabled external libraries.
+14. Disable statistics functionality of the library. Statistics callback will be disabled but the last received statistics data will be still available.
     ```
-    RNFFmpeg.getExternalLibraries().then(externalLibraries => {
+    RNFFmpegConfig.disableStatistics();
+    ```
+
+15. List enabled external libraries.
+    ```
+    RNFFmpegConfig.getExternalLibraries().then(externalLibraries => {
         console.log(externalLibraries);
     });
     ```
@@ -289,7 +309,7 @@ In order to install the `LTS` variant, install the `https-lts` package using ins
 
 #### 4.2 Source Code
 
-- `master` includes the latest released version `v0.4.0`
+- `master` includes the latest released version `v0.4.1`
 - `development` branch includes new features and unreleased fixes
 
 ### 5. LTS Releases

@@ -101,20 +101,20 @@ public class RNFFmpegModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void getFFmpegVersion(final Promise promise) {
-        final String version = FFmpeg.getFFmpegVersion();
+        final String version = Config.getFFmpegVersion();
         promise.resolve(toStringMap(KEY_VERSION, version));
     }
 
     @ReactMethod
-    public void executeWithArguments(final ReadableArray readableArray, final Promise promise) {
-        final RNFFmpegExecuteAsyncArgumentsTask asyncTask = new RNFFmpegExecuteAsyncArgumentsTask(promise);
-        asyncTask.execute(readableArray);
+    public void executeFFmpegWithArguments(final ReadableArray readableArray, final Promise promise) {
+        final RNFFmpegExecuteFFmpegAsyncArgumentsTask asyncTask = new RNFFmpegExecuteFFmpegAsyncArgumentsTask(promise, readableArray);
+        asyncTask.execute();
     }
 
     @ReactMethod
-    public void execute(final String command, String delimiter, final Promise promise) {
-        final RNFFmpegExecuteAsyncCommandTask asyncTask = new RNFFmpegExecuteAsyncCommandTask(delimiter, promise);
-        asyncTask.execute(command);
+    public void executeFFprobeWithArguments(final ReadableArray readableArray, final Promise promise) {
+        final RNFFmpegExecuteFFprobeAsyncArgumentsTask asyncTask = new RNFFmpegExecuteFFprobeAsyncArgumentsTask(promise, readableArray);
+        asyncTask.execute();
     }
 
     @ReactMethod
@@ -212,20 +212,20 @@ public class RNFFmpegModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void getLastReturnCode(final Promise promise) {
-        int lastReturnCode = FFmpeg.getLastReturnCode();
+        int lastReturnCode = Config.getLastReturnCode();
         promise.resolve(toIntMap(KEY_LAST_RC, lastReturnCode));
     }
 
     @ReactMethod
     public void getLastCommandOutput(final Promise promise) {
-        final String lastCommandOutput = FFmpeg.getLastCommandOutput();
+        final String lastCommandOutput = Config.getLastCommandOutput();
         promise.resolve(toStringMap(KEY_LAST_COMMAND_OUTPUT, lastCommandOutput));
     }
 
     @ReactMethod
-    public void getMediaInformation(final String path, final Double timeout, final Promise promise) {
-        final RNFFmpegGetMediaInformationAsyncTask asyncTask = new RNFFmpegGetMediaInformationAsyncTask(timeout, promise);
-        asyncTask.execute(path);
+    public void getMediaInformation(final String path, final Promise promise) {
+        final RNFFmpegGetMediaInformationAsyncTask asyncTask = new RNFFmpegGetMediaInformationAsyncTask(path, promise);
+        asyncTask.execute();
     }
 
     @ReactMethod

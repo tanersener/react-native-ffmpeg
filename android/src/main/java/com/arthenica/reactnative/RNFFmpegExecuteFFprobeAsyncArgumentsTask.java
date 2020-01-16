@@ -27,7 +27,7 @@ package com.arthenica.reactnative;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.arthenica.mobileffmpeg.FFmpeg;
+import com.arthenica.mobileffmpeg.FFprobe;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableType;
@@ -36,23 +36,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class RNFFmpegExecuteAsyncArgumentsTask extends AsyncTask<ReadableArray, Integer, Integer> {
+public class RNFFmpegExecuteFFprobeAsyncArgumentsTask extends AsyncTask<String, Integer, Integer> {
 
     private final Promise promise;
+    private final String[] argumentsArray;
 
-    public RNFFmpegExecuteAsyncArgumentsTask(final Promise promise) {
+    RNFFmpegExecuteFFprobeAsyncArgumentsTask(final Promise promise, final ReadableArray... readableArrays) {
         this.promise = promise;
-    }
 
-    @Override
-    protected Integer doInBackground(final ReadableArray... readableArrays) {
-        int rc = -1;
-
+        /* PREPARING ARGUMENTS */
+        final List<String> arguments = new ArrayList<>();
         if ((readableArrays != null) && (readableArrays.length > 0)) {
             final ReadableArray readableArray = readableArrays[0];
 
-            /* PREPARING ARGUMENTS */
-            final List<String> arguments = new ArrayList<>();
             for (int i = 0; i < readableArray.size(); i++) {
                 final ReadableType type = readableArray.getType(i);
 
@@ -60,15 +56,18 @@ public class RNFFmpegExecuteAsyncArgumentsTask extends AsyncTask<ReadableArray, 
                     arguments.add(readableArray.getString(i));
                 }
             }
-
-            final String[] argumentsArray = arguments.toArray(new String[arguments.size()]);
-
-            Log.d(RNFFmpegModule.LIBRARY_NAME, String.format("Running FFmpeg with arguments: %s.", Arrays.toString(argumentsArray)));
-
-            rc = FFmpeg.execute(argumentsArray);
-
-            Log.d(RNFFmpegModule.LIBRARY_NAME, String.format("FFmpeg exited with rc: %d", rc));
         }
+
+        this.argumentsArray = arguments.toArray(new String[0]);
+    }
+
+    @Override
+    protected Integer doInBackground(final String... unusedArgs) {
+        Log.d(RNFFmpegModule.LIBRARY_NAME, String.format("Running FFprobe with arguments: %s.", Arrays.toString(argumentsArray)));
+
+        int rc = FFprobe.execute(argumentsArray);
+
+        Log.d(RNFFmpegModule.LIBRARY_NAME, String.format("FFprobe exited with rc: %d", rc));
 
         return rc;
     }

@@ -74,11 +74,11 @@ RCT_EXPORT_METHOD(getPlatform:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromi
 }
 
 RCT_EXPORT_METHOD(getFFmpegVersion:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
-    NSString *ffmpegVersion = [MobileFFmpeg getFFmpegVersion];
+    NSString *ffmpegVersion = [MobileFFmpegConfig getFFmpegVersion];
     resolve([RNFFmpegModule toStringDictionary:KEY_VERSION :ffmpegVersion]);
 }
 
-RCT_EXPORT_METHOD(executeWithArguments:(NSArray*)arguments resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+RCT_EXPORT_METHOD(executeFFmpegWithArguments:(NSArray*)arguments resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     RCTLogInfo(@"Running FFmpeg with arguments: %@.\n", arguments);
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -90,17 +90,13 @@ RCT_EXPORT_METHOD(executeWithArguments:(NSArray*)arguments resolver:(RCTPromiseR
     });
 }
 
-RCT_EXPORT_METHOD(execute:(NSString*)command delimiter:(NSString*)delimiter resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
-    if (delimiter == nil) {
-        delimiter = @" ";
-    }
-
-    RCTLogInfo(@"Running FFmpeg command: %@ with delimiter %@.\n", command, delimiter);
+RCT_EXPORT_METHOD(executeFFprobeWithArguments:(NSArray*)arguments resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    RCTLogInfo(@"Running FFprobe with arguments: %@.\n", arguments);
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        int rc = [MobileFFmpeg execute:command delimiter:delimiter];
+        int rc = [MobileFFprobe executeWithArguments:arguments];
 
-        RCTLogInfo(@"FFmpeg exited with rc: %d\n", rc);
+        RCTLogInfo(@"FFprobe exited with rc: %d\n", rc);
 
         resolve([RNFFmpegModule toIntDictionary:KEY_RC :[NSNumber numberWithInt:rc]]);
     });
@@ -171,20 +167,20 @@ RCT_EXPORT_METHOD(getExternalLibraries:(RCTPromiseResolveBlock)resolve rejecter:
 }
 
 RCT_EXPORT_METHOD(getLastReturnCode:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
-    int lastReturnCode = [MobileFFmpeg getLastReturnCode];
+    int lastReturnCode = [MobileFFmpegConfig getLastReturnCode];
     resolve([RNFFmpegModule toIntDictionary:KEY_LAST_RC :[NSNumber numberWithInt:lastReturnCode]]);
 }
 
 RCT_EXPORT_METHOD(getLastCommandOutput:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
-    NSString *lastCommandOutput = [MobileFFmpeg getLastCommandOutput];
+    NSString *lastCommandOutput = [MobileFFmpegConfig getLastCommandOutput];
     resolve([RNFFmpegModule toStringDictionary:KEY_LAST_COMMAND_OUTPUT :lastCommandOutput]);
 }
 
-RCT_EXPORT_METHOD(getMediaInformation:(NSString*)path timeout:(NSNumber*_Nonnull)timeout resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
-    RCTLogInfo(@"Getting media information for %@ with timeout %d.\n", path, [timeout intValue]);
+RCT_EXPORT_METHOD(getMediaInformation:(NSString*)path resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    RCTLogInfo(@"Getting media information for %@.\n", path);
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        MediaInformation *mediaInformation = [MobileFFmpeg getMediaInformation:path timeout:[timeout longLongValue]];
+        MediaInformation *mediaInformation = [MobileFFprobe getMediaInformation:path];
         resolve([RNFFmpegModule toMediaInformationDictionary:mediaInformation]);
     });
 }
