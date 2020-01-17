@@ -234,6 +234,12 @@ public class RNFFmpegModule extends ReactContextBaseJavaModule {
         promise.resolve(toStringMap(KEY_PIPE, pipe));
     }
 
+    @ReactMethod
+    public void registerNewFFmpegPipe(final Promise promise) {
+        final String pipe = Config.registerNewFFmpegPipe(reactContext);
+        promise.resolve(toStringMap(KEY_PIPE, pipe));
+    }
+
     protected void emitLogMessage(final LogMessage logMessage) {
         final DeviceEventManagerModule.RCTDeviceEventEmitter jsModule = reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class);
         final WritableMap logMap = Arguments.createMap();
