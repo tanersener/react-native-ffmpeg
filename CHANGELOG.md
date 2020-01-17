@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.4.1 - 2020-01-17
+- Implements FFprobe
+- Re-organises plugin classes
+
 ## 0.4.0 - 2019-10-27
 - Implements registerNewFFmpegPipe API method
 

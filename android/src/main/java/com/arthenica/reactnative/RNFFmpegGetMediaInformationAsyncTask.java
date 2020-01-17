@@ -27,37 +27,24 @@ package com.arthenica.reactnative;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.arthenica.mobileffmpeg.FFmpeg;
+import com.arthenica.mobileffmpeg.FFprobe;
 import com.arthenica.mobileffmpeg.MediaInformation;
 import com.facebook.react.bridge.Promise;
 
 public class RNFFmpegGetMediaInformationAsyncTask extends AsyncTask<String, Integer, MediaInformation> {
 
-    private Double timeout;
+    private final String path;
     private final Promise promise;
 
-    public RNFFmpegGetMediaInformationAsyncTask(final Double timeout, final Promise promise) {
-        this.timeout = timeout;
+    RNFFmpegGetMediaInformationAsyncTask(final String path, final Promise promise) {
+        this.path = path;
         this.promise = promise;
     }
 
     @Override
-    protected MediaInformation doInBackground(final String... strings) {
-        MediaInformation mediaInformation = null;
-
-        if ((strings != null) && (strings.length > 0)) {
-            final String path = strings[0];
-
-            if (timeout == null) {
-                Log.d(RNFFmpegModule.LIBRARY_NAME, String.format("Getting media information for %s", path));
-                mediaInformation = FFmpeg.getMediaInformation(path);
-            } else {
-                Log.d(RNFFmpegModule.LIBRARY_NAME, String.format("Getting media information for %s with timeout %d.", path, timeout.longValue()));
-                mediaInformation = FFmpeg.getMediaInformation(path, timeout.longValue());
-            }
-        }
-
-        return mediaInformation;
+    protected MediaInformation doInBackground(final String... unusedArgs) {
+        Log.d(RNFFmpegModule.LIBRARY_NAME, String.format("Getting media information for %s", path));
+        return FFprobe.getMediaInformation(path);
     }
 
     @Override
