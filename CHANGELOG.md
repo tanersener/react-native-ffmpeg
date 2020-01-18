@@ -3,7 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## 0.4.1 - 2020-01-17
 - Implements FFprobe
+- Add concurrent execution support
 - Re-organises plugin classes
+- iOS releases depend on iconv system library instead of iconv external library
 
 ## 0.4.0 - 2019-10-27
 - Implements registerNewFFmpegPipe API method
