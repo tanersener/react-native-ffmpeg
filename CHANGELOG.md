@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.4.2 - 2020-01-19
+- Fix not visible cancel() function
+
 ## 0.4.1 - 2020-01-17
 - Implements FFprobe
 - Add concurrent execution support
