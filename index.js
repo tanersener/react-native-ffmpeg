@@ -299,6 +299,8 @@ class ReactNativeFFmpegConfig {
                 return "FATAL";
             case LogLevel.AV_LOG_PANIC:
                 return "PANIC";
+            case LogLevel.AV_LOG_STDERR:
+                return "STDERR";
             case LogLevel.AV_LOG_QUIET:
             default:
                 return "";

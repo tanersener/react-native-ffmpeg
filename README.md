@@ -5,10 +5,10 @@ FFmpeg for React Native
 <img src="https://github.com/tanersener/react-native-ffmpeg/raw/master/docs/assets/react-native-ffmpeg-logo-v2.png" width="280">
 
 ### 1. Features
-- Based on MobileFFmpeg
+- Based on `MobileFFmpeg`
 - Includes both `FFmpeg` and `FFprobe`
 - Supports
-    - Both Android and iOS
+    - Both `Android` and `iOS`
     - FFmpeg `v4.1`, `v4.2` and `v4.3-dev` releases
     - `arm-v7a`, `arm-v7a-neon`, `arm64-v8a`, `x86` and `x86_64` architectures on Android
     - `Android API Level 16` or later 
