@@ -329,6 +329,13 @@ class ReactNativeFFmpeg {
     }
 
     /**
+     * Cancels an ongoing operation.
+     */
+    cancel() {
+        RNFFmpegModule.cancel();
+    }
+
+    /**
      * Parses the given command into arguments.
      *
      * @param command string command
