@@ -29,8 +29,8 @@ android {
     defaultConfig {
         minSdkVersion safeExtGet('reactNativeFFmpegPackage', 'https').contains("-lts") ? 16 : 24
         targetSdkVersion 29
-        versionCode 42
-        versionName "0.4.2"
+        versionCode 43
+        versionName "0.4.3"
         project.archivesBaseName = "react-native-ffmpeg"
     }
     lintOptions {
