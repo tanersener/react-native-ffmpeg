@@ -1,4 +1,4 @@
-# React Native FFmpeg ![GitHub release](https://img.shields.io/badge/release-v0.4.3-blue.svg) [![npm](https://img.shields.io/npm/v/react-native-ffmpeg.svg)](react-native-ffmpeg)
+# React Native FFmpeg ![GitHub release](https://img.shields.io/badge/release-v0.4.4-blue.svg) [![npm](https://img.shields.io/npm/v/react-native-ffmpeg.svg)](react-native-ffmpeg)
 
 FFmpeg for React Native
 
@@ -82,12 +82,16 @@ On React Native < 0.60, manually link the module by running the following comman
 
 ##### 2.2.1 Basic
 
-On React Native < 0.60, manually link the module by running the following command.
+On React Native >= 0.60,
+  
+  - Add `use_native_modules!` to your `Podfile` and run `pod install`  
 
+On React Native < 0.60,
+  
   - Add `react-native-ffmpeg` pod to your `Podfile` and run `pod install`
 
     ```
-    pod 'react-native-ffmpeg', :podspec => '../node_modules/react-native-ffmpeg/ios/react-native-ffmpeg.podspec'
+    pod 'react-native-ffmpeg', :podspec => '../node_modules/react-native-ffmpeg/react-native-ffmpeg.podspec'
     ```
     
   - **DO NOT USE** `react-native link` **on iOS.** `react-native link` breaks Cocoapods dependencies.
@@ -116,7 +120,7 @@ It is possible to enable other installed packages using the following steps.
 - Edit `ios/Podfile` file and add package name as `subspec`. After that run `pod install` again.
 
     ```
-    pod 'react-native-ffmpeg/<package name>', :podspec => '../node_modules/react-native-ffmpeg/ios/react-native-ffmpeg.podspec'
+    pod 'react-native-ffmpeg/<package name>', :podspec => '../node_modules/react-native-ffmpeg/react-native-ffmpeg.podspec'
     ```
     
 #### 2.4 LTS Release
@@ -309,7 +313,7 @@ In order to install the `LTS` variant, install the `https-lts` package using ins
 
 #### 4.2 Source Code
 
-- `master` includes the latest released version `v0.4.3`
+- `master` includes the latest released version `v0.4.4`
 - `development` branch includes new features and unreleased fixes
 
 ### 5. LTS Releases
