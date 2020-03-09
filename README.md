@@ -122,6 +122,16 @@ It is possible to enable other installed packages using the following steps.
     ```
     pod 'react-native-ffmpeg/<package name>', :podspec => '../node_modules/react-native-ffmpeg/react-native-ffmpeg.podspec'
     ```
+  
+- Note that if you have `use_native_modules!` in your `Podfile`, specifying a `subspec` may cause the following error. 
+You can fix it by defining `react-native-ffmpeg` dependency before `use_native_modules!` in your `Podfile`. 
+
+    ```
+    [!] There are multiple dependencies with different sources for `react-native-ffmpeg` in `Podfile`:
+
+    - react-native-ffmpeg (from `../node_modules/react-native-ffmpeg`)
+    - react-native-ffmpeg/<package name> (from `../node_modules/react-native-ffmpeg/react-native-ffmpeg.podspec`)
+    ```  
     
 #### 2.4 LTS Release
 
