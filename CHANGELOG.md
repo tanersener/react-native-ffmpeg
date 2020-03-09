@@ -1,8 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.4.4 - 2020-03-09
+- Fixes issue #118
+
 ## 0.4.3 - 2020-01-19
-- Fix not visible cancel() function
+- Fixes not visible cancel() function
 
 ## 0.4.1 - 2020-01-17
 - Implements FFprobe

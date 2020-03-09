@@ -248,8 +248,9 @@ class ReactNativeFFmpegConfig {
     }
 
     /**
-     * <p>Returns log output of last executed command. Please note that disabling redirection using
-     * disableRedirection() method also disables this functionality.
+     * <p>Returns log output of last executed command.
+     * <p>This method does not support executing multiple concurrent commands. If you execute multiple commands at the same time, this method will return output from all executions.
+     * <p>Please note that disabling redirection using disableRedirection() method also disables this functionality.
      *
      * @return output of last executed command
      */
