@@ -24,6 +24,8 @@
 
 package com.arthenica.reactnative;
 
+import android.os.AsyncTask;
+
 import com.arthenica.mobileffmpeg.AbiDetect;
 import com.arthenica.mobileffmpeg.Config;
 import com.arthenica.mobileffmpeg.FFmpeg;
@@ -108,13 +110,13 @@ public class RNFFmpegModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void executeFFmpegWithArguments(final ReadableArray readableArray, final Promise promise) {
         final RNFFmpegExecuteFFmpegAsyncArgumentsTask asyncTask = new RNFFmpegExecuteFFmpegAsyncArgumentsTask(promise, readableArray);
-        asyncTask.execute();
+        asyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @ReactMethod
     public void executeFFprobeWithArguments(final ReadableArray readableArray, final Promise promise) {
         final RNFFmpegExecuteFFprobeAsyncArgumentsTask asyncTask = new RNFFmpegExecuteFFprobeAsyncArgumentsTask(promise, readableArray);
-        asyncTask.execute();
+        asyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @ReactMethod
@@ -225,7 +227,7 @@ public class RNFFmpegModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void getMediaInformation(final String path, final Promise promise) {
         final RNFFmpegGetMediaInformationAsyncTask asyncTask = new RNFFmpegGetMediaInformationAsyncTask(path, promise);
-        asyncTask.execute();
+        asyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @ReactMethod
