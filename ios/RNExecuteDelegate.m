@@ -17,12 +17,32 @@
  * along with ReactNativeFFmpeg.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#import <Foundation/Foundation.h>
-#import <mobileffmpeg/MobileFFmpegConfig.h>
-#import <React/RCTBridgeModule.h>
-#import <React/RCTEventEmitter.h>
+#import "RNExecuteDelegate.h"
 
-@interface RNFFmpegModule : RCTEventEmitter<RCTBridgeModule,LogDelegate,StatisticsDelegate>
+static NSString *const EVENT_EXECUTE = @"RNFFmpegExecuteCallback";
+
+/**
+ * Execute delegate for async executions.
+ */
+@implementation RNExecuteDelegate {
+    RCTEventEmitter* _eventEmitter;
+}
+
+- (instancetype)initWithEventEmitter:(RCTEventEmitter*)eventEmitter {
+    self = [super init];
+    if (self) {
+        _eventEmitter = eventEmitter;
+    }
+
+    return self;
+}
+
+- (void)executeCallback:(long)executionId :(int)returnCode {
+    NSMutableDictionary *executeDictionary = [[NSMutableDictionary alloc] init];
+    executeDictionary[@"executionId"] = [NSNumber numberWithLong: executionId];
+    executeDictionary[@"returnCode"] = [NSNumber numberWithInt: returnCode];
+
+    [_eventEmitter sendEventWithName:EVENT_EXECUTE body:executeDictionary];
+}
 
 @end
-  

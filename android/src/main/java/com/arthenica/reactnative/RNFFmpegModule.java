@@ -1,41 +1,38 @@
 /*
- * MIT License
+ * Copyright (c) 2018-2020 Taner Sener
  *
- * Copyright (c) 2018 Taner Sener
+ * This file is part of ReactNativeFFmpeg.
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * ReactNativeFFmpeg is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * ReactNativeFFmpeg is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with ReactNativeFFmpeg.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.arthenica.reactnative;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.arthenica.mobileffmpeg.AbiDetect;
 import com.arthenica.mobileffmpeg.Config;
+import com.arthenica.mobileffmpeg.ExecuteCallback;
 import com.arthenica.mobileffmpeg.FFmpeg;
+import com.arthenica.mobileffmpeg.FFmpegExecution;
 import com.arthenica.mobileffmpeg.Level;
 import com.arthenica.mobileffmpeg.LogCallback;
 import com.arthenica.mobileffmpeg.LogMessage;
 import com.arthenica.mobileffmpeg.MediaInformation;
 import com.arthenica.mobileffmpeg.Statistics;
 import com.arthenica.mobileffmpeg.StatisticsCallback;
-import com.arthenica.mobileffmpeg.StreamInformation;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -47,30 +44,27 @@ import com.facebook.react.bridge.ReadableMapKeySetIterator;
 import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
-import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class RNFFmpegModule extends ReactContextBaseJavaModule {
 
     public static final String LIBRARY_NAME = "react-native-ffmpeg";
     public static final String PLATFORM_NAME = "android";
 
-    public static final String KEY_VERSION = "version";
-    public static final String KEY_RC = "rc";
-    public static final String KEY_PLATFORM = "platform";
-    public static final String KEY_PACKAGE_NAME = "packageName";
-    public static final String KEY_LAST_RC = "lastRc";
-    public static final String KEY_LAST_COMMAND_OUTPUT = "lastCommandOutput";
-    public static final String KEY_PIPE = "pipe";
-
+    public static final String KEY_LOG_EXECUTION_ID = "executionId";
     public static final String KEY_LOG_TEXT = "log";
     public static final String KEY_LOG_LEVEL = "level";
 
+    public static final String KEY_STAT_EXECUTION_ID = "executionId";
     public static final String KEY_STAT_TIME = "time";
     public static final String KEY_STAT_SIZE = "size";
     public static final String KEY_STAT_BITRATE = "bitrate";
@@ -79,8 +73,13 @@ public class RNFFmpegModule extends ReactContextBaseJavaModule {
     public static final String KEY_STAT_VIDEO_QUALITY = "videoQuality";
     public static final String KEY_STAT_VIDEO_FPS = "videoFps";
 
+    public static final String KEY_EXECUTION_ID = "executionId";
+    public static final String KEY_EXECUTION_START_TIME = "startTime";
+    public static final String KEY_EXECUTION_COMMAND = "command";
+
     public static final String EVENT_LOG = "RNFFmpegLogCallback";
     public static final String EVENT_STAT = "RNFFmpegStatisticsCallback";
+    public static final String EVENT_EXECUTE = "RNFFmpegExecuteCallback";
 
     private final ReactApplicationContext reactContext;
 
@@ -98,19 +97,42 @@ public class RNFFmpegModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void getPlatform(final Promise promise) {
         final String abi = AbiDetect.getAbi();
-        promise.resolve(toStringMap(KEY_PLATFORM, PLATFORM_NAME + "-" + abi));
+        promise.resolve(PLATFORM_NAME + "-" + abi);
     }
 
     @ReactMethod
     public void getFFmpegVersion(final Promise promise) {
         final String version = Config.getFFmpegVersion();
-        promise.resolve(toStringMap(KEY_VERSION, version));
+        promise.resolve(version);
     }
 
     @ReactMethod
     public void executeFFmpegWithArguments(final ReadableArray readableArray, final Promise promise) {
         final RNFFmpegExecuteFFmpegAsyncArgumentsTask asyncTask = new RNFFmpegExecuteFFmpegAsyncArgumentsTask(promise, readableArray);
         asyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    @ReactMethod
+    public void executeFFmpegAsyncWithArguments(final ReadableArray readableArray, final Promise promise) {
+
+        /* PREPARING ARGUMENTS */
+        String[] arguments = RNFFmpegModule.toArgumentsArray(readableArray);
+
+        long executionId = FFmpeg.executeAsync(arguments, new ExecuteCallback() {
+
+            @Override
+            public void apply(long executionId, int returnCode) {
+                final DeviceEventManagerModule.RCTDeviceEventEmitter jsModule = reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class);
+
+                final WritableMap executeMap = Arguments.createMap();
+                executeMap.putDouble("executionId", (double) executionId);
+                executeMap.putInt("returnCode", returnCode);
+
+                jsModule.emit(EVENT_EXECUTE, executeMap);
+            }
+        });
+
+        promise.resolve((double) executionId);
     }
 
     @ReactMethod
@@ -122,6 +144,11 @@ public class RNFFmpegModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void cancel() {
         FFmpeg.cancel();
+    }
+
+    @ReactMethod
+    public void cancelExecution(Double executionId) {
+        FFmpeg.cancel(executionId.longValue());
     }
 
     @ReactMethod
@@ -137,7 +164,7 @@ public class RNFFmpegModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void getLogLevel(final Promise promise) {
         final Level level = Config.getLogLevel();
-        promise.resolve(toIntMap(KEY_LOG_LEVEL, levelToInt(level)));
+        promise.resolve(levelToInt(level));
     }
 
     @ReactMethod
@@ -203,7 +230,7 @@ public class RNFFmpegModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void getPackageName(final Promise promise) {
         final String packageName = Config.getPackageName();
-        promise.resolve(toStringMap(KEY_PACKAGE_NAME, packageName));
+        promise.resolve(packageName);
     }
 
     @ReactMethod
@@ -215,13 +242,13 @@ public class RNFFmpegModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void getLastReturnCode(final Promise promise) {
         int lastReturnCode = Config.getLastReturnCode();
-        promise.resolve(toIntMap(KEY_LAST_RC, lastReturnCode));
+        promise.resolve(lastReturnCode);
     }
 
     @ReactMethod
     public void getLastCommandOutput(final Promise promise) {
         final String lastCommandOutput = Config.getLastCommandOutput();
-        promise.resolve(toStringMap(KEY_LAST_COMMAND_OUTPUT, lastCommandOutput));
+        promise.resolve(lastCommandOutput);
     }
 
     @ReactMethod
@@ -233,30 +260,39 @@ public class RNFFmpegModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void registerNewFFmpegPipe(final Promise promise) {
         final String pipe = Config.registerNewFFmpegPipe(reactContext);
-        promise.resolve(toStringMap(KEY_PIPE, pipe));
+        promise.resolve(pipe);
+    }
+
+    @ReactMethod
+    public void setEnvironmentVariable(final String variableName, final String variableValue) {
+        Config.setEnvironmentVariable(variableName, variableValue);
+    }
+
+    @ReactMethod
+    public void listExecutions(final Promise promise) {
+        List<FFmpegExecution> ffmpegExecutionList = FFmpeg.listExecutions();
+        promise.resolve(toExecutionsList(ffmpegExecutionList));
     }
 
     protected void emitLogMessage(final LogMessage logMessage) {
         final DeviceEventManagerModule.RCTDeviceEventEmitter jsModule = reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class);
         final WritableMap logMap = Arguments.createMap();
+
+        logMap.putDouble(KEY_LOG_EXECUTION_ID, logMessage.getExecutionId());
         logMap.putInt(KEY_LOG_LEVEL, levelToInt(logMessage.getLevel()));
         logMap.putString(KEY_LOG_TEXT, logMessage.getText());
+
         jsModule.emit(EVENT_LOG, logMap);
     }
 
     protected void emitStatistics(final Statistics statistics) {
         final DeviceEventManagerModule.RCTDeviceEventEmitter jsModule = reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class);
+
         jsModule.emit(EVENT_STAT, toMap(statistics));
     }
 
     public static int levelToInt(final Level level) {
         return (level == null) ? Level.AV_LOG_TRACE.getValue() : level.getValue();
-    }
-
-    public static WritableMap toStringMap(final String key, final String value) {
-        final WritableMap map = new WritableNativeMap();
-        map.putString(key, value);
-        return map;
     }
 
     public static WritableArray toStringArray(final List<String> list) {
@@ -271,12 +307,6 @@ public class RNFFmpegModule extends ReactContextBaseJavaModule {
         return array;
     }
 
-    public static WritableMap toIntMap(final String key, final int value) {
-        final WritableMap map = new WritableNativeMap();
-        map.putInt(key, value);
-        return map;
-    }
-
     public static Map<String, String> toMap(final ReadableMap readableMap) {
         final Map<String, String> map = new HashMap<>();
 
@@ -286,10 +316,8 @@ public class RNFFmpegModule extends ReactContextBaseJavaModule {
                 final String key = iterator.nextKey();
                 final ReadableType type = readableMap.getType(key);
 
-                switch (type) {
-                    case String:
-                        map.put(key, readableMap.getString(key));
-                        break;
+                if (type == ReadableType.String) {
+                    map.put(key, readableMap.getString(key));
                 }
             }
         }
@@ -301,11 +329,11 @@ public class RNFFmpegModule extends ReactContextBaseJavaModule {
         final WritableMap statisticsMap = Arguments.createMap();
 
         if (statistics != null) {
+            statisticsMap.putDouble(KEY_STAT_EXECUTION_ID, statistics.getExecutionId());
             statisticsMap.putInt(KEY_STAT_TIME, statistics.getTime());
-            statisticsMap.putInt(KEY_STAT_SIZE, (statistics.getSize() < Integer.MAX_VALUE) ? (int) statistics.getSize() : (int) (statistics.getSize() % Integer.MAX_VALUE));
+            statisticsMap.putDouble(KEY_STAT_SIZE, statistics.getSize());
             statisticsMap.putDouble(KEY_STAT_BITRATE, statistics.getBitrate());
             statisticsMap.putDouble(KEY_STAT_SPEED, statistics.getSpeed());
-
             statisticsMap.putInt(KEY_STAT_VIDEO_FRAME_NUMBER, statistics.getVideoFrameNumber());
             statisticsMap.putDouble(KEY_STAT_VIDEO_QUALITY, statistics.getVideoQuality());
             statisticsMap.putDouble(KEY_STAT_VIDEO_FPS, statistics.getVideoFps());
@@ -314,138 +342,109 @@ public class RNFFmpegModule extends ReactContextBaseJavaModule {
         return statisticsMap;
     }
 
+    public static WritableArray toExecutionsList(final List<FFmpegExecution> ffmpegExecutions) {
+        final WritableArray executions = Arguments.createArray();
+
+        for (int i = 0; i < ffmpegExecutions.size(); i++) {
+            FFmpegExecution execution = ffmpegExecutions.get(i);
+
+            WritableMap executionMap = Arguments.createMap();
+            executionMap.putDouble(KEY_EXECUTION_ID, execution.getExecutionId());
+            executionMap.putDouble(KEY_EXECUTION_START_TIME, execution.getStartTime().getTime());
+            executionMap.putString(KEY_EXECUTION_COMMAND, execution.getCommand());
+
+            executions.pushMap(executionMap);
+        }
+
+        return executions;
+    }
+
     public static WritableMap toMediaInformationMap(final MediaInformation mediaInformation) {
-        final WritableMap map = Arguments.createMap();
+        WritableMap map = Arguments.createMap();
 
         if (mediaInformation != null) {
-            if (mediaInformation.getFormat() != null) {
-                map.putString("format", mediaInformation.getFormat());
-            }
-            if (mediaInformation.getPath() != null) {
-                map.putString("path", mediaInformation.getPath());
-            }
-            if (mediaInformation.getStartTime() != null) {
-                map.putInt("startTime", mediaInformation.getStartTime().intValue());
-            }
-            if (mediaInformation.getDuration() != null) {
-                map.putInt("duration", mediaInformation.getDuration().intValue());
-            }
-            if (mediaInformation.getBitrate() != null) {
-                map.putInt("bitrate", mediaInformation.getBitrate().intValue());
-            }
-            if (mediaInformation.getRawInformation() != null) {
-                map.putString("rawInformation", mediaInformation.getRawInformation());
-            }
-
-            final Set<Map.Entry<String, String>> metadata = mediaInformation.getMetadataEntries();
-            if ((metadata != null) && (metadata.size() > 0)) {
-                final WritableMap metadataMap = Arguments.createMap();
-
-                for (Map.Entry<String, String> entry : metadata) {
-                    metadataMap.putString(entry.getKey(), entry.getValue());
-                }
-
-                map.putMap("metadata", metadataMap);
-            }
-
-            final List<StreamInformation> streams = mediaInformation.getStreams();
-            if ((streams != null) && (streams.size() > 0)) {
-                final WritableArray array = Arguments.createArray();
-
-                for (StreamInformation streamInformation : streams) {
-                    array.pushMap(toStreamInformationMap(streamInformation));
-                }
-
-                map.putArray("streams", array);
+            JSONObject allProperties = mediaInformation.getAllProperties();
+            if (allProperties != null) {
+                map = toMap(allProperties);
             }
         }
 
         return map;
     }
 
-    public static WritableMap toStreamInformationMap(final StreamInformation streamInformation) {
+    public static WritableMap toMap(final JSONObject jsonObject) {
         final WritableMap map = Arguments.createMap();
 
-        if (streamInformation != null) {
-            if (streamInformation.getIndex() != null) {
-                map.putInt("index", streamInformation.getIndex().intValue());
-            }
-            if (streamInformation.getType() != null) {
-                map.putString("type", streamInformation.getType());
-            }
-            if (streamInformation.getCodec() != null) {
-                map.putString("codec", streamInformation.getCodec());
-            }
-            if (streamInformation.getFullCodec() != null) {
-                map.putString("fullCodec", streamInformation.getFullCodec());
-            }
-            if (streamInformation.getFormat() != null) {
-                map.putString("format", streamInformation.getFormat());
-            }
-            if (streamInformation.getFullFormat() != null) {
-                map.putString("fullFormat", streamInformation.getFullFormat());
-            }
-            if (streamInformation.getWidth() != null) {
-                map.putInt("width", streamInformation.getWidth().intValue());
-            }
-            if (streamInformation.getHeight() != null) {
-                map.putInt("height", streamInformation.getHeight().intValue());
-            }
-            if (streamInformation.getBitrate() != null) {
-                map.putInt("bitrate", streamInformation.getBitrate().intValue());
-            }
-            if (streamInformation.getSampleRate() != null) {
-                map.putInt("sampleRate", streamInformation.getSampleRate().intValue());
-            }
-            if (streamInformation.getSampleFormat() != null) {
-                map.putString("sampleFormat", streamInformation.getSampleFormat());
-            }
-            if (streamInformation.getChannelLayout() != null) {
-                map.putString("channelLayout", streamInformation.getChannelLayout());
-            }
-            if (streamInformation.getSampleAspectRatio() != null) {
-                map.putString("sampleAspectRatio", streamInformation.getSampleAspectRatio());
-            }
-            if (streamInformation.getDisplayAspectRatio() != null) {
-                map.putString("displayAspectRatio", streamInformation.getDisplayAspectRatio());
-            }
-            if (streamInformation.getAverageFrameRate() != null) {
-                map.putString("averageFrameRate", streamInformation.getAverageFrameRate());
-            }
-            if (streamInformation.getRealFrameRate() != null) {
-                map.putString("realFrameRate", streamInformation.getRealFrameRate());
-            }
-            if (streamInformation.getTimeBase() != null) {
-                map.putString("timeBase", streamInformation.getTimeBase());
-            }
-            if (streamInformation.getCodecTimeBase() != null) {
-                map.putString("codecTimeBase", streamInformation.getCodecTimeBase());
-            }
-
-            final Set<Map.Entry<String, String>> metadata = streamInformation.getMetadataEntries();
-            if ((metadata != null) && (metadata.size() > 0)) {
-                final WritableMap metadataMap = Arguments.createMap();
-
-                for (Map.Entry<String, String> entry : metadata) {
-                    metadataMap.putString(entry.getKey(), entry.getValue());
+        if (jsonObject != null) {
+            Iterator<String> keys = jsonObject.keys();
+            while (keys.hasNext()) {
+                String key = keys.next();
+                Object value = jsonObject.opt(key);
+                if (value != null) {
+                    if (value instanceof JSONArray) {
+                        map.putArray(key, toList((JSONArray) value));
+                    } else if (value instanceof JSONObject) {
+                        map.putMap(key, toMap((JSONObject) value));
+                    } else if (value instanceof String) {
+                        map.putString(key, (String) value);
+                    } else if (value instanceof Number) {
+                        if (value instanceof Integer) {
+                            map.putInt(key, (Integer) value);
+                        } else {
+                            map.putDouble(key, ((Number) value).doubleValue());
+                        }
+                    } else if (value instanceof Boolean) {
+                        map.putBoolean(key, (Boolean) value);
+                    } else {
+                        Log.i(LIBRARY_NAME, String.format("Can not map json key %s using value %s:%s", key, value.toString(), value.getClass().toString()));
+                    }
                 }
-
-                map.putMap("metadata", metadataMap);
-            }
-
-            final Set<Map.Entry<String, String>> sidedata = streamInformation.getSidedataEntries();
-            if ((sidedata != null) && (sidedata.size() > 0)) {
-                final WritableMap sidedataMap = Arguments.createMap();
-
-                for (Map.Entry<String, String> entry : sidedata) {
-                    sidedataMap.putString(entry.getKey(), entry.getValue());
-                }
-
-                map.putMap("sidedata", sidedataMap);
             }
         }
 
         return map;
+    }
+
+    public static WritableArray toList(final JSONArray array) {
+        final WritableArray list = Arguments.createArray();
+
+        for (int i = 0; i < array.length(); i++) {
+            Object value = array.opt(i);
+            if (value != null) {
+                if (value instanceof JSONArray) {
+                    list.pushArray(toList((JSONArray) value));
+                } else if (value instanceof JSONObject) {
+                    list.pushMap(toMap((JSONObject) value));
+                } else if (value instanceof String) {
+                    list.pushString((String) value);
+                } else if (value instanceof Number) {
+                    if (value instanceof Integer) {
+                        list.pushInt((Integer) value);
+                    } else {
+                        list.pushDouble(((Number) value).doubleValue());
+                    }
+                } else if (value instanceof Boolean) {
+                    list.pushBoolean((Boolean) value);
+                } else {
+                    Log.i(LIBRARY_NAME, String.format("Can not map json value %s:%s", value.toString(), value.getClass().toString()));
+                }
+            }
+        }
+
+        return list;
+    }
+
+    public static String[] toArgumentsArray(final ReadableArray readableArray) {
+        final List<String> arguments = new ArrayList<>();
+        for (int i = 0; i < readableArray.size(); i++) {
+            final ReadableType type = readableArray.getType(i);
+
+            if (type == ReadableType.String) {
+                arguments.add(readableArray.getString(i));
+            }
+        }
+
+        return arguments.toArray(new String[0]);
     }
 
 }

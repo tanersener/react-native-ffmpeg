@@ -19,7 +19,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.3'
+        classpath 'com.android.tools.build:gradle:4.0.1'
     }
 }
 
@@ -29,8 +29,8 @@ android {
     defaultConfig {
         minSdkVersion safeExtGet('reactNativeFFmpegPackage', 'https').contains("-lts") ? 16 : 24
         targetSdkVersion 29
-        versionCode 44
-        versionName "0.4.4"
+        versionCode 50
+        versionName "0.5.0"
         project.archivesBaseName = "react-native-ffmpeg"
     }
     lintOptions {
@@ -46,6 +46,6 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.arthenica:mobile-ffmpeg-' + safePackageName(safeExtGet('reactNativeFFmpegPackage', 'https')) + ':' + safePackageVersion(safeExtGet('reactNativeFFmpegPackage', 'https'), '4.3.1', '4.3.1')
+    implementation 'com.arthenica:mobile-ffmpeg-' + safePackageName(safeExtGet('reactNativeFFmpegPackage', 'https')) + ':' + safePackageVersion(safeExtGet('reactNativeFFmpegPackage', 'https'), safeExtGet('mobileFFmpegVersion', '4.4'), safeExtGet('mobileFFmpegVersion', '4.4'))
     implementation 'com.facebook.react:react-native:+'
 }

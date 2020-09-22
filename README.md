@@ -1,4 +1,4 @@
-# React Native FFmpeg ![GitHub release](https://img.shields.io/badge/release-v0.4.4-blue.svg) [![npm](https://img.shields.io/npm/v/react-native-ffmpeg.svg)](react-native-ffmpeg)
+# React Native FFmpeg ![GitHub release](https://img.shields.io/badge/release-v0.5.0-blue.svg) [![npm](https://img.shields.io/npm/v/react-native-ffmpeg.svg)](react-native-ffmpeg)
 
 FFmpeg for React Native
 
@@ -9,14 +9,14 @@ FFmpeg for React Native
 - Includes both `FFmpeg` and `FFprobe`
 - Supports
     - Both `Android` and `iOS`
-    - FFmpeg `v4.1`, `v4.2` and `v4.3-dev` releases
+    - FFmpeg `v4.1`, `v4.2`, `v4.3` and `v4.4-dev` releases
     - `arm-v7a`, `arm-v7a-neon`, `arm64-v8a`, `x86` and `x86_64` architectures on Android
     - `Android API Level 16` or later 
     - `armv7`, `armv7s`, `arm64`, `arm64e`, `i386` and `x86_64` architectures on iOS
     - `iOS SDK 9.3` or later
-    - 24 external libraries
+    - 25 external libraries
     
-        `fontconfig`, `freetype`, `fribidi`, `gmp`, `gnutls`, `kvazaar`, `lame`, `libaom`, `libass`, `libiconv`, `libilbc`, `libtheora`, `libvorbis`, `libvpx`, `libwebp`, `libxml2`, `opencore-amr`, `opus`, `shine`, `snappy`, `soxr`, `speex`, `twolame`, `wavpack`
+        `fontconfig`, `freetype`, `fribidi`, `gmp`, `gnutls`, `kvazaar`, `lame`, `libaom`, `libass`, `libiconv`, `libilbc`, `libtheora`, `libvorbis`, `libvpx`, `libwebp`, `libxml2`, `opencore-amr`, `opus`, `shine`, `snappy`, `soxr`, `speex`, `twolame`, `vo-amrwbenc`, `wavpack`
     
     - 4 external libraries with GPL license
     
@@ -24,10 +24,15 @@ FFmpeg for React Native
         
     - Concurrent execution
     - `zlib` and `MediaCodec` Android system libraries
-    - `bzip2`, `zlib`, `iconv` iOS system libraries and `AudioToolbox`, `CoreImage`, `VideoToolbox`, `AVFoundation` iOS system frameworks
+    - `bzip2`, `iconv`, `libuuid`, `zlib` system libraries and `AudioToolbox`, `VideoToolbox`, `AVFoundation` system frameworks
 
 - Includes Typescript definitions
 - Licensed under LGPL 3.0, can be customized to support GPL v3.0
+
+### 2. Installation
+
+`$ yarn add react-native-ffmpeg`
+
 - Includes eight different packages with different external libraries enabled in FFmpeg
 
 <table>
@@ -66,11 +71,6 @@ FFmpeg for React Native
 </tr>
 </tbody>
 </table>
-
-
-### 2. Installation
-
-`$ yarn add react-native-ffmpeg`
 
 #### 2.1 Android
 
@@ -443,13 +443,25 @@ Refer to [Changelog](CHANGELOG.md) for updates.
 
 ### 9. License
 
-This project is licensed under the LGPL v3.0. However, if installation is customized to use a package with `-gpl` postfix (min-gpl, https-gpl, full-gpl) then `React Native FFmpeg` is subject to the GPL v3.0 license.
+This project is licensed under the LGPL v3.0. However, if installation is customized to use a package with `-gpl` 
+postfix (min-gpl, https-gpl, full-gpl) then `React Native FFmpeg` is subject to the GPL v3.0 license.
 
-Digital assets used in test applications are published in the public domain.
+Digital assets used in test application are published in the public domain.
+
+### 8. Patents
+
+It is not clearly explained in their documentation but it is believed that `FFmpeg`, `kvazaar`, `x264` and `x265`
+include algorithms which are subject to software patents. If you live in a country where software algorithms are
+patentable then you'll probably need to pay royalty fees to patent holders. We are not lawyers though, so we recommend
+that you seek legal advice first. See [FFmpeg Patent Mini-FAQ](https://ffmpeg.org/legal.html).
 
 ### 10. Contributing
 
 Feel free to submit issues or pull requests.
+
+Please note that `master` branch includes only the latest released source code. Changes planned for the next release 
+are implemented under the `development` branch. Therefore, if you want to create a pull request, please open it against
+the `development`.
 
 ### 11. See Also
 

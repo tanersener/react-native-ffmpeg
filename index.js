@@ -1,9 +1,10 @@
-import { NativeEventEmitter, NativeModules } from 'react-native';
+import {NativeEventEmitter, NativeModules} from 'react-native';
 
-const { RNFFmpegModule } = NativeModules;
+const {RNFFmpegModule} = NativeModules;
 
 const eventLog = "RNFFmpegLogCallback";
-const statisticsLog = "RNFFmpegStatisticsCallback";
+const eventStatistics = "RNFFmpegStatisticsCallback";
+const eventExecute = "RNFFmpegExecuteCallback";
 
 class LogLevel {
 
@@ -76,16 +77,21 @@ class ReactNativeFFmpegConfig {
 
     constructor() {
         const reactNativeFFmpegModuleEvents = new NativeEventEmitter(RNFFmpegModule);
-        reactNativeFFmpegModuleEvents.addListener(eventLog, event => {
+        reactNativeFFmpegModuleEvents.addListener(eventLog, log => {
             if (this.logCallback === undefined) {
-                console.log(event.log);
+                console.log(log.log);
             } else {
-                this.logCallback(event);
+                this.logCallback(log);
             }
         });
-        reactNativeFFmpegModuleEvents.addListener(statisticsLog, statistics => {
+        reactNativeFFmpegModuleEvents.addListener(eventStatistics, statistics => {
             if (this.statisticsCallback !== undefined) {
                 this.statisticsCallback(statistics);
+            }
+        });
+        reactNativeFFmpegModuleEvents.addListener(eventExecute, execute => {
+            if (this.executeCallback !== undefined) {
+                this.executeCallback(execute);
             }
         });
 
@@ -95,15 +101,15 @@ class ReactNativeFFmpegConfig {
         RNFFmpegModule.enableStatisticsEvents();
         RNFFmpegModule.enableRedirection();
 
-        RNFFmpegModule.getPlatform().then((result) => {
-            console.log("Loaded react-native-ffmpeg-" + result.platform + ".");
+        this.getPlatform().then(platform => {
+            console.log(`Loaded react-native-ffmpeg-${platform}.`);
         });
     }
 
     /**
      * Returns FFmpeg version bundled within the library.
      *
-     * @returns FFmpeg version stored in version field
+     * @returns FFmpeg version
      */
     getFFmpegVersion() {
         return RNFFmpegModule.getFFmpegVersion();
@@ -112,7 +118,7 @@ class ReactNativeFFmpegConfig {
     /**
      * Returns platform name where library is loaded.
      *
-     * @returns platform name stored in platform field
+     * @returns platform name
      */
     getPlatform() {
         return RNFFmpegModule.getPlatform();
@@ -134,7 +140,7 @@ class ReactNativeFFmpegConfig {
     /**
      * Returns log level.
      *
-     * @returns log level stored in level field
+     * @returns log level
      */
     getLogLevel() {
         return RNFFmpegModule.getLogLevel();
@@ -182,6 +188,15 @@ class ReactNativeFFmpegConfig {
      */
     enableStatisticsCallback(newCallback) {
         this.statisticsCallback = newCallback;
+    }
+
+    /**
+     * Sets a callback function to redirect async FFmpeg execution results.
+     *
+     * @param newCallback new execute callback function or undefined to disable a previously defined callback
+     */
+    enableExecuteCallback(newCallback) {
+        this.executeCallback = newCallback;
     }
 
     /**
@@ -268,6 +283,16 @@ class ReactNativeFFmpegConfig {
     }
 
     /**
+     * Sets an environment variable
+     *
+     * @param name environment variable name
+     * @param value environment variable value
+     */
+    setEnvironmentVariable(name, value) {
+        return RNFFmpegModule.setEnvironmentVariable(name, value);
+    }
+
+    /**
      * Returns log level string.
      *
      * @param level log level integer
@@ -313,7 +338,7 @@ class ReactNativeFFmpeg {
      * Executes FFmpeg with arguments provided.
      *
      * @param commandArguments FFmpeg command options/arguments as string array
-     * @returns return code stored in rc field
+     * @returns return code
      */
     executeWithArguments(commandArguments) {
         return RNFFmpegModule.executeFFmpegWithArguments(commandArguments);
@@ -323,17 +348,53 @@ class ReactNativeFFmpeg {
      * Executes FFmpeg command provided.
      *
      * @param command FFmpeg command
-     * @returns return code stored in rc field
+     * @returns return code
      */
     execute(command) {
         return RNFFmpegModule.executeFFmpegWithArguments(this.parseArguments(command));
     }
 
     /**
-     * Cancels an ongoing operation.
+     * Asynchronously executes FFmpeg with arguments provided.
+     *
+     * @param commandArguments FFmpeg command options/arguments as string array
+     * @returns returns a unique id that represents this execution
+     */
+    executeAsyncWithArguments(commandArguments) {
+        return RNFFmpegModule.executeFFmpegAsyncWithArguments(commandArguments);
+    }
+
+    /**
+     * Asynchronously executes FFmpeg command provided.
+     *
+     * @param command FFmpeg command
+     * @returns returns a unique id that represents this execution
+     */
+    executeAsync(command) {
+        return RNFFmpegModule.executeFFmpegAsyncWithArguments(this.parseArguments(command));
+    }
+
+    /**
+     * Cancels all ongoing operations.
      */
     cancel() {
         RNFFmpegModule.cancel();
+    }
+
+    /**
+     * Cancels an ongoing operation.
+     */
+    cancelExecution(executionId) {
+        RNFFmpegModule.cancelExecution(executionId);
+    }
+
+    /**
+     * Lists ongoing executions.
+     *
+     * @return list of ongoing executions
+     */
+    listExecutions() {
+        return RNFFmpegModule.listExecutions();
     }
 
     /**
@@ -407,7 +468,7 @@ class ReactNativeFFprobe {
      * Executes FFprobe with arguments provided.
      *
      * @param commandArguments FFprobe command options/arguments as string array
-     * @returns return code stored in rc field
+     * @returns return code
      */
     executeWithArguments(commandArguments) {
         return RNFFmpegModule.executeFFprobeWithArguments(commandArguments);
@@ -417,7 +478,7 @@ class ReactNativeFFprobe {
      * Executes FFprobe command provided.
      *
      * @param command FFprobe command
-     * @returns return code stored in rc field
+     * @returns return code
      */
     execute(command) {
         return RNFFmpegModule.executeFFprobeWithArguments(RNFFmpeg.parseArguments(command));

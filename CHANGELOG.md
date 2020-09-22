@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.5.0 - 2020-09-23
+- Depends on mobile-ffmpeg v4.4
+- Allows modifying mobile-ffmpeg version for android
+
 ## 0.4.4 - 2020-03-09
 - Fixes issue #118
 
