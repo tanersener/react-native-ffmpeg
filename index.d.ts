@@ -47,8 +47,8 @@ declare module 'react-native-ffmpeg' {
         realFrameRate?: string;
         timeBase?: string;
         codecTimeBase?: string;
-        metadata?: [string, string];
-        sidedata?: [string, string];
+        metadata?: Record<string, string>;
+        sidedata?: Record<string, string>;
     }
 
     export interface MediaInformation {
@@ -57,7 +57,7 @@ declare module 'react-native-ffmpeg' {
         duration?: number;
         startTime?: number;
         bitrate?: number;
-        metadata?: [string, string];
+        metadata?: Record<string, string>;
         streams?: StreamInformation[];
         rawInformation?: string;
     }
