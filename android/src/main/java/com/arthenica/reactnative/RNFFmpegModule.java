@@ -61,7 +61,7 @@ public class RNFFmpegModule extends ReactContextBaseJavaModule {
     public static final String PLATFORM_NAME = "android";
 
     public static final String KEY_LOG_EXECUTION_ID = "executionId";
-    public static final String KEY_LOG_TEXT = "log";
+    public static final String KEY_LOG_MESSAGE = "message";
     public static final String KEY_LOG_LEVEL = "level";
 
     public static final String KEY_STAT_EXECUTION_ID = "executionId";
@@ -280,7 +280,7 @@ public class RNFFmpegModule extends ReactContextBaseJavaModule {
 
         logMap.putDouble(KEY_LOG_EXECUTION_ID, logMessage.getExecutionId());
         logMap.putInt(KEY_LOG_LEVEL, levelToInt(logMessage.getLevel()));
-        logMap.putString(KEY_LOG_TEXT, logMessage.getText());
+        logMap.putString(KEY_LOG_MESSAGE, logMessage.getText());
 
         jsModule.emit(EVENT_LOG, logMap);
     }

@@ -249,7 +249,7 @@ In order to install the `LTS` variant, install the `https-lts` package using ins
 6. Enable log callback and redirect all `FFmpeg`/`FFprobe` logs to a console/file/widget.
     ```
     logCallback = (logData) => {
-        console.log(logData.log);
+        console.log(logData.message);
     };
     ...
     RNFFmpegConfig.enableLogCallback(this.logCallback);

@@ -79,7 +79,7 @@ class ReactNativeFFmpegConfig {
         const reactNativeFFmpegModuleEvents = new NativeEventEmitter(RNFFmpegModule);
         reactNativeFFmpegModuleEvents.addListener(eventLog, log => {
             if (this.logCallback === undefined) {
-                console.log(log.log);
+                console.log(log.message);
             } else {
                 this.logCallback(log);
             }

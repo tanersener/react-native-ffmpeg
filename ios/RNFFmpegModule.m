@@ -30,7 +30,7 @@
 static NSString *const PLATFORM_NAME = @"ios";
 
 static NSString *const KEY_LOG_EXECUTION_ID = @"executionId";
-static NSString *const KEY_LOG_TEXT = @"log";
+static NSString *const KEY_LOG_MESSAGE = @"message";
 static NSString *const KEY_LOG_LEVEL = @"level";
 
 static NSString *const KEY_STAT_EXECUTION_ID = @"executionId";
@@ -198,7 +198,7 @@ RCT_EXPORT_METHOD(listExecutions:(RCTPromiseResolveBlock)resolve rejecter:(RCTPr
         NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
         dictionary[KEY_LOG_EXECUTION_ID] = [NSNumber numberWithLong:executionId];
         dictionary[KEY_LOG_LEVEL] = [NSNumber numberWithInt:level];
-        dictionary[KEY_LOG_TEXT] = message;
+        dictionary[KEY_LOG_MESSAGE] = message;
 
         [self emitLogMessage: dictionary];
     });
