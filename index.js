@@ -489,16 +489,87 @@ class ReactNativeFFprobe {
      * Returns media information for given file.
      *
      * @param path path or uri of media file
-     * @return media information
+     * @return media information class
      */
     getMediaInformation(path) {
-        return RNFFmpegModule.getMediaInformation(path);
+        return RNFFmpegModule.getMediaInformation(path).then(properties => new MediaInformation(properties));
     }
 
 }
 
+class MediaInformation {
+    #allProperties;
+
+    constructor(properties) {
+        this.#allProperties = properties;
+    }
+
+    /**
+     * Returns the streams found as array.
+     *
+     * @returns StreamInformation[]
+     */
+    getStreams() {
+        let list = [];
+        let streamList;
+
+        if (this.#allProperties === undefined) {
+            streamList = [];
+        } else {
+            streamList = this.#allProperties.streams;
+        }
+
+        if (streamList !== undefined) {
+            streamList.forEach((stream) => {
+                list.push(new StreamInformation(stream));
+            });
+        }
+
+        return list;
+    }
+
+    /**
+     * Returns all media properties.
+     *
+     * @returns an object where media properties can be accessed by property names
+     */
+    getMediaProperties() {
+        if (this.#allProperties == null) {
+            return new Map();
+        } else {
+            return this.#allProperties.format;
+        }
+    }
+
+    /**
+     * Returns all properties found, including stream properties too.
+     *
+     * @returns an object in which properties can be accessed by property names
+     */
+    getAllProperties() {
+        return this.#allProperties;
+    }
+}
+
+class StreamInformation {
+    #allProperties;
+
+    constructor(properties) {
+        this.#allProperties = properties;
+    }
+
+    /**
+     * Returns all properties found.
+     *
+     * @returns an object in which properties can be accessed by property names
+     */
+    getAllProperties() {
+        return this.#allProperties;
+    }
+}
+
 export {
-    LogLevel
+    LogLevel, MediaInformation
 }
 
 export const RNFFmpegConfig = new ReactNativeFFmpegConfig();

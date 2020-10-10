@@ -43,38 +43,16 @@ declare module 'react-native-ffmpeg' {
         returnCode: number;
     }
 
-    export interface StreamInformation {
-        index?: number;
-        type?: string;
-        codec?: string;
-        fullCodec?: string;
-        format?: string;
-        fullFormat?: string;
-        width?: number;
-        height?: number;
-        bitrate?: number;
-        sampleRate?: number;
-        sampleFormat?: string;
-        channelLayout?: string;
-        sampleAspectRatio?: string;
-        displayAspectRatio?: string;
-        averageFrameRate?: string;
-        realFrameRate?: string;
-        timeBase?: string;
-        codecTimeBase?: string;
-        metadata?: [string, string];
-        sidedata?: [string, string];
+    export class StreamInformation {
+        getAllProperties(): Record<string, string>;
     }
 
-    export interface MediaInformation {
-        format?: string;
-        path?: string;
-        duration?: number;
-        startTime?: number;
-        bitrate?: number;
-        metadata?: [string, string];
-        streams?: StreamInformation[];
-        rawInformation?: string;
+    export class MediaInformation {
+        getStreams(): StreamInformation[];
+
+        getMediaProperties(): Record<string, string>;
+
+        getAllProperties(): Record<string, string>;
     }
 
     export class RNFFmpegConfig {
