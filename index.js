@@ -89,9 +89,9 @@ class ReactNativeFFmpegConfig {
                 this.statisticsCallback(statistics);
             }
         });
-        reactNativeFFmpegModuleEvents.addListener(eventExecute, execute => {
+        reactNativeFFmpegModuleEvents.addListener(eventExecute, completedExecution => {
             if (this.executeCallback !== undefined) {
-                this.executeCallback(execute);
+                this.executeCallback(completedExecution);
             }
         });
 
