@@ -85,7 +85,6 @@ declare module 'react-native-ffmpeg' {
         static disableStatistics(): void;
         static enableLogCallback(newCallback: (log: Log) => void): void;
         static enableStatisticsCallback(newCallback: (statistics: Statistics) => void): void;
-        static enableExecuteCallback(newCallback: (execution: CompletedExecution) => void): void;
         static getLastReceivedStatistics(): Promise<Statistics>;
         static resetStatistics(): void;
         static setFontconfigConfigurationPath(path: string): void;
@@ -101,8 +100,8 @@ declare module 'react-native-ffmpeg' {
     export class RNFFmpeg {
         static executeWithArguments(arguments: string[]): Promise<number>;
         static execute(command: string): Promise<number>;
-        static executeAsyncWithArguments(arguments: string[]): Promise<number>;
-        static executeAsync(command: string): Promise<number>;
+        static executeAsyncWithArguments(arguments: string[], callback: (execution: CompletedExecution) => void): Promise<number>;
+        static executeAsync(command: string, callback: (execution: CompletedExecution) => void): Promise<number>;
         static cancel(): void;
         static cancelExecution(executionId: number): void;
         static listExecutions(): Promise<Execution[]>;

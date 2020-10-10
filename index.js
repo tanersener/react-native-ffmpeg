@@ -5,6 +5,7 @@ const {RNFFmpegModule} = NativeModules;
 const eventLog = "RNFFmpegLogCallback";
 const eventStatistics = "RNFFmpegStatisticsCallback";
 const eventExecute = "RNFFmpegExecuteCallback";
+const executeCallbackMap = new Map()
 
 class LogLevel {
 
@@ -90,8 +91,11 @@ class ReactNativeFFmpegConfig {
             }
         });
         reactNativeFFmpegModuleEvents.addListener(eventExecute, completedExecution => {
-            if (this.executeCallback !== undefined) {
-                this.executeCallback(completedExecution);
+            let executeCallback = executeCallbackMap.get(completedExecution.executionId);
+            if (executeCallback !== undefined) {
+                executeCallback(completedExecution);
+            } else {
+                console.log(`Async execution with id ${completedExecution.executionId} completed but no callback is found for it.`);
             }
         });
 
@@ -188,15 +192,6 @@ class ReactNativeFFmpegConfig {
      */
     enableStatisticsCallback(newCallback) {
         this.statisticsCallback = newCallback;
-    }
-
-    /**
-     * Sets a callback function to redirect async FFmpeg execution results.
-     *
-     * @param newCallback new execute callback function or undefined to disable a previously defined callback
-     */
-    enableExecuteCallback(newCallback) {
-        this.executeCallback = newCallback;
     }
 
     /**
@@ -358,20 +353,26 @@ class ReactNativeFFmpeg {
      * Asynchronously executes FFmpeg with arguments provided.
      *
      * @param commandArguments FFmpeg command options/arguments as string array
+     * @param executeCallback callback to receive execution result
      * @returns returns a unique id that represents this execution
      */
-    executeAsyncWithArguments(commandArguments) {
-        return RNFFmpegModule.executeFFmpegAsyncWithArguments(commandArguments);
+    async executeAsyncWithArguments(commandArguments, executeCallback) {
+        let executionId = await RNFFmpegModule.executeFFmpegAsyncWithArguments(commandArguments);
+        executeCallbackMap.set(executionId, executeCallback);
+        return executionId;
     }
 
     /**
      * Asynchronously executes FFmpeg command provided.
      *
      * @param command FFmpeg command
+     * @param executeCallback callback to receive execution result
      * @returns returns a unique id that represents this execution
      */
-    executeAsync(command) {
-        return RNFFmpegModule.executeFFmpegAsyncWithArguments(this.parseArguments(command));
+    async executeAsync(command, executeCallback) {
+        let executionId = await RNFFmpegModule.executeFFmpegAsyncWithArguments(this.parseArguments(command));
+        executeCallbackMap.set(executionId, executeCallback);
+        return executionId;
     }
 
     /**
