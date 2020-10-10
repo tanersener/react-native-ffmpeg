@@ -66,6 +66,38 @@ class LogLevel {
      */
     static AV_LOG_TRACE = 56;
 
+    /**
+     * Returns log level string.
+     *
+     * @param level log level integer
+     * @returns log level string
+     */
+    static logLevelToString(level) {
+        switch (level) {
+            case LogLevel.AV_LOG_TRACE:
+                return "TRACE";
+            case LogLevel.AV_LOG_DEBUG:
+                return "DEBUG";
+            case LogLevel.AV_LOG_VERBOSE:
+                return "VERBOSE";
+            case LogLevel.AV_LOG_INFO:
+                return "INFO";
+            case LogLevel.AV_LOG_WARNING:
+                return "WARNING";
+            case LogLevel.AV_LOG_ERROR:
+                return "ERROR";
+            case LogLevel.AV_LOG_FATAL:
+                return "FATAL";
+            case LogLevel.AV_LOG_PANIC:
+                return "PANIC";
+            case LogLevel.AV_LOG_STDERR:
+                return "STDERR";
+            case LogLevel.AV_LOG_QUIET:
+            default:
+                return "";
+        }
+    }
+
 }
 
 /**
@@ -285,38 +317,6 @@ class ReactNativeFFmpegConfig {
      */
     setEnvironmentVariable(name, value) {
         return RNFFmpegModule.setEnvironmentVariable(name, value);
-    }
-
-    /**
-     * Returns log level string.
-     *
-     * @param level log level integer
-     * @returns log level string
-     */
-    logLevelToString(level) {
-        switch (level) {
-            case LogLevel.AV_LOG_TRACE:
-                return "TRACE";
-            case LogLevel.AV_LOG_DEBUG:
-                return "DEBUG";
-            case LogLevel.AV_LOG_VERBOSE:
-                return "VERBOSE";
-            case LogLevel.AV_LOG_INFO:
-                return "INFO";
-            case LogLevel.AV_LOG_WARNING:
-                return "WARNING";
-            case LogLevel.AV_LOG_ERROR:
-                return "ERROR";
-            case LogLevel.AV_LOG_FATAL:
-                return "FATAL";
-            case LogLevel.AV_LOG_PANIC:
-                return "PANIC";
-            case LogLevel.AV_LOG_STDERR:
-                return "STDERR";
-            case LogLevel.AV_LOG_QUIET:
-            default:
-                return "";
-        }
     }
 
 }
