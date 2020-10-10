@@ -13,12 +13,14 @@ declare module 'react-native-ffmpeg' {
         static AV_LOG_TRACE: number;
     }
 
-    export interface LogMessage {
+    export interface Log {
+        executionId: number;
         level: LogLevel;
         message: string;
     }
 
     export interface Statistics {
+        executionId: number;
         videoFrameNumber: number;
         videoFps: number;
         videoQuality: number;
@@ -26,6 +28,17 @@ declare module 'react-native-ffmpeg' {
         time: number;
         bitrate: number;
         speed: number;
+    }
+
+    export interface Execution {
+        executionId: number;
+        startTime: number;
+        command: string;
+    }
+
+    export interface CompletedExecution {
+        executionId: number;
+        returnCode: number;
     }
 
     export interface StreamInformation {
@@ -53,7 +66,7 @@ declare module 'react-native-ffmpeg' {
 
     export interface MediaInformation {
         format?: string;
-        path?: string
+        path?: string;
         duration?: number;
         startTime?: number;
         bitrate?: number;
@@ -63,36 +76,42 @@ declare module 'react-native-ffmpeg' {
     }
 
     export class RNFFmpegConfig {
-        static getFFmpegVersion(): Promise<{version: string}>;
-        static getPlatform(): Promise<{platform: string}>;
+        static getFFmpegVersion(): Promise<string>;
+        static getPlatform(): Promise<string>;
         static disableRedirection(): void;
-        static getLogLevel(): Promise<{level: number}>;
+        static getLogLevel(): Promise<number>;
         static setLogLevel(level: number): void;
         static disableLogs(): void;
         static disableStatistics(): void;
-        static enableLogCallback(newCallback: (log: LogMessage) => void): void;
+        static enableLogCallback(newCallback: (log: Log) => void): void;
         static enableStatisticsCallback(newCallback: (statistics: Statistics) => void): void;
+        static enableExecuteCallback(newCallback: (execution: CompletedExecution) => void): void;
         static getLastReceivedStatistics(): Promise<Statistics>;
         static resetStatistics(): void;
         static setFontconfigConfigurationPath(path: string): void;
         static setFontDirectory(path: string, mapping?: { [key: string]: string }): void;
-        static getPackageName(): Promise<{packageName: string}>;
+        static getPackageName(): Promise<string>;
         static getExternalLibraries(): Promise<string[]>;
-        static getLastReturnCode(): Promise<{lastRc: number}>;
-        static getLastCommandOutput(): Promise<{lastCommandOutput: string}>;
-        static registerNewFFmpegPipe(): Promise<{packageName: string}>;
+        static getLastReturnCode(): Promise<number>;
+        static getLastCommandOutput(): Promise<string>;
+        static registerNewFFmpegPipe(): Promise<string>;
+        static setEnvironmentVariable(name: string, value: string);
     }
 
     export class RNFFmpeg {
-        static executeWithArguments(arguments: string[]): Promise<{rc: number}>;
-        static execute(command: string): Promise<{rc: number}>;
+        static executeWithArguments(arguments: string[]): Promise<number>;
+        static execute(command: string): Promise<number>;
+        static executeAsyncWithArguments(arguments: string[]): Promise<number>;
+        static executeAsync(command: string): Promise<number>;
         static cancel(): void;
+        static cancelExecution(executionId: number): void;
+        static listExecutions(): Promise<Execution[]>;
         static parseArguments(command: string): string[];
     }
 
     export class RNFFprobe {
-        static executeWithArguments(arguments: string[]): Promise<{rc: number}>;
-        static execute(command: string): Promise<{rc: number}>;
+        static executeWithArguments(arguments: string[]): Promise<number>;
+        static execute(command: string): Promise<number>;
         static getMediaInformation(path: string): Promise<MediaInformation>;
     }
 
