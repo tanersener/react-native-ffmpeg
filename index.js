@@ -319,6 +319,16 @@ class ReactNativeFFmpegConfig {
         return RNFFmpegModule.setEnvironmentVariable(name, value);
     }
 
+    /**
+     * Writes input file path to the pipe path.
+     *
+     * @param inputPath input file path
+     * @param pipePath pipe path
+     */
+    writeToPipe(inputPath, pipePath) {
+        return RNFFmpegModule.writeToPipe(inputPath, pipePath);
+    }
+
 }
 
 /**

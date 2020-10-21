@@ -274,6 +274,12 @@ public class RNFFmpegModule extends ReactContextBaseJavaModule {
         promise.resolve(toExecutionsList(ffmpegExecutionList));
     }
 
+    @ReactMethod
+    public void writeToPipe(final String inputPath, final String namedPipePath, final Promise promise) {
+        final RNFFmpegWriteToPipeAsyncTask asyncTask = new RNFFmpegWriteToPipeAsyncTask(inputPath, namedPipePath, promise);
+        asyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
     protected void emitLogMessage(final LogMessage logMessage) {
         final DeviceEventManagerModule.RCTDeviceEventEmitter jsModule = reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class);
         final WritableMap logMap = Arguments.createMap();

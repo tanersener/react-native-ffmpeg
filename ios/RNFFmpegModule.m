@@ -193,6 +193,59 @@ RCT_EXPORT_METHOD(listExecutions:(RCTPromiseResolveBlock)resolve rejecter:(RCTPr
     resolve(executionsArray);
 }
 
+RCT_EXPORT_METHOD(writeToPipe:(NSString*)inputPath onPipe:(NSString*)namedPipePath:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+
+        NSLog(@"Starting copy %@ to pipe %@ operation.\n", inputPath, namedPipePath);
+
+        NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath: inputPath];
+        if (fileHandle == nil) {
+            NSLog(@"Failed to open file %@.\n", inputPath);
+            reject(@"Copy failed", [NSString stringWithFormat:@"Failed to open file %@.", inputPath], nil);
+            return;
+        }
+
+        NSFileHandle *pipeHandle = [NSFileHandle fileHandleForWritingAtPath: namedPipePath];
+        if (pipeHandle == nil) {
+            NSLog(@"Failed to open pipe %@.\n", namedPipePath);
+            reject(@"Copy failed", [NSString stringWithFormat:@"Failed to open pipe %@.", namedPipePath], nil);
+            [fileHandle closeFile];
+            return;
+        }
+
+        int BUFFER_SIZE = 4096;
+        unsigned long readBytes = 0;
+        unsigned long totalBytes = 0;
+        double startTime = CACurrentMediaTime();
+
+        @try {
+            [fileHandle seekToFileOffset: 0];
+
+            do {
+                NSData *data = [fileHandle readDataOfLength:BUFFER_SIZE];
+                readBytes = [data length];
+                if (readBytes > 0) {
+                    totalBytes += readBytes;
+                    [pipeHandle writeData:data];
+                }
+            } while (readBytes > 0);
+
+            double endTime = CACurrentMediaTime();
+
+            NSLog(@"Completed copy %@ to pipe %@ operation. %lu bytes copied in %f seconds.\n", inputPath, namedPipePath, totalBytes, (endTime - startTime));
+
+            resolve(0);
+
+        } @catch (NSException *e) {
+            NSLog(@"Copy failed %@.\n", [e reason]);
+            reject(@"Copy failed", [NSString stringWithFormat:@"Copy %@ to %@ failed with error.", inputPath, namedPipePath], e);
+        } @finally {
+            [fileHandle closeFile];
+            [pipeHandle closeFile];
+        }
+    });
+}
+
 - (void)logCallback:(long)executionId :(int)level :(NSString*)message {
     dispatch_async(dispatch_get_main_queue(), ^{
         NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];

@@ -93,6 +93,8 @@ declare module 'react-native-ffmpeg' {
         static registerNewFFmpegPipe(): Promise<string>;
 
         static setEnvironmentVariable(name: string, value: string);
+
+        static writeToPipe(inputPath: string, pipePath: string): Promise<number>;
     }
 
     export class RNFFmpeg {
