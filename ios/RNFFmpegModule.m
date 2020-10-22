@@ -24,6 +24,7 @@
 #import <React/RCTEventDispatcher.h>
 
 #import <mobileffmpeg/MobileFFmpeg.h>
+#import <mobileffmpeg/MobileFFprobe.h>
 #import <mobileffmpeg/ArchDetect.h>
 #import <mobileffmpeg/MediaInformation.h>
 
