@@ -18,11 +18,14 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <mobileffmpeg/MobileFFmpegConfig.h>
-#import <React/RCTBridgeModule.h>
+#import <mobileffmpeg/ExecuteDelegate.h>
 #import <React/RCTEventEmitter.h>
 
-@interface RNFFmpegModule : RCTEventEmitter<RCTBridgeModule,LogDelegate,StatisticsDelegate>
+/**
+ * Execute delegate for async executions.
+ */
+@interface RNExecuteDelegate : NSObject<ExecuteDelegate>
+
+- (instancetype)initWithEventEmitter:(RCTEventEmitter*)eventEmitter;
 
 @end
-  

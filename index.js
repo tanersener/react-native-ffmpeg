@@ -1,9 +1,11 @@
-import { NativeEventEmitter, NativeModules } from 'react-native';
+import {NativeEventEmitter, NativeModules} from 'react-native';
 
-const { RNFFmpegModule } = NativeModules;
+const {RNFFmpegModule} = NativeModules;
 
 const eventLog = "RNFFmpegLogCallback";
-const statisticsLog = "RNFFmpegStatisticsCallback";
+const eventStatistics = "RNFFmpegStatisticsCallback";
+const eventExecute = "RNFFmpegExecuteCallback";
+const executeCallbackMap = new Map()
 
 class LogLevel {
 
@@ -64,6 +66,38 @@ class LogLevel {
      */
     static AV_LOG_TRACE = 56;
 
+    /**
+     * Returns log level string.
+     *
+     * @param level log level integer
+     * @returns log level string
+     */
+    static logLevelToString(level) {
+        switch (level) {
+            case LogLevel.AV_LOG_TRACE:
+                return "TRACE";
+            case LogLevel.AV_LOG_DEBUG:
+                return "DEBUG";
+            case LogLevel.AV_LOG_VERBOSE:
+                return "VERBOSE";
+            case LogLevel.AV_LOG_INFO:
+                return "INFO";
+            case LogLevel.AV_LOG_WARNING:
+                return "WARNING";
+            case LogLevel.AV_LOG_ERROR:
+                return "ERROR";
+            case LogLevel.AV_LOG_FATAL:
+                return "FATAL";
+            case LogLevel.AV_LOG_PANIC:
+                return "PANIC";
+            case LogLevel.AV_LOG_STDERR:
+                return "STDERR";
+            case LogLevel.AV_LOG_QUIET:
+            default:
+                return "";
+        }
+    }
+
 }
 
 /**
@@ -76,16 +110,24 @@ class ReactNativeFFmpegConfig {
 
     constructor() {
         const reactNativeFFmpegModuleEvents = new NativeEventEmitter(RNFFmpegModule);
-        reactNativeFFmpegModuleEvents.addListener(eventLog, event => {
+        reactNativeFFmpegModuleEvents.addListener(eventLog, log => {
             if (this.logCallback === undefined) {
-                console.log(event.log);
+                console.log(log.message);
             } else {
-                this.logCallback(event);
+                this.logCallback(log);
             }
         });
-        reactNativeFFmpegModuleEvents.addListener(statisticsLog, statistics => {
+        reactNativeFFmpegModuleEvents.addListener(eventStatistics, statistics => {
             if (this.statisticsCallback !== undefined) {
                 this.statisticsCallback(statistics);
+            }
+        });
+        reactNativeFFmpegModuleEvents.addListener(eventExecute, completedExecution => {
+            let executeCallback = executeCallbackMap.get(completedExecution.executionId);
+            if (executeCallback !== undefined) {
+                executeCallback(completedExecution);
+            } else {
+                console.log(`Async execution with id ${completedExecution.executionId} completed but no callback is found for it.`);
             }
         });
 
@@ -95,15 +137,15 @@ class ReactNativeFFmpegConfig {
         RNFFmpegModule.enableStatisticsEvents();
         RNFFmpegModule.enableRedirection();
 
-        RNFFmpegModule.getPlatform().then((result) => {
-            console.log("Loaded react-native-ffmpeg-" + result.platform + ".");
+        this.getPlatform().then(platform => {
+            console.log(`Loaded react-native-ffmpeg-${platform}.`);
         });
     }
 
     /**
      * Returns FFmpeg version bundled within the library.
      *
-     * @returns FFmpeg version stored in version field
+     * @returns FFmpeg version
      */
     getFFmpegVersion() {
         return RNFFmpegModule.getFFmpegVersion();
@@ -112,7 +154,7 @@ class ReactNativeFFmpegConfig {
     /**
      * Returns platform name where library is loaded.
      *
-     * @returns platform name stored in platform field
+     * @returns platform name
      */
     getPlatform() {
         return RNFFmpegModule.getPlatform();
@@ -134,7 +176,7 @@ class ReactNativeFFmpegConfig {
     /**
      * Returns log level.
      *
-     * @returns log level stored in level field
+     * @returns log level
      */
     getLogLevel() {
         return RNFFmpegModule.getLogLevel();
@@ -268,35 +310,23 @@ class ReactNativeFFmpegConfig {
     }
 
     /**
-     * Returns log level string.
+     * Sets an environment variable
      *
-     * @param level log level integer
-     * @returns log level string
+     * @param name environment variable name
+     * @param value environment variable value
      */
-    logLevelToString(level) {
-        switch (level) {
-            case LogLevel.AV_LOG_TRACE:
-                return "TRACE";
-            case LogLevel.AV_LOG_DEBUG:
-                return "DEBUG";
-            case LogLevel.AV_LOG_VERBOSE:
-                return "VERBOSE";
-            case LogLevel.AV_LOG_INFO:
-                return "INFO";
-            case LogLevel.AV_LOG_WARNING:
-                return "WARNING";
-            case LogLevel.AV_LOG_ERROR:
-                return "ERROR";
-            case LogLevel.AV_LOG_FATAL:
-                return "FATAL";
-            case LogLevel.AV_LOG_PANIC:
-                return "PANIC";
-            case LogLevel.AV_LOG_STDERR:
-                return "STDERR";
-            case LogLevel.AV_LOG_QUIET:
-            default:
-                return "";
-        }
+    setEnvironmentVariable(name, value) {
+        return RNFFmpegModule.setEnvironmentVariable(name, value);
+    }
+
+    /**
+     * Writes input file path to the pipe path.
+     *
+     * @param inputPath input file path
+     * @param pipePath pipe path
+     */
+    writeToPipe(inputPath, pipePath) {
+        return RNFFmpegModule.writeToPipe(inputPath, pipePath);
     }
 
 }
@@ -313,7 +343,7 @@ class ReactNativeFFmpeg {
      * Executes FFmpeg with arguments provided.
      *
      * @param commandArguments FFmpeg command options/arguments as string array
-     * @returns return code stored in rc field
+     * @returns return code
      */
     executeWithArguments(commandArguments) {
         return RNFFmpegModule.executeFFmpegWithArguments(commandArguments);
@@ -323,17 +353,59 @@ class ReactNativeFFmpeg {
      * Executes FFmpeg command provided.
      *
      * @param command FFmpeg command
-     * @returns return code stored in rc field
+     * @returns return code
      */
     execute(command) {
         return RNFFmpegModule.executeFFmpegWithArguments(this.parseArguments(command));
     }
 
     /**
-     * Cancels an ongoing operation.
+     * Asynchronously executes FFmpeg with arguments provided.
+     *
+     * @param commandArguments FFmpeg command options/arguments as string array
+     * @param executeCallback callback to receive execution result
+     * @returns returns a unique id that represents this execution
+     */
+    async executeAsyncWithArguments(commandArguments, executeCallback) {
+        let executionId = await RNFFmpegModule.executeFFmpegAsyncWithArguments(commandArguments);
+        executeCallbackMap.set(executionId, executeCallback);
+        return executionId;
+    }
+
+    /**
+     * Asynchronously executes FFmpeg command provided.
+     *
+     * @param command FFmpeg command
+     * @param executeCallback callback to receive execution result
+     * @returns returns a unique id that represents this execution
+     */
+    async executeAsync(command, executeCallback) {
+        let executionId = await RNFFmpegModule.executeFFmpegAsyncWithArguments(this.parseArguments(command));
+        executeCallbackMap.set(executionId, executeCallback);
+        return executionId;
+    }
+
+    /**
+     * Cancels all ongoing operations.
      */
     cancel() {
         RNFFmpegModule.cancel();
+    }
+
+    /**
+     * Cancels an ongoing operation.
+     */
+    cancelExecution(executionId) {
+        RNFFmpegModule.cancelExecution(executionId);
+    }
+
+    /**
+     * Lists ongoing executions.
+     *
+     * @return list of ongoing executions
+     */
+    listExecutions() {
+        return RNFFmpegModule.listExecutions();
     }
 
     /**
@@ -407,7 +479,7 @@ class ReactNativeFFprobe {
      * Executes FFprobe with arguments provided.
      *
      * @param commandArguments FFprobe command options/arguments as string array
-     * @returns return code stored in rc field
+     * @returns return code
      */
     executeWithArguments(commandArguments) {
         return RNFFmpegModule.executeFFprobeWithArguments(commandArguments);
@@ -417,7 +489,7 @@ class ReactNativeFFprobe {
      * Executes FFprobe command provided.
      *
      * @param command FFprobe command
-     * @returns return code stored in rc field
+     * @returns return code
      */
     execute(command) {
         return RNFFmpegModule.executeFFprobeWithArguments(RNFFmpeg.parseArguments(command));
@@ -427,16 +499,87 @@ class ReactNativeFFprobe {
      * Returns media information for given file.
      *
      * @param path path or uri of media file
-     * @return media information
+     * @return media information class
      */
     getMediaInformation(path) {
-        return RNFFmpegModule.getMediaInformation(path);
+        return RNFFmpegModule.getMediaInformation(path).then(properties => new MediaInformation(properties));
     }
 
 }
 
+class MediaInformation {
+    #allProperties;
+
+    constructor(properties) {
+        this.#allProperties = properties;
+    }
+
+    /**
+     * Returns the streams found as array.
+     *
+     * @returns StreamInformation[]
+     */
+    getStreams() {
+        let list = [];
+        let streamList;
+
+        if (this.#allProperties === undefined) {
+            streamList = [];
+        } else {
+            streamList = this.#allProperties.streams;
+        }
+
+        if (streamList !== undefined) {
+            streamList.forEach((stream) => {
+                list.push(new StreamInformation(stream));
+            });
+        }
+
+        return list;
+    }
+
+    /**
+     * Returns all media properties.
+     *
+     * @returns an object where media properties can be accessed by property names
+     */
+    getMediaProperties() {
+        if (this.#allProperties == null) {
+            return new Map();
+        } else {
+            return this.#allProperties.format;
+        }
+    }
+
+    /**
+     * Returns all properties found, including stream properties too.
+     *
+     * @returns an object in which properties can be accessed by property names
+     */
+    getAllProperties() {
+        return this.#allProperties;
+    }
+}
+
+class StreamInformation {
+    #allProperties;
+
+    constructor(properties) {
+        this.#allProperties = properties;
+    }
+
+    /**
+     * Returns all properties found.
+     *
+     * @returns an object in which properties can be accessed by property names
+     */
+    getAllProperties() {
+        return this.#allProperties;
+    }
+}
+
 export {
-    LogLevel
+    LogLevel, MediaInformation
 }
 
 export const RNFFmpegConfig = new ReactNativeFFmpegConfig();
