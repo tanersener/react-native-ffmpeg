@@ -10,7 +10,7 @@ All notable changes to this project will be documented in this file.
 - Adds setEnvironmentVariable API method
 - LogCallback and StatisticsCallback functions updated with executionId
 - Includes an updated example application
-- Fixes issue #156, #164 and #188
+- Fixes issue #156, #164, #188 and #196
 
 ## 0.4.4 - 2020-03-09
 - Fixes issue #118
