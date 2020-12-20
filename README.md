@@ -1,4 +1,4 @@
-# React Native FFmpeg ![GitHub release](https://img.shields.io/badge/release-v0.5.0-blue.svg) [![npm](https://img.shields.io/npm/v/react-native-ffmpeg.svg)](react-native-ffmpeg)
+# React Native FFmpeg ![GitHub release](https://img.shields.io/badge/release-v0.5.1-blue.svg) [![npm](https://img.shields.io/npm/v/react-native-ffmpeg.svg)](react-native-ffmpeg)
 
 FFmpeg for React Native
 
@@ -384,6 +384,27 @@ Apply provided solutions if you encounter one of the following issues.
 
 - `react-native-ffmpeg` uses file system paths, it does not know what an `assets` folder or a `project` folder is. So you can't use resources on those folders directly, you need to provide full paths of those resources.
 
+- If you receive the following error on Android, please add the `ProGuard` rule given below to your `proguard-rules.pro` file.
+
+    ```
+    OnLoad thread failed to GetStaticMethodID for log.
+    JNI DETECTED ERROR IN APPLICATION: JNI NewGlobalRef called with pending exception java.lang.NoSuchMethodError: no static method "Lcom/arthenica/mobileffmpeg/Config;.log(JI[B)V"
+    ```
+
+    `proguard-rules.pro`
+
+    ```
+    -keep class com.arthenica.mobileffmpeg.Config {
+        native <methods>;
+        void log(long, int, byte[]);
+        void statistics(long, int, float, float, long , int, double, double);
+    }
+
+    -keep class com.arthenica.mobileffmpeg.AbiDetect {
+        native <methods>;
+    }
+    ```
+
 - Enabling `ProGuard` on releases older than `v0.3.3` causes linking errors. Please add the following rule inside your `proguard-rules.pro` file to preserve necessary method names and prevent linking errors.
                                                         
     ```
@@ -421,7 +442,7 @@ if your build receives the following error for iOS.
     1 error generated.
     ```
 
-- When `pod install` fails with the following message, delete `Podfile.lock` file and run `pod install` again.
+- When `pod install` fails with the following message, delete the `Podfile.lock` file and run `pod install` again.
 
     ```
     [!] Unable to find a specification for 'react-native-ffmpeg'.
@@ -477,7 +498,7 @@ domain.
 
 ### 8. Patents
 
-It is not clearly explained in their documentation but it is believed that `FFmpeg`, `kvazaar`, `x264` and `x265`
+It is not clearly explained in their documentation, but it is believed that `FFmpeg`, `kvazaar`, `x264` and `x265`
 include algorithms which are subject to software patents. If you live in a country where software algorithms are
 patentable then you'll probably need to pay royalty fees to patent holders. We are not lawyers though, so we recommend
 that you seek legal advice first. See [FFmpeg Patent Mini-FAQ](https://ffmpeg.org/legal.html).
