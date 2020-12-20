@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name              = 'react-native-ffmpeg'
-    s.version           = '0.5.0'
+    s.version           = '0.5.1'
     s.summary           = 'FFmpeg for React Native'
     s.description       = 'React Native FFmpeg based on mobile-ffmpeg'
     s.homepage          = 'https://github.com/tanersener/react-native-ffmpeg'
@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
     s.requires_arc      = true
     s.static_framework  = true
 
-    s.source            = { :git => 'https://github.com/tanersener/react-native-ffmpeg.git', :tag => 'v0.5.0'}
+    s.source            = { :git => 'https://github.com/tanersener/react-native-ffmpeg.git', :tag => 'v0.5.1'}
 
     s.default_subspec   = 'https'
 

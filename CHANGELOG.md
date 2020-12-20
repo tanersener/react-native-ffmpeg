@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.5.1 - 2020-12-20
+- Fixes issue #210
+
 ## 0.5.0 - 2020-10-22
 - Depends on mobile-ffmpeg v4.4
 - Implements async FFmpeg execution methods
