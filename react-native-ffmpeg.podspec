@@ -13,10 +13,6 @@ Pod::Spec.new do |s|
     s.static_framework  = true
 
     s.source            = { :git => 'https://github.com/tanersener/react-native-ffmpeg.git', :tag => 'v0.5.0'}
-    s.source_files      = 'ios/RNFFmpegModule.m',
-                          'ios/RNFFmpegModule.h',
-                          'ios/RNExecuteDelegate.h',
-                          'ios/RNExecuteDelegate.m'
 
     s.default_subspec   = 'https'
 
