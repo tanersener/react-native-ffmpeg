@@ -384,26 +384,37 @@ Apply provided solutions if you encounter one of the following issues.
 
 - `react-native-ffmpeg` uses file system paths, it does not know what an `assets` folder or a `project` folder is. So you can't use resources on those folders directly, you need to provide full paths of those resources.
 
-- If you receive the following error on Android, please add the `ProGuard` rule given below to your `proguard-rules.pro` file.
 
-    ```
-    OnLoad thread failed to GetStaticMethodID for log.
-    JNI DETECTED ERROR IN APPLICATION: JNI NewGlobalRef called with pending exception java.lang.NoSuchMethodError: no static method "Lcom/arthenica/mobileffmpeg/Config;.log(JI[B)V"
-    ```
+- If `react-native-ffmpeg` release builds on Android fail with the following exception, make sure that `mavenCentral()` is
+  defined as a repository in your `build.gradle` and it is listed before `jcenter()`.
 
-    `proguard-rules.pro`
-
-    ```
-    -keep class com.arthenica.mobileffmpeg.Config {
-        native <methods>;
-        void log(long, int, byte[]);
-        void statistics(long, int, float, float, long , int, double, double);
-    }
-
-    -keep class com.arthenica.mobileffmpeg.AbiDetect {
-        native <methods>;
-    }
-    ```
+  ```
+  I/ReactNativeJS: Loading react-native-ffmpeg.
+  I/mobile-ffmpeg: Loading mobile-ffmpeg.
+  E/mobile-ffmpeg: OnLoad thread failed to GetStaticMethodID for log.
+  java_vm_ext.cc:577] JNI DETECTED ERROR IN APPLICATION: JNI NewGlobalRef called with pending exception java.lang.NoSuchMethodError: no static method "Lcom/arthenica/mobileffmpeg/Config;.log(JI[B)V"
+  java_vm_ext.cc:577]   at java.lang.String java.lang.Runtime.nativeLoad(java.lang.String, java.lang.ClassLoader, java.lang.Class) (Runtime.java:-2)
+  java_vm_ext.cc:577]   at java.lang.String java.lang.Runtime.nativeLoad(java.lang.String, java.lang.ClassLoader) (Runtime.java:1131)
+  java_vm_ext.cc:577]   at void java.lang.Runtime.loadLibrary0(java.lang.ClassLoader, java.lang.Class, java.lang.String) (Runtime.java:1085)
+  java_vm_ext.cc:577]   at void java.lang.Runtime.loadLibrary0(java.lang.Class, java.lang.String) (Runtime.java:1008)
+  java_vm_ext.cc:577]   at void java.lang.System.loadLibrary(java.lang.String) (System.java:1664)
+  java_vm_ext.cc:577]   at void com.arthenica.mobileffmpeg.Config.<clinit>() (:-1)
+  java_vm_ext.cc:577]   at void com.arthenica.mobileffmpeg.Config.c(com.arthenica.mobileffmpeg.h) (:-1)
+  java_vm_ext.cc:577]   at void com.arthenica.reactnative.RNFFmpegModule.enableLogEvents() (:-1)
+  java_vm_ext.cc:577]   at java.lang.Object java.lang.reflect.Method.invoke(java.lang.Object, java.lang.Object[]) (Method.java:-2)
+  java_vm_ext.cc:577]   at void com.facebook.react.bridge.JavaMethodWrapper.invoke(com.facebook.react.bridge.JSInstance, com.facebook.react.bridge.ReadableArray) (:-1)
+  java_vm_ext.cc:577]   at void com.facebook.react.bridge.JavaModuleWrapper.invoke(int, com.facebook.react.bridge.ReadableNativeArray) (:-1)
+  java_vm_ext.cc:577]   at void com.facebook.react.bridge.queue.NativeRunnable.run() (:-2)
+  java_vm_ext.cc:577]   at void android.os.Handler.handleCallback(android.os.Message) (Handler.java:938)
+  java_vm_ext.cc:577]   at void android.os.Handler.dispatchMessage(android.os.Message) (Handler.java:99)
+  java_vm_ext.cc:577]   at void com.facebook.react.bridge.queue.MessageQueueThreadHandler.dispatchMessage(android.os.Message) (:-1)
+  java_vm_ext.cc:577]   at void android.os.Looper.loop() (Looper.java:223)
+  java_vm_ext.cc:577]   at void com.facebook.react.bridge.queue.MessageQueueThreadImpl$4.run() (:-1)
+  java_vm_ext.cc:577]   at void java.lang.Thread.run() (Thread.java:923)
+  java_vm_ext.cc:577]
+  java_vm_ext.cc:577]     in call to NewGlobalRef
+  java_vm_ext.cc:577]     from java.lang.String java.lang.Runtime.nativeLoad(java.lang.String, java.lang.ClassLoader, java.lang.Class)
+  ```
 
 - Enabling `ProGuard` on releases older than `v0.3.3` causes linking errors. Please add the following rule inside your `proguard-rules.pro` file to preserve necessary method names and prevent linking errors.
                                                         
