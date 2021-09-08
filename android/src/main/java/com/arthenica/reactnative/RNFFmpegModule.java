@@ -95,6 +95,15 @@ public class RNFFmpegModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
+    public void addListener(String eventName) {
+        Log.i(LIBRARY_NAME, String.format("Listener added for %s event.", eventName));
+    }
+
+    @ReactMethod
+    public void removeListeners(Integer count) {
+    }
+
+    @ReactMethod
     public void getPlatform(final Promise promise) {
         final String abi = AbiDetect.getAbi();
         promise.resolve(PLATFORM_NAME + "-" + abi);

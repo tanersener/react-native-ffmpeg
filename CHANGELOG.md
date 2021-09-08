@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.5.2 - 2021-09-08
+- Fixes issue #264
+
 ## 0.5.1 - 2020-12-20
 - Fixes issue #210
 
