@@ -1,4 +1,4 @@
-# React Native FFmpeg ![GitHub release](https://img.shields.io/badge/release-v0.5.1-blue.svg) [![npm](https://img.shields.io/npm/v/react-native-ffmpeg.svg)](react-native-ffmpeg)
+# React Native FFmpeg ![GitHub release](https://img.shields.io/badge/release-v0.5.2-blue.svg) [![npm](https://img.shields.io/npm/v/react-native-ffmpeg.svg)](react-native-ffmpeg)
 
 FFmpeg for React Native
 
