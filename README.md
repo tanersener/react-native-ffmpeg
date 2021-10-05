@@ -2,6 +2,8 @@
 
 FFmpeg for React Native
 
+Not maintained anymore, superseded by [FFmpegKit](https://github.com/tanersener/ffmpeg-kit). See [ReactNativeFFmpeg to FFmpegKit Migration Guide](https://github.com/tanersener/ffmpeg-kit/wiki/Migrating-From-ReactNativeFFmpeg).
+
 <img src="https://github.com/tanersener/react-native-ffmpeg/raw/master/docs/assets/react-native-ffmpeg-logo-v2.png" width="280">
 
 ### 1. Features
